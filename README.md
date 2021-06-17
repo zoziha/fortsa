@@ -13,10 +13,13 @@ and SARIMA functions are now superseded by SARIMAX.*
 Git and CMake
 
 ## Getting Started
-```
+```bash
 git clone https://github.com/rafat/ctsa.git
 cd ctsa
-cmake .
+cmake 
+make
+---
+cmake -G "MSYS Makefiles"
 make
 ```
 
