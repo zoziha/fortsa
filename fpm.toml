@@ -1,0 +1,23 @@
+name = 'fortran-tsa'
+version = '0.0.1'
+maintainer = 'fortran-tsa contributors'
+license = 'BSD 3- Clause Check COPYRIGHT file'
+author = 'fortran-tsa contributors'
+categories = 'time series analysis'
+copyright = "2021-2021 fortran-tsa contributors"
+
+[build]
+auto-examples = false
+auto-executables = false
+auto-tests = true
+
+[library]
+source-dir="src"
+
+[[test]]
+name="test"
+source-dir="test"
+main="test.f90"
+[test.dependencies]
+forlab = { git = "https://github.com/zoziha/forlab.git" }
+
