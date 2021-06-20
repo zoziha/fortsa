@@ -41,3 +41,6 @@ build/
 #data
 *.bin
 *.txt
+
+#vscode
+*.vscode

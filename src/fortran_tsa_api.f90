@@ -5,7 +5,7 @@ module fortran_tsa
     implicit none
     private
 
-    public :: acvf
+    public :: acvf, acvf_opt, acvf2acf
 
     !* CTSA_H_
     type, bind(c) :: auto_arima_set
@@ -491,14 +491,14 @@ module fortran_tsa
         end subroutine acvf
 
         subroutine acvf_opt(vec, N, method, par, M) bind(c, name='acvf_opt')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
-            real(kind=c_double) :: vec, par
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            type(c_ptr), value :: vec, par
             integer(kind=c_int), value :: N, method, M
         end subroutine acvf_opt
 
         subroutine acvf2acf(acf, M) bind(c, name='acvf2acf')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
-            real(kind=c_double) :: acf
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            type(c_ptr) :: acf
             integer(kind=c_int), value :: M
         end subroutine acvf2acf
 
