@@ -1,25 +1,46 @@
-# CTSA
+# FORTRAN-TSA
+This package is still under development, please do not use this package as a production tool.
 
-## A Univariate Time Series Analysis and ARIMA Modeling Package in ANSI C
+## A Univariate Time Series Analysis and ARIMA Modeling Package in Fortran
 
+Fortran-TSA is a Fortran software package for univariate time series analysis, which is base on [rafat/CTSA](https://github.com/rafat/ctsa).  
 CTSA is a C software package for univariate time series analysis. 
-ARIMA and Seasonal ARIMA models have been added as of 10/30/2014. Other functionality will be added soon 
-
-*07/24/2020 Update : SARIMAX and Auto ARIMA added. Documentation will be added in the coming days. Software is still in beta stage and older ARIMA
-and SARIMA functions are now superseded by SARIMAX.*
-
-## Dependencies
-
-Git and CMake
+| | |  
+|:-:|---|
+| **Version:** | 0.0.1 |
+| **Author:** | Fortran-TSA Contributors |
+| **Web site:** | https://github.com/zoziha/fortran-tsa |
+| **API-Doc Web site:** | \todo: |
+| **Copyright:** | _This document_ has been placed in the public domain. |
+| **License:** | _Fortran-TSA_ is released under (BSD 3- Clause Check COPYRIGHT file). |
 
 ## Getting Started
+```bash
+git clone https://github.com/zoziha/fortran-tsa.git
+cd fortran-tsa
 ```
-git clone https://github.com/rafat/ctsa.git
-cd ctsa
-cmake .
-make
-```
+## Dependencies
 
+Git and [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
+
+### Supported Compilers
+The following combinations are tested on the default branch of `forlab`:  
+|Name|Vesrion|Platform|Architecture|  
+|---|---|---|---|  
+|GCC Fortran(MSYS2)|10|Windows 10|x86_64|
+
+### Build with [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
+You can build using provided `fpm.toml`:
+```bash
+fpm build
+fpm test
+```
+To use `fortran-tsa` within your fpm project, add the following to `fpm.toml` file:
+```toml
+[dependencies]
+forlab = { git = "https://github.com/zoziha/fortran-tsa.git" }
+```
+## Fortran Docs
 
 |**[Auto ARIMA](https://github.com/rafat/ctsa/wiki/AUTO-ARIMA)**| Auto ARIMA Class + Examples        |
 |:-----------------------------------------------------|:----------------------------------|
@@ -37,3 +58,11 @@ https://github.com/rafat/ctsa/wiki
 License : BSD 3- Clause Check COPYRIGHT file
 
 Contact rafat.hsn@gmail.com
+
+## Links
+1. [rafat/ctsa](https://github.com/rafat/ctsa)
+2. [vmagnin/gtk-fortran](https://github.com/vmagnin/gtk-fortran)
+3. [fortran-lang](https://fortran-lang.org/learn/)
+4. [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
+5. [zoziha/forlab](https://github.com/zoziha/forlab)
+6. [toml](https://toml.io/en/)

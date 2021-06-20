@@ -35,10 +35,12 @@ language.settings.xml
 #stackdump
 *.stackdump
 
-build*
 *.exe
+build/
 
+#data
 *.bin
 *.txt
 
-
+#vscode
+*.vscode
