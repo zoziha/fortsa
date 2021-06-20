@@ -35,4 +35,10 @@ language.settings.xml
 #stackdump
 *.stackdump
 
+build*
+*.exe
+
+*.bin
+*.txt
+
 
