@@ -5,7 +5,10 @@ module fortran_tsa
     implicit none
     private
 
-    type, bind(c, name='auto_arima_set') :: auto_arima_set
+    public :: acvf
+
+    !* CTSA_H_
+    type, bind(c) :: auto_arima_set
         integer(kind=c_int) :: N        !! length of time series
         integer(kind=c_int) :: Nused    !! length of time series after differencing, Nused = N - d
         integer(kind=c_int) :: method
@@ -69,8 +72,8 @@ module fortran_tsa
 
     interface
         function auto_arima_init(pdqmax, pdqmax_, s, r, N) bind(c, name='auto_arima_init')
-            import auto_arima_set
             use, intrinsic :: iso_c_binding, only: c_int
+            import auto_arima_set
             integer(kind=c_int) :: pdqmax, pdqmax_
             integer(kind=c_int), value :: s, r, N
             type(auto_arima_set) :: auto_arima_init
@@ -78,7 +81,49 @@ module fortran_tsa
         end function
     end interface
 
-    type, bind(c, name='arima_set') :: arima_set
+    type, bind(c) :: sarimax_set
+        integer(kind=c_int) :: N        !! length of time series
+        integer(kind=c_int) :: Nused    !!length of time series after differencing, Nused = N - d
+        integer(kind=c_int) :: method
+        integer(kind=c_int) :: optmethod
+        integer(kind=c_int) :: p        !! size of phi
+        integer(kind=c_int) :: d        !! Number of times the series is to be differenced
+        integer(kind=c_int) :: q        !!size of theta
+        integer(kind=c_int) :: s        !! Seasonality/Period
+        integer(kind=c_int) :: p_       !!Size of seasonal phi
+        integer(kind=c_int) :: d_       !! The number of times the seasonal series is to be differenced
+        integer(kind=c_int) :: q_       !!size of Seasonal Theta
+        integer(kind=c_int) :: r        !! Number of exogenous variables
+        integer(kind=c_int) :: M        !! M = 0 if mean is 0.0 else M = 1
+        integer(kind=c_int) :: ncoeff   !! Total Number of Coefficients to be estimated
+        real(kind=c_double) :: phi
+        real(kind=c_double) :: theta
+        real(kind=c_double) :: phi_
+        real(kind=c_double) :: theta_
+        real(kind=c_double) :: exog
+        real(kind=c_double) :: vcov     !! Variance-Covariance Matrix Of length lvcov
+        integer(kind=c_int) :: lvcov    !!length of VCOV
+        real(kind=c_double) :: res
+        real(kind=c_double) :: mean
+        real(kind=c_double) :: var
+        real(kind=c_double) :: loglik
+        real(kind=c_double) :: aic
+        integer(kind=c_int) :: retval
+        integer(kind=c_int) :: start
+        integer(kind=c_int) :: imean
+        real(kind=c_double), dimension(0) :: params
+    end type sarimax_set 
+
+    interface 
+        function sarimax_init(p, d, q, p_, d_, q_, s, r, imean, N) bind(c, name='sarimax_init')
+            use, intrinsic :: iso_c_binding, only: c_int
+            import sarimax_set
+            integer(kind=c_int), value :: p, d, q, p_, d_, q_, s, r, imean, N
+            type(sarimax_set) :: sarimax_init
+        end function sarimax_init
+    end interface
+
+    type, bind(c) :: arima_set
         integer(kind=c_int) :: N        !! length of time series
         integer(kind=c_int) :: Nused    !! length of time series after differencing, Nused = N - d
         integer(kind=c_int) :: method
@@ -113,14 +158,14 @@ module fortran_tsa
 
     interface
         function arima_init(p, d, q, N)
-            import arima_set
             use, intrinsic :: iso_c_binding, only: c_int
+            import arima_set
             integer(kind=c_int), value :: p, d, q, N
             type(arima_set) :: arima_init
         end function
     end interface
 
-    type, bind(c, name='sarima_set') :: sarima_set
+    type, bind(c) :: sarima_set
         integer(kind=c_int) :: N        !!  length of time series
         integer(kind=c_int) :: Nused    !! length of time series after differencing, Nused = N - d - s*D
         integer(kind=c_int) :: method 
@@ -146,19 +191,19 @@ module fortran_tsa
         real(kind=c_double) :: loglik 
         real(kind=c_double) :: aic 
         integer(kind=c_int) :: retval 
-        real(kind=c_double) :: params[0] 
+        real(kind=c_double), dimension(0) :: params 
     end type
 
     interface
         function sarima_init(p, d, q, s, p_, d_, q_, N)
-            import sarima_set
             use, intrinsic :: iso_c_binding, only: c_int
+            import sarima_set
             integer(kind=c_int), value :: p, d, q, s, p_, d_, q_, N
             type(sarima_set) :: sarima_init
         end function
     end interface
 
-    type, bind(c, name='ar_set') :: ar_set
+    type, bind(c) :: ar_set
         integer(kind=c_int) :: N            !! length of time series
         integer(kind=c_int) :: method
         integer(kind=c_int) :: optmethod    !! Valid only for MLE estimation
@@ -176,8 +221,8 @@ module fortran_tsa
 
     interface
         function ar_init(method, N) bind(c, name = 'ar_init')
-            import ar_set
             use, intrinsic :: iso_c_binding, only: c_int
+            import ar_set
             integer(kind=c_int), value :: method, N
             type(ar_set) :: ar_init
         end function
@@ -186,96 +231,322 @@ module fortran_tsa
     interface
         !!! exec routines 🔻
         subroutine sarimax_exec(obj, inp, xreg) bind(c, name='sarimax_exec')
-            import sarimax_set
             use, intrinsic :: iso_c_binding, only: c_double
+            import sarimax_set
             type(sarimax_set) :: obj
             real(kind=c_double) :: inp, xreg
         end subroutine sarimax_exec
 
         subroutine arima_exec(obj, x) bind(c, name='arima_exec')
-            import arima_set
             use, intrinsic :: iso_c_binding, only: c_double
+            import arima_set
             type(arima_set) :: obj
             real(kind=c_double) :: x
         end subroutine arima_exec
 
         subroutine sarima_exec(obj, x) bind(c, name='sarima_exec')
-            import sarima_set
             use, intrinsic :: iso_c_binding, only: c_double
+            import sarima_set
             type(sarima_set) :: obj
             real(kind=c_double) :: x
         end subroutine sarima_exec
 
         subroutine auto_arima_exec(obj, inp, xreg) bind(c, name='auto_arima_exec')
-            import auto_arima_set
             use, intrinsic :: iso_c_binding, only: c_double
+            import auto_arima_set
             type(auto_arima_set) :: obj
             real(kind=c_double) :: inp, xreg
         end subroutine auto_arima_exec
 
         subroutine ar_exec(obj, inp) bind(c, name='ar_exec')
-            import ar_set
             use, intrinsic :: iso_c_binding, only: c_double
+            import ar_set
             type(ar_set) :: obj
             real(kind=c_double) :: inp
         end subroutine ar_exec
         !!! predict routines 🔻
         subroutine arima_predict(obj, inp, L, xpred, amse) bind(c, name='arima_predict')
-            import arima_set
             use, intrinsic :: iso_c_binding, only: c_int, c_double
+            import arima_set
             type(arima_set) :: obj
             real(kind=c_double) :: inp, xpred, amse
             integer(kind=c_int), value :: L
         end subroutine arima_predict
 
         subroutine sarima_predict(obj, inp, L, xpred, amse) bind(c, name='sarima_predict')
-            import sarima_set
             use, intrinsic :: iso_c_binding, only: c_int, c_double
+            import sarima_set
             type(sarima_set) :: obj
             real(kind=c_double) :: inp, xpred, amse
             integer(kind=c_int), value :: L
         end subroutine sarima_predict
 
         subroutine sarimax_predict(obj, inp, xreg, L, newxreg, xpred, amse) bind(c, name='sarimax_predict')
-            import sarimax_set
             use, intrinsic :: iso_c_binding, only: c_int, c_double
+            import sarimax_set
             type(sarimax_set) :: obj
             real(kind=c_double) :: inp, xreg, newxreg, xpred, amse
             integer(kind=c_int), value :: L
         end subroutine sarimax_predict
 
         subroutine auto_arima_predict(obj, inp, xreg, L, newxreg, xpred, amse) bind(c, name='auto_arima_predict')
-            import auto_arima_set
             use, intrinsic :: iso_c_binding, only: c_int, c_double
+            import auto_arima_set
             type(auto_arima_set) :: obj
             real(kind=c_double) :: inp, xreg, newxreg, xpred, amse
             integer(kind=c_int), value :: L
         end subroutine auto_arima_predict
 
         subroutine ar_predict(obj, inp, L, xpred, amse) bind(c, name='ar_predict')
-            import ar_set
             use, intrinsic :: iso_c_binding, only: c_int, c_double
+            import ar_set
             type(ar_set) :: obj
             real(kind=c_double) :: inp, xpred, amse
             integer(kind=c_int), value :: L
         end subroutine ar_predict
 
         subroutine ar(inp, N, p, method, phi, var) bind(c, name='ar')
-            import ar
             use, intrinsic :: iso_c_binding, only: c_int, c_double
+            import ar
             real(kind=c_double) :: inp, phi, var
             integer(kind=c_int), value :: N, p, method
         end subroutine ar
-
+        !!! setMethod routines 🔻
         subroutine arima_setMethod(obj, value) bind(c, name='arima_setMethod')
-            import arima_set
             use, intrinsic :: iso_c_binding, only: c_int
+            import arima_set
             type(arima_set) :: obj
             integer(kind=c_int), value :: value
         end subroutine arima_setMethod
-        
-    end interface
 
+        subroutine sarima_setMethod(obj, value) bind(c, name='sarima_setMethod')
+            use, intrinsic :: iso_c_binding, only: c_int
+            import sarima_set
+            type(sarima_set) :: obj
+            integer(kind=c_int), value :: value
+        end subroutine sarima_setMethod
+
+        subroutine auto_arima_setMethod(obj, value) bind(c, name='auto_arima_setMethod')
+            use, intrinsic :: iso_c_binding, only: c_int
+            import auto_arima_set
+            type(auto_arima_set) :: obj
+            integer(kind=c_int), value :: value
+        end subroutine auto_arima_setMethod
+
+        subroutine sarimax_setMethod(obj, value) bind(c, name='sarimax_setMethod')
+            use, intrinsic :: iso_c_binding, only: c_int
+            import sarimax_set
+            type(sarimax_set) :: obj
+            integer(kind=c_int), value :: value
+        end subroutine sarimax_setMethod
+        !!! setOptMethod routines 🔻
+        subroutine arima_setOptMethod(obj, value) bind(c, name='arima_setOptMethod')
+            use, intrinsic :: iso_c_binding, only: c_int
+            import arima_set
+            type(arima_set) :: obj
+            integer(kind=c_int), value :: value
+        end subroutine arima_setOptMethod
+
+        subroutine sarima_setOptMethod(obj, value) bind(c, name='sarima_setOptMethod')
+            use, intrinsic ::  iso_c_binding, only: c_int
+            import sarima_set
+            type(sarima_set) :: obj
+            integer(kind=c_int), value :: value
+        end subroutine sarima_setOptMethod
+
+        subroutine auto_arima_setOptMethod(obj, value) bind(c, name='auto_arima_setOptMethod')
+            use, intrinsic :: iso_c_binding, only: c_int
+            import auto_arima_set
+            type(auto_arima_set) :: obj
+            integer(kind=c_int), value :: value
+        end subroutine auto_arima_setOptMethod
+
+        subroutine arima_vcov(obj, vcov) bind(c, name='arima_vcov')
+            use, intrinsic :: iso_c_binding, only: c_double
+            import arima_set
+            type(arima_set) :: obj
+            real(kind=c_double) :: vcov
+        end subroutine arima_vcov
+
+        subroutine sarima_vcov(obj, vcov) bind(c, name='sarima_vcov')
+            use, intrinsic :: iso_c_binding, only: c_double
+            import sarima_set
+            type(sarima_set) :: obj
+            real(kind=c_double) :: vcov
+        end subroutine sarima_vcov
+
+        subroutine sarimax_vcov(obj, vcov) bind(c, name='sarimax_vcov')
+            use, intrinsic :: iso_c_binding, only: c_double
+            import sarimax_set
+            type(sarimax_set) :: obj
+            real(kind=c_double) :: vcov
+        end subroutine sarimax_vcov
+
+        subroutine auto_arima_setApproximation(obj, approximation) bind(c, name='auto_arima_setApproximation')
+            use, intrinsic :: iso_c_binding, only: c_int
+            import auto_arima_set
+            type(auto_arima_set) :: obj
+            integer(kind=c_int), value :: approximation
+        end subroutine auto_arima_setApproximation
+
+        subroutine auto_arima_setStepwise(obj, stepwise) bind(c, name='auto_arima_setStepwise')
+            use, intrinsic :: iso_c_binding, only: c_int
+            import auto_arima_set
+            type(auto_arima_set) :: obj
+            integer(kind=c_int), value :: stepwise
+        end subroutine auto_arima_setStepwise
+
+        subroutine auto_arima_setStationary(obj, stationary) bind(c, name='auto_arima_setStationary')
+            use, intrinsic :: iso_c_binding, only: c_int
+            import auto_arima_set
+            type(auto_arima_set) :: obj
+            integer(kind=c_int), value :: stationary
+        end subroutine auto_arima_setStationary
+
+        subroutine auto_arima_setSeasonal(obj, seasonal) bind(c, name='auto_arima_setSeasonal')
+            use, intrinsic :: iso_c_binding, only: c_int
+            import auto_arima_set
+            type(auto_arima_set) :: obj
+            integer(kind=c_int), value :: seasonal
+        end subroutine auto_arima_setSeasonal
+
+        subroutine auto_arima_setStationarityParameter(obj, test, alpha, type) bind(c, name='auto_arima_setStationarityParameter')
+            use, intrinsic :: iso_c_binding, only: c_double, c_char
+            import auto_arima_set
+            type(auto_arima_set) :: obj
+            character(kind=c_char) :: test, type
+                !!\tocheck:
+            real(kind=c_double), value :: alpha
+        end subroutine auto_arima_setStationarityParameter
+
+        subroutine auto_arima_setSeasonalParameter(obj, test, alpha) bind(c, name='auto_arima_setSeasonalParameter')
+            use, intrinsic :: iso_c_binding, only: c_double, c_char
+            import auto_arima_set
+            type(auto_arima_set) :: obj
+            character(kind=c_char) :: test
+            real(kind=c_double), value :: alpha
+        end subroutine auto_arima_setSeasonalParameter
+
+        subroutine auto_arima_setVerbose(obj, verbose) bind(c, name='auto_arima_setVerbose')
+            use, intrinsic :: iso_c_binding, only: c_int
+            import auto_arima_set
+            type(auto_arima_set) :: obj
+            integer(kind=c_int), value :: verbose
+        end subroutine auto_arima_setVerbose
+        !!! summary routines 🔻
+        subroutine arima_summary(obj) bind(c, name='arima_summary')
+            import arima_set
+            type(arima_set) :: obj
+        end subroutine arima_summary
+
+        subroutine sarima_summary(obj) bind(c, name='sarima_summary')
+            import sarima_set
+            type(sarima_set) :: obj
+        end subroutine sarima_summary
+
+        subroutine sarimax_summary(obj) bind(c, name='sarimax_summary')
+            import sarimax_set
+            type(sarimax_set) :: obj
+        end subroutine sarimax_summary
+
+        subroutine auto_arima_summary(obj) bind(c, name='auto_arima_summary')
+            import auto_arima_set
+            type(auto_arima_set) :: obj
+        end subroutine auto_arima_summary
+
+        subroutine ar_estimate(x, N, method) bind(c, name='ar_estimate')
+            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            real(kind=c_double) :: x
+            integer(kind=c_int), value :: N, method
+        end subroutine ar_estimate
+
+        subroutine ar_summary(obj) bind(c, name='ar_summary')
+            import ar_set
+            type(ar_set) :: obj
+        end subroutine ar_summary
+
+        subroutine model_estimate(x, N, d, pmax, h) bind(c, name='model_estimate')
+            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            real(kind=c_double) :: x
+            integer(kind=c_int), value :: N, d, pmax, h
+        end subroutine model_estimate
+
+        subroutine pacf(vec, N, par, M) bind(c, name='pacf')
+            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            real(kind=c_double) :: vec, par
+            integer(kind=c_int), value :: N, M
+        end subroutine pacf
+
+        subroutine pacf_opt(vec, N, method, par, M) bind(c, name='pacf_opt')
+            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            real(kind=c_double) :: vec, par
+            integer(kind=c_int), value :: N, method, M
+        end subroutine pacf_opt
+
+        subroutine acvf(vec, N, par, M) bind(c, name='acvf')
+            use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
+            ! real(kind=c_double) :: vec, par
+            type(c_ptr), value :: vec, par
+            integer(kind=c_int), value :: N, M
+        end subroutine acvf
+
+        subroutine acvf_opt(vec, N, method, par, M) bind(c, name='acvf_opt')
+            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            real(kind=c_double) :: vec, par
+            integer(kind=c_int), value :: N, method, M
+        end subroutine acvf_opt
+
+        subroutine acvf2acf(acf, M) bind(c, name='acvf2acf')
+            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            real(kind=c_double) :: acf
+            integer(kind=c_int), value :: M
+        end subroutine acvf2acf
+
+        !!! free routines 🔻
+        subroutine arima_free(obj) bind(c, name='arima_free')
+            import arima_set
+            type(arima_set) :: obj
+        end subroutine arima_free
+
+        subroutine sarima_free(obj) bind(c, name='sarima_free')
+            import sarima_set
+            type(sarima_set) :: obj
+        end subroutine sarima_free
+
+        subroutine sarimax_free(obj) bind(c, name='sarimax_free')
+            import sarimax_set
+            type(sarimax_set) :: obj
+        end subroutine sarimax_free
+
+        subroutine auto_arima_free(obj) bind(c, name='auto_arima_free')
+            import auto_arima_set
+            type(auto_arima_set) :: obj
+        end subroutine auto_arima_free
+
+        subroutine ar_free(obj) bind(c, name='ar_free')
+            import ar_set
+            type(ar_set) :: obj
+        end subroutine ar_free
+        !!! Yule-Walker, Burg and Hannan Rissanen Algorithms for Initial Parameter Estimation
+        subroutine yw(x, N, p, phi, var) bind(c, name='yw')
+            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            real(kind=c_double) :: x, phi, var
+            integer(kind=c_int), value :: N, p
+        end subroutine yw
+
+        subroutine burg(x, N, p, phi, var) bind(c, name='burg')
+            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            real(kind=c_double) :: x, phi, var
+            integer(kind=c_int), value :: N, p
+        end subroutine burg
+
+        subroutine hr(x, N, p, q, phi, theta, var) bind(c, name='hr')
+            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            real(kind=c_double) :: x, phi, theta, var
+            integer(kind=c_int), value :: N, p, q
+        end subroutine hr
+    end interface
+    !* CTSA_H_
 contains
 
 end module fortran_tsa
