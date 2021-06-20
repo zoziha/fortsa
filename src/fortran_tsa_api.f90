@@ -115,7 +115,7 @@ module fortran_tsa
         function arima_init(p, d, q, N)
             import arima_set
             use, intrinsic :: iso_c_binding, only: c_int
-            integer(kind=c_int) :: p, d, q, N
+            integer(kind=c_int), value :: p, d, q, N
             type(arima_set) :: arima_init
         end function
     end interface
@@ -153,7 +153,7 @@ module fortran_tsa
         function sarima_init(p, d, q, s, p_, d_, q_, N)
             import sarima_set
             use, intrinsic :: iso_c_binding, only: c_int
-            integer(kind=c_int) :: p, d, q, s, p_, d_, q_, N
+            integer(kind=c_int), value :: p, d, q, s, p_, d_, q_, N
             type(sarima_set) :: sarima_init
         end function
     end interface
