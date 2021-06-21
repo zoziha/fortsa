@@ -77,7 +77,7 @@ program main
         d = 1
         q = 0
 
-        L = 0
+        L = 5
 
         line = 0
 

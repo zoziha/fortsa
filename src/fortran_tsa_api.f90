@@ -163,7 +163,6 @@ module fortran_tsa
     interface
         function arima_init(p, d, q, N) bind(c, name='arima_init')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr
-            import arima_set
             integer(kind=c_int), value :: p, d, q, N
             type(c_ptr) :: arima_init
         end function
@@ -242,7 +241,7 @@ module fortran_tsa
         end subroutine sarimax_exec
 
         subroutine arima_exec(obj, x) bind(c, name='arima_exec')
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            use, intrinsic :: iso_c_binding, only: c_ptr, c_double
             type(c_ptr), value :: obj
             type(c_ptr), value :: x
         end subroutine arima_exec
@@ -269,7 +268,7 @@ module fortran_tsa
         end subroutine ar_exec
         !!! predict routines 🔻
         subroutine arima_predict(obj, inp, L, xpred, amse) bind(c, name='arima_predict')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr, c_double
             import arima_set
             type(c_ptr), value :: obj
             type(c_ptr), value :: inp, xpred, amse
@@ -317,7 +316,7 @@ module fortran_tsa
         !!! setMethod routines 🔻
         subroutine arima_setMethod(obj, value) bind(c, name='arima_setMethod')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr
-            type(c_ptr), value :: obj
+            type(c_ptr) :: obj
             integer(kind=c_int), value :: value
         end subroutine arima_setMethod
 
@@ -344,7 +343,7 @@ module fortran_tsa
         subroutine arima_setOptMethod(obj, value) bind(c, name='arima_setOptMethod')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr
             import arima_set
-            type(c_ptr), value :: obj
+            type(c_ptr) :: obj
             integer(kind=c_int), value :: value
         end subroutine arima_setOptMethod
 
@@ -437,7 +436,6 @@ module fortran_tsa
         !!! summary routines 🔻
         subroutine arima_summary(obj) bind(c, name='arima_summary')
             use, intrinsic :: iso_c_binding, only: c_ptr
-            import arima_set
             type(c_ptr) :: obj
         end subroutine arima_summary
 
@@ -500,7 +498,7 @@ module fortran_tsa
 
         subroutine acvf2acf(acf, M) bind(c, name='acvf2acf')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr
-            type(c_ptr) :: acf
+            type(c_ptr), value :: acf
             integer(kind=c_int), value :: M
         end subroutine acvf2acf
 
