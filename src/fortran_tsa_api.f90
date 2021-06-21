@@ -1,11 +1,13 @@
 !! `Fortran-TSA-api.f90` will be the `C-Fortran` interface to `CTSA`
 
 module fortran_tsa
-    use, intrinsic :: iso_c_binding, only: c_int, c_double, c_char
+    use, intrinsic :: iso_c_binding, only: c_int, c_double, c_char, c_ptr
     implicit none
     private
 
     public :: acvf, acvf_opt, acvf2acf
+    public :: arima_set, arima_init, arima_setMethod,arima_setOptMethod, &
+              arima_exec, arima_summary, arima_predict, arima_free
 
     !* CTSA_H_
     type, bind(c) :: auto_arima_set
@@ -138,14 +140,14 @@ module fortran_tsa
         integer(kind=c_int) :: r        !! Number of exogenous variables
         integer(kind=c_int) :: M        !! M = 0 if mean is 0.0 else M = 1
         integer(kind=c_int) :: ncoeff   !! Total Number of Coefficients to be estimated
-        real(kind=c_double) :: phi
-        real(kind=c_double) :: theta
-        real(kind=c_double) :: phi_
-        real(kind=c_double) :: theta_
-        real(kind=c_double) :: exog
-        real(kind=c_double) :: vcov     !! Variance-Covariance Matrix Of length lvcov
+        type(c_ptr) :: phi
+        type(c_ptr) :: theta
+        type(c_ptr) :: phi_
+        type(c_ptr) :: theta_
+        type(c_ptr) :: exog
+        type(c_ptr) :: vcov     !! Variance-Covariance Matrix Of length lvcov
         integer(kind=c_int) :: lvcov    !! length of VCOV
-        real(kind=c_double) :: res
+        type(c_ptr) :: res
         real(kind=c_double) :: mean
         real(kind=c_double) :: var
         real(kind=c_double) :: loglik
@@ -156,12 +158,14 @@ module fortran_tsa
         real(kind=c_double), dimension(0) :: params
     end type
 
+    ! type(c_ptr), bind(c, name='arima_object') :: arima_object
+
     interface
-        function arima_init(p, d, q, N)
-            use, intrinsic :: iso_c_binding, only: c_int
+        function arima_init(p, d, q, N) bind(c, name='arima_init')
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
             import arima_set
             integer(kind=c_int), value :: p, d, q, N
-            type(arima_set) :: arima_init
+            type(c_ptr) :: arima_init
         end function
     end interface
 
@@ -238,16 +242,15 @@ module fortran_tsa
         end subroutine sarimax_exec
 
         subroutine arima_exec(obj, x) bind(c, name='arima_exec')
-            use, intrinsic :: iso_c_binding, only: c_double
-            import arima_set
-            type(arima_set) :: obj
-            real(kind=c_double) :: x
+            use, intrinsic :: iso_c_binding, only: c_ptr
+            type(c_ptr), value :: obj
+            type(c_ptr), value :: x
         end subroutine arima_exec
 
         subroutine sarima_exec(obj, x) bind(c, name='sarima_exec')
-            use, intrinsic :: iso_c_binding, only: c_double
+            use, intrinsic :: iso_c_binding, only: c_double, c_ptr
             import sarima_set
-            type(sarima_set) :: obj
+            type(c_ptr), value :: obj
             real(kind=c_double) :: x
         end subroutine sarima_exec
 
@@ -266,10 +269,10 @@ module fortran_tsa
         end subroutine ar_exec
         !!! predict routines 🔻
         subroutine arima_predict(obj, inp, L, xpred, amse) bind(c, name='arima_predict')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
             import arima_set
-            type(arima_set) :: obj
-            real(kind=c_double) :: inp, xpred, amse
+            type(c_ptr), value :: obj
+            type(c_ptr), value :: inp, xpred, amse
             integer(kind=c_int), value :: L
         end subroutine arima_predict
 
@@ -307,22 +310,20 @@ module fortran_tsa
 
         subroutine ar(inp, N, p, method, phi, var) bind(c, name='ar')
             use, intrinsic :: iso_c_binding, only: c_int, c_double
-            import ar
+            import ar_set
             real(kind=c_double) :: inp, phi, var
             integer(kind=c_int), value :: N, p, method
         end subroutine ar
         !!! setMethod routines 🔻
         subroutine arima_setMethod(obj, value) bind(c, name='arima_setMethod')
-            use, intrinsic :: iso_c_binding, only: c_int
-            import arima_set
-            type(arima_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine arima_setMethod
 
         subroutine sarima_setMethod(obj, value) bind(c, name='sarima_setMethod')
-            use, intrinsic :: iso_c_binding, only: c_int
-            import sarima_set
-            type(sarima_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine sarima_setMethod
 
@@ -341,9 +342,9 @@ module fortran_tsa
         end subroutine sarimax_setMethod
         !!! setOptMethod routines 🔻
         subroutine arima_setOptMethod(obj, value) bind(c, name='arima_setOptMethod')
-            use, intrinsic :: iso_c_binding, only: c_int
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
             import arima_set
-            type(arima_set) :: obj
+            type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine arima_setOptMethod
 
@@ -435,13 +436,14 @@ module fortran_tsa
         end subroutine auto_arima_setVerbose
         !!! summary routines 🔻
         subroutine arima_summary(obj) bind(c, name='arima_summary')
+            use, intrinsic :: iso_c_binding, only: c_ptr
             import arima_set
-            type(arima_set) :: obj
+            type(c_ptr) :: obj
         end subroutine arima_summary
 
         subroutine sarima_summary(obj) bind(c, name='sarima_summary')
             import sarima_set
-            type(sarima_set) :: obj
+            type(sarima_set), value :: obj
         end subroutine sarima_summary
 
         subroutine sarimax_summary(obj) bind(c, name='sarimax_summary')
@@ -505,7 +507,7 @@ module fortran_tsa
         !!! free routines 🔻
         subroutine arima_free(obj) bind(c, name='arima_free')
             import arima_set
-            type(arima_set) :: obj
+            type(arima_set), value :: obj
         end subroutine arima_free
 
         subroutine sarima_free(obj) bind(c, name='sarima_free')
