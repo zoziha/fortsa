@@ -1,4 +1,4 @@
-!! `Fortran-TSA-api.f90` will be the `C-Fortran` interface to `CTSA`
+!! `Fortran-TSA-api.f90` will be the `C-Fortran` interface to [rafat/CTSA](https://github.com/rafat/ctsa)
 
 module fortran_tsa
     use, intrinsic :: iso_c_binding, only: c_int, c_double, c_char, c_ptr

@@ -27,13 +27,10 @@ print_creation_date: true
 creation_date: %Y-%m-%d %H:%M %z
 project_github: https://github.com/zoziha/fortran-tsa
 project_download: https://github.com/zoziha/fortran-tsa
-favicon: # doc/media/favicon.png
 license: BSD-3
 author: FTN-TSA v0.0.1 contributors
-author_pic: null
 author_email: zuo.zhihua@qq.com
 github: https://github.com/zoziha/fortran-tsa
-twitter: null
 website: https://github.com/zoziha/fortran-tsa
 dbg: true
 ---
