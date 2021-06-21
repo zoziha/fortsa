@@ -16,7 +16,7 @@ program main
         real(8),target,allocatable :: inp(:), acf(:)
         integer :: method
 
-        infile = file('data/seriesC.txt')
+        infile = file('example/data/seriesC.txt')
         call infile%open('r')
         lines = infile%countlines()
         allocate(inp(lines), acf(10))
@@ -81,7 +81,7 @@ program main
 
         line = 0
 
-        infile = file('data/seriesA.txt')
+        infile = file('example/data/seriesA.txt')
         call infile%open('r')
         line = infile%countlines()
         allocate(inp(line), xpred(L), amse(L))
@@ -137,7 +137,7 @@ program main
 
         line = 0
 
-        infile = file('data/seriesA.txt')
+        infile = file('example/data/seriesA.txt')
         call infile%open('r')
         line = infile%countlines()
         allocate(inp(line), xpred(L), amse(L))

@@ -1,20 +1,25 @@
 # Workflows
 
-## 
+## Plans
+### CTSA Translation
+All the examples and interfaces in ctsa are implemented through Fortran, and they can run correctly.
+
+### Robust Fortran Interface
+Encapsulate the c-fortran interface to avoid dynamic memory leaks.
 
 ## C-Fortran Interoperability
-### pointer in c struct
+### Pointer in c struct
 
 ```c
 struct c_struct{
     int N;
-    double *phi
+    double *phi;
 }
 ```
-Acco
+Correspondingly:
 ```fortran
 type, bind(c) :: f_type
     integer(c_int) :: n
     type(c_ptr) :: p
-edn type
+end type
 ```

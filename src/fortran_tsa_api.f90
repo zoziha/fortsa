@@ -317,7 +317,7 @@ module fortran_tsa
         !!! setMethod routines 🔻
         subroutine arima_setMethod(obj, value) bind(c, name='arima_setMethod')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr
-            type(c_ptr) :: obj
+            type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine arima_setMethod
 
@@ -343,8 +343,7 @@ module fortran_tsa
         !!! setOptMethod routines 🔻
         subroutine arima_setOptMethod(obj, value) bind(c, name='arima_setOptMethod')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr
-            import arima_set
-            type(c_ptr) :: obj
+            type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine arima_setOptMethod
 
@@ -437,7 +436,7 @@ module fortran_tsa
         !!! summary routines 🔻
         subroutine arima_summary(obj) bind(c, name='arima_summary')
             use, intrinsic :: iso_c_binding, only: c_ptr
-            type(c_ptr) :: obj
+            type(c_ptr), value :: obj
         end subroutine arima_summary
 
         subroutine sarima_summary(obj) bind(c, name='sarima_summary')
