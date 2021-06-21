@@ -8,6 +8,9 @@ module fortran_tsa
     public :: acvf, acvf_opt, acvf2acf
     public :: arima_set, arima_init, arima_setMethod,arima_setOptMethod, &
               arima_exec, arima_summary, arima_predict, arima_free
+    public :: ar_init, ar_exec, &
+                ar_summary, ar_predict, &
+                ar_free
 
     !* CTSA_H_
     type, bind(c) :: auto_arima_set
@@ -224,10 +227,9 @@ module fortran_tsa
 
     interface
         function ar_init(method, N) bind(c, name = 'ar_init')
-            use, intrinsic :: iso_c_binding, only: c_int
-            import ar_set
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
             integer(kind=c_int), value :: method, N
-            type(ar_set) :: ar_init
+            type(c_ptr) :: ar_init
         end function
     end interface
 
@@ -261,10 +263,10 @@ module fortran_tsa
         end subroutine auto_arima_exec
 
         subroutine ar_exec(obj, inp) bind(c, name='ar_exec')
-            use, intrinsic :: iso_c_binding, only: c_double
+            use, intrinsic :: iso_c_binding, only: c_double, c_ptr
             import ar_set
-            type(ar_set) :: obj
-            real(kind=c_double) :: inp
+            type(c_ptr), value :: obj
+            type(c_ptr), value :: inp
         end subroutine ar_exec
         !!! predict routines 🔻
         subroutine arima_predict(obj, inp, L, xpred, amse) bind(c, name='arima_predict')
@@ -300,10 +302,9 @@ module fortran_tsa
         end subroutine auto_arima_predict
 
         subroutine ar_predict(obj, inp, L, xpred, amse) bind(c, name='ar_predict')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
-            import ar_set
-            type(ar_set) :: obj
-            real(kind=c_double) :: inp, xpred, amse
+            use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
+            type(c_ptr), value :: obj
+            type(c_ptr), value :: inp, xpred, amse
             integer(kind=c_int), value :: L
         end subroutine ar_predict
 
@@ -461,8 +462,8 @@ module fortran_tsa
         end subroutine ar_estimate
 
         subroutine ar_summary(obj) bind(c, name='ar_summary')
-            import ar_set
-            type(ar_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_ptr
+            type(c_ptr), value :: obj
         end subroutine ar_summary
 
         subroutine model_estimate(x, N, d, pmax, h) bind(c, name='model_estimate')
@@ -504,8 +505,8 @@ module fortran_tsa
 
         !!! free routines 🔻
         subroutine arima_free(obj) bind(c, name='arima_free')
-            import arima_set
-            type(arima_set), value :: obj
+            use, intrinsic :: iso_c_binding, only: c_ptr
+            type(c_ptr) :: obj
         end subroutine arima_free
 
         subroutine sarima_free(obj) bind(c, name='sarima_free')
@@ -524,8 +525,8 @@ module fortran_tsa
         end subroutine auto_arima_free
 
         subroutine ar_free(obj) bind(c, name='ar_free')
-            import ar_set
-            type(ar_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_ptr
+            type(c_ptr) :: obj
         end subroutine ar_free
         !!! Yule-Walker, Burg and Hannan Rissanen Algorithms for Initial Parameter Estimation
         subroutine yw(x, N, p, phi, var) bind(c, name='yw')
