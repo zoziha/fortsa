@@ -176,11 +176,6 @@ program main
         integer :: i, d, L
         integer :: p, q
         real(8), target, allocatable :: phi(:), theta(:)
-        type(c_ptr) :: obj = c_null_ptr
-        target obj
-        ! type(arima_set), target :: set
-        ! target set
-        ! type(arima_set) :: obj
         type(file) :: infile
         integer :: line
         real(8), target, allocatable :: inp(:)
@@ -232,6 +227,70 @@ program main
         call disp(var, 'VAR : ')
 
         deallocate(inp, phi, theta)
+        call infile%close()
+
+    endblock
+
+    block   !! autoarimatest1.c
+        use forlab, only: disp, file
+        use fortran_tsa, only: auto_arima_init,auto_arima_setApproximation, auto_arima_exec, &
+                                auto_arima_summary, auto_arima_predict, &
+                                auto_arima_free, auto_arima_setStepwise
+        use, intrinsic :: iso_c_binding
+        integer :: i, s, r, L
+        integer :: p, d, q, p_, d_ , q_
+        real(8), target, allocatable :: xpred(:), amse(:)
+        type(c_ptr) :: obj = c_null_ptr
+        target obj
+        ! type(arima_set), target :: set
+        ! target set
+        ! type(arima_set) :: obj
+        type(file) :: infile
+        integer :: line
+        real(8), target, allocatable :: inp(:)
+        integer, target :: order(3), seasonal(3)
+
+        p = 5
+        d = 2
+        q = 5
+        p_ = 2
+        d_ = 1
+        q_ = 2
+
+        order = [p, d, q]
+        seasonal = [p_, d_, q_]
+
+        s = 0
+        r = 0
+        L = 5
+
+        infile = file('example/data/seriesA.txt')
+        call infile%open('r')
+        line = infile%countlines()
+        allocate(inp(line), xpred(L), amse(L))
+
+        do i = 1, line
+            read(infile%unit, *) inp(i)
+        enddo
+
+        ! obj = c_loc(set)
+        ! call c_f_pointer(obj, set)
+
+        obj = auto_arima_init(c_loc(order(1)), c_loc(seasonal(1)), s, r, line)
+        call auto_arima_setApproximation(obj, 0)
+        call auto_arima_setStepwise(obj, 0)
+        call auto_arima_exec(obj, c_loc(inp(1)), c_null_ptr)
+        call auto_arima_summary(obj)
+        call auto_arima_predict(obj, c_loc(inp(1)), c_null_ptr, L, c_null_ptr, c_loc(xpred(1)), c_loc(amse(1)))
+        
+        call disp('Predicted Values : ')
+        call disp(xpred)
+        call disp('Standard Errors : ')
+        call disp(sqrt(amse))
+
+        call auto_arima_free(obj)
+            !!\FIXME:
+        deallocate(inp, xpred, amse)
         call infile%close()
 
     endblock
