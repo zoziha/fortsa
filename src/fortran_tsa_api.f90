@@ -11,6 +11,7 @@ module fortran_tsa
     public :: ar_init, ar_exec, &
                 ar_summary, ar_predict, &
                 ar_free
+    public :: yw, burg, hr
 
     !* CTSA_H_
     type, bind(c) :: auto_arima_set
@@ -505,7 +506,7 @@ module fortran_tsa
         !!! free routines 🔻
         subroutine arima_free(obj) bind(c, name='arima_free')
             use, intrinsic :: iso_c_binding, only: c_ptr
-            type(c_ptr) :: obj
+            type(c_ptr), value :: obj
         end subroutine arima_free
 
         subroutine sarima_free(obj) bind(c, name='sarima_free')
@@ -525,24 +526,27 @@ module fortran_tsa
 
         subroutine ar_free(obj) bind(c, name='ar_free')
             use, intrinsic :: iso_c_binding, only: c_ptr
-            type(c_ptr) :: obj
+            type(c_ptr), value :: obj
         end subroutine ar_free
         !!! Yule-Walker, Burg and Hannan Rissanen Algorithms for Initial Parameter Estimation
         subroutine yw(x, N, p, phi, var) bind(c, name='yw')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
-            real(kind=c_double) :: x, phi, var
+            use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
+            type(c_ptr), value :: var
+                !!\FIXME:
+            type(c_ptr), value :: x, phi
             integer(kind=c_int), value :: N, p
         end subroutine yw
 
         subroutine burg(x, N, p, phi, var) bind(c, name='burg')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
-            real(kind=c_double) :: x, phi, var
+            use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
+            type(c_ptr), value :: var
+            type(c_ptr), value :: x, phi
             integer(kind=c_int), value :: N, p
         end subroutine burg
 
         subroutine hr(x, N, p, q, phi, theta, var) bind(c, name='hr')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
-            real(kind=c_double) :: x, phi, theta, var
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            type(c_ptr), value :: x, phi, theta, var
             integer(kind=c_int), value :: N, p, q
         end subroutine hr
     end interface
