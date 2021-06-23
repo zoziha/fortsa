@@ -6,14 +6,20 @@ module fortran_tsa
     private
 
     public :: acvf, acvf_opt, acvf2acf
+
     public :: arima_set, arima_init, arima_setMethod,arima_setOptMethod, &
               arima_exec, arima_summary, arima_predict, arima_free
     public :: ar_init, ar_exec, &
                 ar_summary, ar_predict, &
                 ar_free
+
+    public :: auto_arima_init,auto_arima_setApproximation, auto_arima_exec, &
+                auto_arima_summary, auto_arima_predict, &
+                auto_arima_free, auto_arima_setStepwise
+
     public :: yw, burg, hr
 
-    !* CTSA_H_
+    !* CTSA_H_ *!
     type, bind(c) :: auto_arima_set
         integer(kind=c_int) :: N        !! length of time series
         integer(kind=c_int) :: Nused    !! length of time series after differencing, Nused = N - d
@@ -78,12 +84,10 @@ module fortran_tsa
 
     interface
         function auto_arima_init(pdqmax, pdqmax_, s, r, N) bind(c, name='auto_arima_init')
-            use, intrinsic :: iso_c_binding, only: c_int
-            import auto_arima_set
-            integer(kind=c_int) :: pdqmax, pdqmax_
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            type(c_ptr), value :: pdqmax, pdqmax_
             integer(kind=c_int), value :: s, r, N
-            type(auto_arima_set) :: auto_arima_init
-                !! \TOCHECK:
+            type(c_ptr) :: auto_arima_init
         end function
     end interface
 
@@ -122,10 +126,9 @@ module fortran_tsa
 
     interface 
         function sarimax_init(p, d, q, p_, d_, q_, s, r, imean, N) bind(c, name='sarimax_init')
-            use, intrinsic :: iso_c_binding, only: c_int
-            import sarimax_set
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
             integer(kind=c_int), value :: p, d, q, p_, d_, q_, s, r, imean, N
-            type(sarimax_set) :: sarimax_init
+            type(c_ptr) :: sarimax_init
         end function sarimax_init
     end interface
 
@@ -257,10 +260,9 @@ module fortran_tsa
         end subroutine sarima_exec
 
         subroutine auto_arima_exec(obj, inp, xreg) bind(c, name='auto_arima_exec')
-            use, intrinsic :: iso_c_binding, only: c_double
-            import auto_arima_set
-            type(auto_arima_set) :: obj
-            real(kind=c_double) :: inp, xreg
+            use, intrinsic :: iso_c_binding, only: c_double, c_ptr
+            type(c_ptr), value :: obj
+            type(c_ptr), value :: inp, xreg
         end subroutine auto_arima_exec
 
         subroutine ar_exec(obj, inp) bind(c, name='ar_exec')
@@ -295,10 +297,9 @@ module fortran_tsa
         end subroutine sarimax_predict
 
         subroutine auto_arima_predict(obj, inp, xreg, L, newxreg, xpred, amse) bind(c, name='auto_arima_predict')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
-            import auto_arima_set
-            type(auto_arima_set) :: obj
-            real(kind=c_double) :: inp, xreg, newxreg, xpred, amse
+            use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
+            type(c_ptr), value :: obj
+            type(c_ptr), value :: inp, xreg, newxreg, xpred, amse
             integer(kind=c_int), value :: L
         end subroutine auto_arima_predict
 
@@ -384,23 +385,20 @@ module fortran_tsa
         end subroutine sarimax_vcov
 
         subroutine auto_arima_setApproximation(obj, approximation) bind(c, name='auto_arima_setApproximation')
-            use, intrinsic :: iso_c_binding, only: c_int
-            import auto_arima_set
-            type(auto_arima_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            type(c_ptr), value :: obj
             integer(kind=c_int), value :: approximation
         end subroutine auto_arima_setApproximation
 
         subroutine auto_arima_setStepwise(obj, stepwise) bind(c, name='auto_arima_setStepwise')
-            use, intrinsic :: iso_c_binding, only: c_int
-            import auto_arima_set
-            type(auto_arima_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            type(c_ptr), value :: obj
             integer(kind=c_int), value :: stepwise
         end subroutine auto_arima_setStepwise
 
         subroutine auto_arima_setStationary(obj, stationary) bind(c, name='auto_arima_setStationary')
-            use, intrinsic :: iso_c_binding, only: c_int
-            import auto_arima_set
-            type(auto_arima_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            type(c_ptr) :: obj
             integer(kind=c_int), value :: stationary
         end subroutine auto_arima_setStationary
 
@@ -451,8 +449,8 @@ module fortran_tsa
         end subroutine sarimax_summary
 
         subroutine auto_arima_summary(obj) bind(c, name='auto_arima_summary')
-            import auto_arima_set
-            type(auto_arima_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_ptr
+            type(c_ptr), value :: obj
         end subroutine auto_arima_summary
 
         subroutine ar_estimate(x, N, method) bind(c, name='ar_estimate')
@@ -505,31 +503,42 @@ module fortran_tsa
 
         !!! free routines 🔻
         subroutine arima_free(obj) bind(c, name='arima_free')
+            !! free arima struct memory
             use, intrinsic :: iso_c_binding, only: c_ptr
             type(c_ptr), value :: obj
+                !! pointer points to `arima_object`
         end subroutine arima_free
 
         subroutine sarima_free(obj) bind(c, name='sarima_free')
-            import sarima_set
-            type(sarima_set) :: obj
+            !! free sarima struct memory
+            use, intrinsic :: iso_c_binding, only: c_ptr
+            type(c_ptr), value :: obj
+                !! pointer points to `sarima_object`
         end subroutine sarima_free
 
         subroutine sarimax_free(obj) bind(c, name='sarimax_free')
-            import sarimax_set
-            type(sarimax_set) :: obj
+            !! free sarimax struct memory
+            use, intrinsic :: iso_c_binding, only: c_ptr
+            type(c_ptr), value :: obj
+                !! pointer points to `sarimax_object`
         end subroutine sarimax_free
 
         subroutine auto_arima_free(obj) bind(c, name='auto_arima_free')
-            import auto_arima_set
-            type(auto_arima_set) :: obj
+            !! free auto_arima struct memory
+            use, intrinsic :: iso_c_binding, only: c_ptr
+            type(c_ptr), value :: obj
+                !! pointer points to `auto_arima_object`
         end subroutine auto_arima_free
 
         subroutine ar_free(obj) bind(c, name='ar_free')
+            !! free ar struct memory
             use, intrinsic :: iso_c_binding, only: c_ptr
             type(c_ptr), value :: obj
+                !! pointer points to `ar_object`
         end subroutine ar_free
         !!! Yule-Walker, Burg and Hannan Rissanen Algorithms for Initial Parameter Estimation
         subroutine yw(x, N, p, phi, var) bind(c, name='yw')
+            !! Yule-Walker Algorithms for Initial Parameter Estimation
             use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
             type(c_ptr), value :: var
                 !!\FIXME:
@@ -538,6 +547,7 @@ module fortran_tsa
         end subroutine yw
 
         subroutine burg(x, N, p, phi, var) bind(c, name='burg')
+            !! Burg Algorithms for Initial Parameter Estimation
             use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
             type(c_ptr), value :: var
             type(c_ptr), value :: x, phi
@@ -545,12 +555,13 @@ module fortran_tsa
         end subroutine burg
 
         subroutine hr(x, N, p, q, phi, theta, var) bind(c, name='hr')
+            !! Hannan Rissanen Algorithms for Initial Parameter Estimation
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr
             type(c_ptr), value :: x, phi, theta, var
             integer(kind=c_int), value :: N, p, q
         end subroutine hr
     end interface
-    !* CTSA_H_
+    !* CTSA_H_ *!
 contains
 
 end module fortran_tsa
