@@ -1,10 +1,10 @@
 name = 'fortran-tsa'
 version = '0.0.1'
 maintainer = 'fortran-tsa contributors'
-license = 'BSD 3- Clause Check COPYRIGHT file'
+license = 'BSD 3- Clause Check LINCENSE file'
 author = 'fortran-tsa contributors'
 categories = 'time series analysis'
-copyright = "2021-2021 fortran-tsa contributors"
+copyright = "2014-2021 fortran-tsa contributors"
 
 [build]
 auto-examples = false

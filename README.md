@@ -1,5 +1,5 @@
 # FORTRAN-TSA
-This package is still under development, please do not use this package as a production tool.
+This package is still **under development**, please **do not use** this package as a production tool.
 
 ## A Univariate Time Series Analysis and ARIMA Modeling Package in Fortran
 
@@ -12,7 +12,7 @@ CTSA is a C software package for univariate time series analysis.
 | **Web site:** | https://github.com/zoziha/fortran-tsa |
 | **API-Doc Web site:** | \todo: |
 | **Copyright:** | _This document_ has been placed in the public domain. |
-| **License:** | _Fortran-TSA_ is released under (BSD 3- Clause Check COPYRIGHT file). |
+| **License:** | _Fortran-TSA_ is released under BSD-3. |
 
 ## Getting Started
 ```bash
@@ -55,7 +55,7 @@ Wiki is available at
 
 https://github.com/rafat/ctsa/wiki
 
-License : BSD 3- Clause Check COPYRIGHT file
+License : BSD 3- Clause Check LICENSE file
 
 Contact rafat.hsn@gmail.com
 

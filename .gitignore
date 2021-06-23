@@ -41,7 +41,7 @@ API-doc
 
 #data
 *.bin
-*.txt
 
 #vscode
 *.vscode
+API-doc/
