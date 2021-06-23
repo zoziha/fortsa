@@ -45,8 +45,8 @@ program check
         enddo
 
         obj = auto_arima_init(c_loc(order(1)), c_loc(seasonal(1)), s, r, lines)
-        call auto_arima_setApproximation(obj, 1)
-        call auto_arima_setStepwise(obj, 1)
+        call auto_arima_setApproximation(obj, 0)
+        call auto_arima_setStepwise(obj, 0)
         call auto_arima_setVerbose(obj, 1)
 
         call auto_arima_exec(obj, c_loc(inp(1)), c_null_ptr)
