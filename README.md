@@ -12,7 +12,7 @@ CTSA is a C software package for univariate time series analysis.
 | **Web site:** | https://github.com/zoziha/fortran-tsa |
 | **API-Doc Web site:** | \todo: |
 | **Copyright:** | _This document_ has been placed in the public domain. |
-| **License:** | _Fortran-TSA_ is released under (BSD 3- Clause Check COPYRIGHT file). |
+| **License:** | _Fortran-TSA_ is released under BSD-3. |
 
 ## Getting Started
 ```bash
