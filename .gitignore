@@ -37,6 +37,7 @@ language.settings.xml
 
 *.exe
 build/
+API-doc
 
 #data
 *.bin
