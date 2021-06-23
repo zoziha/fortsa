@@ -31,7 +31,7 @@ int main(void) {
 	int seasonal[3] = {P,D,Q};
 
 
-	L = 0;
+	L = 5;
 
 	xpred = (double*)malloc(sizeof(double)* L);
 	amse = (double*)malloc(sizeof(double)* L);

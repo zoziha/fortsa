@@ -15,7 +15,7 @@ module fortran_tsa
 
     public :: auto_arima_init,auto_arima_setApproximation, auto_arima_exec, &
                 auto_arima_summary, auto_arima_predict, &
-                auto_arima_free, auto_arima_setStepwise
+                auto_arima_free, auto_arima_setStepwise, auto_arima_setVerbose
 
     public :: yw, burg, hr
 
@@ -297,7 +297,7 @@ module fortran_tsa
         end subroutine sarimax_predict
 
         subroutine auto_arima_predict(obj, inp, xreg, L, newxreg, xpred, amse) bind(c, name='auto_arima_predict')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
             type(c_ptr), value :: obj
             type(c_ptr), value :: inp, xreg, newxreg, xpred, amse
             integer(kind=c_int), value :: L
@@ -427,9 +427,8 @@ module fortran_tsa
         end subroutine auto_arima_setSeasonalParameter
 
         subroutine auto_arima_setVerbose(obj, verbose) bind(c, name='auto_arima_setVerbose')
-            use, intrinsic :: iso_c_binding, only: c_int
-            import auto_arima_set
-            type(auto_arima_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            type(c_ptr), value :: obj
             integer(kind=c_int), value :: verbose
         end subroutine auto_arima_setVerbose
         !!! summary routines 🔻
