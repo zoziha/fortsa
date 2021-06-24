@@ -9,7 +9,7 @@ program test
 
     block   !! acftest
         use forlab, only: disp, file
-        use fortran_tsa, only: acvf, acvf_opt, acvf2acf
+        use ctsa_api, only: acvf, acvf_opt, acvf2acf
         use iso_c_binding
         type(file) :: infile
         integer :: lines
@@ -56,7 +56,7 @@ program test
 
     block   !! arimatest.c
         use forlab, only: disp, file
-        use fortran_tsa, only: arima_set, arima_init, &
+        use ctsa_api, only: arima_set, arima_init, &
                                 arima_setMethod,arima_exec, &
                                 arima_summary, arima_predict, &
                                 arima_free, arima_setOptMethod
@@ -113,7 +113,7 @@ program test
 
     block   !! artest.c
         use forlab, only: disp, file
-        use fortran_tsa, only: ar_init, ar_exec, &
+        use ctsa_api, only: ar_init, ar_exec, &
                                 ar_summary, ar_predict, &
                                 ar_free
         use, intrinsic :: iso_c_binding
@@ -168,10 +168,10 @@ program test
 
     block   !! artest2.c
         use forlab, only: disp, file, mean
-        use fortran_tsa, only: ar_init, ar_exec, &
+        use ctsa_api, only: ar_init, ar_exec, &
                                 ar_summary, ar_predict, &
                                 ar_free
-        use fortran_tsa, only: yw, burg, hr
+        use ctsa_api, only: yw, burg, hr
         use, intrinsic :: iso_c_binding
         integer :: i, d, L
         integer :: p, q
@@ -233,7 +233,7 @@ program test
 
     block   !! autoarimatest1.c
         use forlab, only: disp, file
-        use fortran_tsa, only: auto_arima_init,auto_arima_setApproximation, auto_arima_exec, &
+        use ctsa_api, only: auto_arima_init,auto_arima_setApproximation, auto_arima_exec, &
                                 auto_arima_summary, auto_arima_predict, &
                                 auto_arima_free, auto_arima_setStepwise, auto_arima_setVerbose
         use, intrinsic :: iso_c_binding
@@ -300,7 +300,7 @@ program test
     block
         use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc
         use forlab, only: file, error_stop, disp
-        use fortran_tsa, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
+        use ctsa_api, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
                                 auto_arima_exec, auto_arima_summary, auto_arima_predict, auto_arima_free
         integer :: i, N, d, d_, L
         real(8), allocatable, target :: inp(:)
@@ -364,7 +364,7 @@ program test
     block   !! auto_arima_test3.c
         use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc
         use forlab, only: file, error_stop, disp
-        use fortran_tsa, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
+        use ctsa_api, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
                                 auto_arima_exec, auto_arima_summary, auto_arima_predict, auto_arima_free
         integer :: i, N, d, d_, L
         real(8), allocatable, target :: inp(:)
@@ -387,7 +387,6 @@ program test
         p_ = 2
         d_ = 1
         q_ = 2
-        r = 0
 
         order = [p, d, q]
         seasonal = [p_, d_, q_]

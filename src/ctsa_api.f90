@@ -1,6 +1,6 @@
 !! `Fortran-TSA-api.f90` will be the `C-Fortran` interface to [rafat/CTSA](https://github.com/rafat/ctsa)
 
-module fortran_tsa
+module ctsa_api
     use, intrinsic :: iso_c_binding, only: c_int, c_double, c_char, c_ptr
     implicit none
     private
@@ -501,38 +501,38 @@ module fortran_tsa
         end subroutine acvf2acf
 
         !!! free routines 🔻
-        subroutine arima_free(obj) bind(c, name='arima_free')
+        subroutine arima_free(object) bind(c, name='arima_free')
             !! free arima struct memory
             use, intrinsic :: iso_c_binding, only: c_ptr
-            type(c_ptr), value :: obj
-                !! pointer points to `arima_object`
+            type(c_ptr), value :: object
+                !! pointer points to `arima_objectect`
         end subroutine arima_free
 
-        subroutine sarima_free(obj) bind(c, name='sarima_free')
+        subroutine sarima_free(object) bind(c, name='sarima_free')
             !! free sarima struct memory
             use, intrinsic :: iso_c_binding, only: c_ptr
-            type(c_ptr), value :: obj
+            type(c_ptr), value :: object
                 !! pointer points to `sarima_object`
         end subroutine sarima_free
 
-        subroutine sarimax_free(obj) bind(c, name='sarimax_free')
+        subroutine sarimax_free(object) bind(c, name='sarimax_free')
             !! free sarimax struct memory
             use, intrinsic :: iso_c_binding, only: c_ptr
-            type(c_ptr), value :: obj
+            type(c_ptr), value :: object
                 !! pointer points to `sarimax_object`
         end subroutine sarimax_free
 
-        subroutine auto_arima_free(obj) bind(c, name='auto_arima_free')
+        subroutine auto_arima_free(object) bind(c, name='auto_arima_free')
             !! free auto_arima struct memory
             use, intrinsic :: iso_c_binding, only: c_ptr
-            type(c_ptr), value :: obj
+            type(c_ptr), value :: object
                 !! pointer points to `auto_arima_object`
         end subroutine auto_arima_free
 
-        subroutine ar_free(obj) bind(c, name='ar_free')
+        subroutine ar_free(object) bind(c, name='ar_free')
             !! free ar struct memory
             use, intrinsic :: iso_c_binding, only: c_ptr
-            type(c_ptr), value :: obj
+            type(c_ptr), value :: object
                 !! pointer points to `ar_object`
         end subroutine ar_free
         !!! Yule-Walker, Burg and Hannan Rissanen Algorithms for Initial Parameter Estimation
@@ -563,4 +563,4 @@ module fortran_tsa
     !* CTSA_H_ *!
 contains
 
-end module fortran_tsa
+end module ctsa_api
