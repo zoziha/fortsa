@@ -302,7 +302,7 @@ program test
         use forlab, only: file, error_stop, disp
         use ctsa_api, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
                                 auto_arima_exec, auto_arima_summary, auto_arima_predict, auto_arima_free
-        integer :: i, N, d, d_, L
+        integer :: i, d, d_, L
         real(8), allocatable, target :: inp(:)
         integer :: p, q, p_, q_, s, r
         real(8), allocatable, target :: xpred(:), amse(:)
@@ -366,7 +366,7 @@ program test
         use forlab, only: file, error_stop, disp
         use ctsa_api, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
                                 auto_arima_exec, auto_arima_summary, auto_arima_predict, auto_arima_free
-        integer :: i, N, d, d_, L
+        integer :: i, d, d_, L
         real(8), allocatable, target :: inp(:)
         integer :: p, q, p_, q_, s, r
         real(8), allocatable, target :: xpred(:), amse(:), xreg(:), newxreg(:)
@@ -504,7 +504,8 @@ program test
 
         allocate(output_(wt_%outlength), fp(wt_%outlength))
         call c_f_pointer(wt_%output, fp, reshape([wt_%outlength],shape=[1]) )
-        call disp(output_(1:wt_%outlength))
+            !!\FIXME: rm unused variables
+        call disp(fp(1:wt_%outlength))
             !!\TODO: c_f_pointer, page427
 
         call imodwt(wt, c_loc(out(1)))
@@ -512,7 +513,7 @@ program test
         do i = 1, wt_%siglength
             diff(i) = out(i) - inp(i)
         enddo
-        call disp(maxval(diff), 'MAX : ')   !! If Reconstruction succeeded then the output should be a small value.
+        call disp(maxval(abs(diff)), 'MAX : ')   !! If Reconstruction succeeded then the output should be a small value.
         !!\TODO: detto
 
         call wt_summary(wt)

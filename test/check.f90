@@ -76,7 +76,7 @@ program check
         do i = 1, wt_%siglength
             diff(i) = out(i) - inp(i)
         enddo
-        call disp(maxval(diff), 'MAX : ')   !! If Reconstruction succeeded then the output should be a small value.
+        call disp(maxval(abs(diff)), 'MAX : ')   !! If Reconstruction succeeded then the output should be a small value.
         !!\TODO: detto
 
         call wt_summary(wt)
