@@ -9,7 +9,7 @@ program main
 
     block   !! acftest
         use forlab, only: disp, file
-        use fortran_tsa, only: acvf, acvf_opt, acvf2acf
+        use ctsa_api, only: acvf, acvf_opt, acvf2acf
         use iso_c_binding
         type(file) :: infile
         integer :: lines
@@ -56,7 +56,7 @@ program main
 
     block   !! arimatest.c
         use forlab, only: disp, file
-        use fortran_tsa, only: arima_set, arima_init, &
+        use ctsa_api, only: arima_set, arima_init, &
                                 arima_setMethod,arima_exec, &
                                 arima_summary, arima_predict, &
                                 arima_free, arima_setOptMethod
@@ -113,7 +113,7 @@ program main
 
     block   !! artest.c
         use forlab, only: disp, file
-        use fortran_tsa, only: ar_init, ar_exec, &
+        use ctsa_api, only: ar_init, ar_exec, &
                                 ar_summary, ar_predict, &
                                 ar_free
         use, intrinsic :: iso_c_binding
