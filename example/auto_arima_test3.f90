@@ -3,7 +3,7 @@ program check
     block
         use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc
         use forlab, only: file, error_stop, disp
-        use fortran_tsa, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
+        use ctsa_api, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
                                 auto_arima_exec, auto_arima_summary, auto_arima_predict, auto_arima_free
         integer :: i, N, d, d_, L
         real(8), allocatable, target :: inp(:)

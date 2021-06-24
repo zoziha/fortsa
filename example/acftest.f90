@@ -9,7 +9,7 @@ program main
 
     block   !! acftest
         use forlab, only: disp, file
-        use fortran_tsa, only: acvf, acvf_opt, acvf2acf
+        use ctsa_api, only: acvf, acvf_opt, acvf2acf
         use iso_c_binding
         type(file) :: infile
         integer :: lines

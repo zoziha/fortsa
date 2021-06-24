@@ -9,7 +9,7 @@ program test
 
     block   !! acftest
         use forlab, only: disp, file
-        use fortran_tsa, only: acvf, acvf_opt, acvf2acf
+        use ctsa_api, only: acvf, acvf_opt, acvf2acf
         use iso_c_binding
         type(file) :: infile
         integer :: lines
@@ -56,7 +56,7 @@ program test
 
     block   !! arimatest.c
         use forlab, only: disp, file
-        use fortran_tsa, only: arima_set, arima_init, &
+        use ctsa_api, only: arima_set, arima_init, &
                                 arima_setMethod,arima_exec, &
                                 arima_summary, arima_predict, &
                                 arima_free, arima_setOptMethod
@@ -113,7 +113,7 @@ program test
 
     block   !! artest.c
         use forlab, only: disp, file
-        use fortran_tsa, only: ar_init, ar_exec, &
+        use ctsa_api, only: ar_init, ar_exec, &
                                 ar_summary, ar_predict, &
                                 ar_free
         use, intrinsic :: iso_c_binding
@@ -168,10 +168,10 @@ program test
 
     block   !! artest2.c
         use forlab, only: disp, file, mean
-        use fortran_tsa, only: ar_init, ar_exec, &
+        use ctsa_api, only: ar_init, ar_exec, &
                                 ar_summary, ar_predict, &
                                 ar_free
-        use fortran_tsa, only: yw, burg, hr
+        use ctsa_api, only: yw, burg, hr
         use, intrinsic :: iso_c_binding
         integer :: i, d, L
         integer :: p, q
@@ -233,7 +233,7 @@ program test
 
     block   !! autoarimatest1.c
         use forlab, only: disp, file
-        use fortran_tsa, only: auto_arima_init,auto_arima_setApproximation, auto_arima_exec, &
+        use ctsa_api, only: auto_arima_init,auto_arima_setApproximation, auto_arima_exec, &
                                 auto_arima_summary, auto_arima_predict, &
                                 auto_arima_free, auto_arima_setStepwise, auto_arima_setVerbose
         use, intrinsic :: iso_c_binding
@@ -300,9 +300,9 @@ program test
     block
         use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc
         use forlab, only: file, error_stop, disp
-        use fortran_tsa, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
+        use ctsa_api, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
                                 auto_arima_exec, auto_arima_summary, auto_arima_predict, auto_arima_free
-        integer :: i, N, d, d_, L
+        integer :: i, d, d_, L
         real(8), allocatable, target :: inp(:)
         integer :: p, q, p_, q_, s, r
         real(8), allocatable, target :: xpred(:), amse(:)
@@ -364,9 +364,9 @@ program test
     block   !! auto_arima_test3.c
         use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc
         use forlab, only: file, error_stop, disp
-        use fortran_tsa, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
+        use ctsa_api, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
                                 auto_arima_exec, auto_arima_summary, auto_arima_predict, auto_arima_free
-        integer :: i, N, d, d_, L
+        integer :: i, d, d_, L
         real(8), allocatable, target :: inp(:)
         integer :: p, q, p_, q_, s, r
         real(8), allocatable, target :: xpred(:), amse(:), xreg(:), newxreg(:)
@@ -387,7 +387,6 @@ program test
         p_ = 2
         d_ = 1
         q_ = 2
-        r = 0
 
         order = [p, d, q]
         seasonal = [p_, d_, q_]
@@ -436,6 +435,93 @@ program test
         deallocate(inp, xpred, amse, xreg, newxreg)
         call infile%close()
 
+    endblock
+
+    block   !! dwttest.c
+        !! <Fortran 2018 with Parallel Programming> Page.432
+        use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc, c_char, c_f_pointer, c_null_char
+        use forlab, only: file, error_stop, disp
+        use wavelib_api, only: wave_init, wt_init, &
+                                wave_summary, wt_summary, &
+                                modwt, imodwt, &
+                                wave_free, wt_free, wt_set
+        real(8), allocatable, target :: inp(:), out(:), diff(:), data(:)
+        integer :: N, i, J
+        type(c_ptr) :: obj
+            !! wave_object
+        type(c_ptr) :: wt
+            !! wt_object
+        type(wt_set), pointer :: wt_
+            !! wt_object
+        real(8), allocatable, target :: output_(:)
+        real(8), pointer :: fp(:)
+        character(kind=c_char), dimension(4), target :: name
+        character(kind=c_char), dimension(6), target :: tmp
+
+        type(file) :: infile
+        integer :: lines
+
+        name(1) = 'd'
+        name(2) = 'b'
+        name(3) = '4'
+        name(4) = c_null_char
+        obj = wave_init(c_loc(name(1)))
+        call wave_summary(obj)
+
+        infile = file('example/data/signal.txt')
+        if(.not.infile%exist()) then
+            call error_stop('file not found : '//infile%filename)
+        endif
+        call infile%open('r')
+        lines = infile%countlines()
+        call disp(lines, 'file number of lines is : ')
+        allocate(data(lines))
+
+        do i = 1, lines
+            read(infile%unit, *) data(i)
+        enddo
+        call infile%close()
+        N = 177
+
+        allocate(inp(N), out(N), diff(N))
+        inp(:N) = data(:N)
+        J = 2
+
+            tmp(1) = 'm'
+            tmp(2) = 'o'
+            tmp(3) = 'd'
+            tmp(4) = 'w'
+            tmp(5) = 't'
+            tmp(6) = c_null_char
+                !! Note: char of c and fortran is different.
+            
+            wt = wt_init(obj, c_loc(tmp(1)), N, J)
+                !! Initialize the wavelet transform object
+            call c_f_pointer(wt, wt_)
+
+        call modwt(wt, c_loc(inp(1)))
+            !! MODWT output can be accessed using wt->output vector. Use wt_summary to find out how to extract appx and detail coefficients
+
+        allocate(output_(wt_%outlength), fp(wt_%outlength))
+        call c_f_pointer(wt_%output, fp, reshape([wt_%outlength],shape=[1]) )
+            !!\FIXME: rm unused variables
+        call disp(fp(1:wt_%outlength))
+            !!\TODO: c_f_pointer, page427
+
+        call imodwt(wt, c_loc(out(1)))
+
+        do i = 1, wt_%siglength
+            diff(i) = out(i) - inp(i)
+        enddo
+        call disp(maxval(abs(diff)), 'MAX : ')   !! If Reconstruction succeeded then the output should be a small value.
+        !!\TODO: detto
+
+        call wt_summary(wt)
+
+        call wave_free(obj)
+        call wt_free(wt)
+
+        deallocate(inp, out, diff, data)
     endblock
 
 end program
