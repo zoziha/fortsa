@@ -1,23 +1,77 @@
-name = 'fortran-tsa'
+name = 'fortsa'
 version = '0.0.1'
-maintainer = 'fortran-tsa contributors'
+maintainer = 'fortsa contributors'
 license = 'BSD 3- Clause Check LINCENSE file'
-author = 'fortran-tsa contributors'
+author = 'fortsa contributors'
 categories = 'time series analysis'
-copyright = "2014-2021 fortran-tsa contributors"
+copyright = "2014-2021 fortsa contributors"
 
 [build]
 auto-examples = false
 auto-executables = false
-auto-tests = true
+auto-tests = false
+
+[dev-dependencies]
+forlab = { git = "https://github.com/zoziha/forlab", branch = "feature/fypp_src" }
 
 [library]
 source-dir="src"
 
+# ============================ tests ===========================================
+## [model] tests
 [[test]]
-name="test"
-source-dir="test"
-main="test.f90"
-[test.dependencies]
-forlab = { git = "https://github.com/zoziha/forlab.git" }
+name="model_ar"
+source-dir="tests/model"
+main="test_model_ar.f90"
+[[test]]
+name="model_ar2"
+source-dir="tests/model"
+main="test_model_ar2.f90"
+[[test]]
+name="model_arima"
+source-dir="tests/model"
+main="test_model_arima.f90"
+[[test]]
+name="model_autoarima"
+source-dir="tests/model"
+main="test_model_autoarima.f90"
+[[test]]
+name="model_autoarima2"
+source-dir="tests/model"
+main="test_model_autoarima2.f90"
+[[test]]
+name="model_autoarima3"
+source-dir="tests/model"
+main="test_model_autoarima3.f90"
+## \TODO:
+[[test]]
+name="model_dwt"
+source-dir="tests/model"
+main="test_model_dwt.f90"
+# [[test]]
+# name="model_misc"
+# source-dir="tests/model"
+# main="test_model_misc.f90"
+[[test]]
+name="model_sarima"
+source-dir="tests/model"
+main="test_model_sarima.f90"
+[[test]]
+name="model_sarimax"
+source-dir="tests/model"
+main="test_model_sarimax.f90"
+[[test]]
+name="model_sarimax2"
+source-dir="tests/model"
+main="test_model_sarimax2.f90"
+[[test]]
+name="model_sarimax3"
+source-dir="tests/model"
+main="test_model_sarimax3.f90"
+
+## [stats] tests
+[[test]]
+name="stats_acf"
+source-dir="tests/stats"
+main="test_stats_acf.f90"
 

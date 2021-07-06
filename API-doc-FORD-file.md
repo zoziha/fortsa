@@ -2,8 +2,6 @@
 project: FTN-TSA
 summary: A opensource package FTN-TSA v0.0.1 for (modern) Fortran
 src_dir: src/
-exclude_dir: src/fpm/
-             src/fypp_test/
 output_dir: API-doc
 page_dir: doc
 media_dir: doc/media

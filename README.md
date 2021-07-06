@@ -1,23 +1,23 @@
-# FORTRAN-TSA
+# fortsa
 This package is still **under development**, please **do not use** this package as a production tool.
 
 ## A Univariate Time Series Analysis and ARIMA Modeling Package in Fortran
 
-Fortran-TSA is a Fortran software package for univariate time series analysis, which is base on [rafat/CTSA](https://github.com/rafat/ctsa).  
+fortsa is a Fortran software package for univariate time series analysis, which is base on [rafat/CTSA](https://github.com/rafat/ctsa).  
 CTSA is a C software package for univariate time series analysis. 
 | | |  
 |:-:|---|
 | **Version:** | 0.0.1 |
-| **Author:** | Fortran-TSA Contributors |
-| **Web site:** | https://github.com/zoziha/fortran-tsa |
+| **Author:** | fortsa Contributors |
+| **Web site:** | https://github.com/zoziha/fortsa |
 | **API-Doc Web site:** | \todo: |
 | **Copyright:** | _This document_ has been placed in the public domain. |
-| **License:** | _Fortran-TSA_ is released under BSD-3. |
+| **License:** | _fortsa_ is released under BSD-3. |
 
 ## Getting Started
 ```bash
-git clone https://github.com/zoziha/fortran-tsa.git
-cd fortran-tsa
+git clone https://github.com/zoziha/fortsa.git
+cd fortsa
 ```
 ## Dependencies
 
@@ -35,10 +35,10 @@ You can build using provided `fpm.toml`:
 fpm build
 fpm test
 ```
-To use `fortran-tsa` within your fpm project, add the following to `fpm.toml` file:
+To use `fortsa` within your fpm project, add the following to `fpm.toml` file:
 ```toml
 [dependencies]
-forlab = { git = "https://github.com/zoziha/fortran-tsa.git" }
+forlab = { git = "https://github.com/zoziha/fortsa.git" }
 ```
 ## Fortran Docs
 
