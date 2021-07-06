@@ -1,7 +1,8 @@
 program test_acf_acf
     use forlab_io, only: disp, file
-    use ctsa_api, only: acvf, acvf_opt, acvf2acf
-    use iso_c_binding
+    use fortsa_stats, only: acvf, acvf_opt, acvf2acf
+    use iso_c_binding, only: c_loc
+    implicit none
     type(file) :: infile
     real(8),target,allocatable :: inp(:), acf(:)
     integer :: method

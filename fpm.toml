@@ -74,4 +74,8 @@ main="test_model_sarimax3.f90"
 name="stats_acf"
 source-dir="tests/stats"
 main="test_stats_acf.f90"
+[[test]]
+name="stats_pacf"
+source-dir="tests/stats"
+main="test_stats_pacf.f90"
 
