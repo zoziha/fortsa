@@ -1,4 +1,5 @@
 module fortsa_stats
+    
     implicit none
     private
 
@@ -37,4 +38,5 @@ module fortsa_stats
             integer(kind=c_int), value :: N, method, M
         end subroutine pacf_opt
     end interface
+
 end module fortsa_stats

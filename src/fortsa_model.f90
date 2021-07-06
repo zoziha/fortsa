@@ -7,21 +7,21 @@ module fortsa_model
 
     public :: acvf, acvf_opt, acvf2acf
 
-    public :: arima_set, arima_init, arima_setMethod,arima_setOptMethod, &
+    public :: arima_set, arima_init, arima_setMethod, arima_setOptMethod, &
               arima_exec, arima_summary, arima_predict, arima_free
     public :: ar_init, ar_exec, &
-                ar_summary, ar_predict, &
-                ar_free
+              ar_summary, ar_predict, &
+              ar_free
 
     public :: auto_arima_init, auto_arima_setApproximation, auto_arima_exec, &
-                auto_arima_summary, auto_arima_predict, &
-                auto_arima_free, auto_arima_setStepwise, auto_arima_setVerbose
+              auto_arima_summary, auto_arima_predict, &
+              auto_arima_free, auto_arima_setStepwise, auto_arima_setVerbose
 
     public :: sarima_init, sarima_predict, sarima_setMethod, sarima_setOptMethod, &
-                sarima_vcov, sarima_exec, sarima_free, sarima_summary
+              sarima_vcov, sarima_exec, sarima_free, sarima_summary
 
     public :: sarimax_init, sarimax_setMethod, sarimax_exec, &
-                sarimax_summary, sarimax_predict, sarimax_free
+              sarimax_summary, sarimax_predict, sarimax_free
 
     public :: yw, burg, hr
 
@@ -128,9 +128,9 @@ module fortsa_model
         integer(kind=c_int) :: start
         integer(kind=c_int) :: imean
         real(kind=c_double), dimension(0) :: params
-    end type sarimax_set 
+    end type sarimax_set
 
-    interface 
+    interface
         function sarimax_init(p, d, q, p_, d_, q_, s, r, imean, N) bind(c, name='sarimax_init')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr
             integer(kind=c_int), value :: p, d, q, p_, d_, q_, s, r, imean, N
@@ -185,8 +185,8 @@ module fortsa_model
     type, bind(c) :: sarima_set
         integer(kind=c_int) :: N        !!  length of time series
         integer(kind=c_int) :: Nused    !! length of time series after differencing, Nused = N - d - s*D
-        integer(kind=c_int) :: method 
-        integer(kind=c_int) :: optmethod 
+        integer(kind=c_int) :: method
+        integer(kind=c_int) :: optmethod
         integer(kind=c_int) :: p        !!  size of phi
         integer(kind=c_int) :: d        !!  Number of times the series is to be differenced
         integer(kind=c_int) :: q        !! size of theta
@@ -196,19 +196,19 @@ module fortsa_model
         integer(kind=c_int) :: Q_        !! size of Seasonal Theta
         integer(kind=c_int) :: M        !!  M = 0 if mean is 0.0 else M = 1
         integer(kind=c_int) :: ncoeff   !!  Total Number of Coefficients to be estimated
-        real(kind=c_double) :: phi 
-        real(kind=c_double) :: theta 
-        real(kind=c_double) :: PHI_ 
-        real(kind=c_double) :: THETA_ 
+        real(kind=c_double) :: phi
+        real(kind=c_double) :: theta
+        real(kind=c_double) :: PHI_
+        real(kind=c_double) :: THETA_
         real(kind=c_double) :: vcov    !!  Variance-Covariance Matrix Of length lvcov
         integer(kind=c_int) :: lvcov    !! length of VCOV
-        real(kind=c_double) :: res 
-        real(kind=c_double) :: mean 
-        real(kind=c_double) :: var 
-        real(kind=c_double) :: loglik 
-        real(kind=c_double) :: aic 
-        integer(kind=c_int) :: retval 
-        real(kind=c_double), dimension(0) :: params 
+        real(kind=c_double) :: res
+        real(kind=c_double) :: mean
+        real(kind=c_double) :: var
+        real(kind=c_double) :: loglik
+        real(kind=c_double) :: aic
+        integer(kind=c_int) :: retval
+        real(kind=c_double), dimension(0) :: params
     end type
 
     interface
@@ -236,7 +236,7 @@ module fortsa_model
     end type
 
     interface
-        function ar_init(method, N) bind(c, name = 'ar_init')
+        function ar_init(method, N) bind(c, name='ar_init')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr
             integer(kind=c_int), value :: method, N
             type(c_ptr) :: ar_init
@@ -271,14 +271,12 @@ module fortsa_model
 
         subroutine ar_exec(obj, inp) bind(c, name='ar_exec')
             use, intrinsic :: iso_c_binding, only: c_double, c_ptr
-            import ar_set
             type(c_ptr), value :: obj
             type(c_ptr), value :: inp
         end subroutine ar_exec
         !!! predict routines 🔻
         subroutine arima_predict(obj, inp, L, xpred, amse) bind(c, name='arima_predict')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr, c_double
-            import arima_set
             type(c_ptr), value :: obj
             type(c_ptr), value :: inp, xpred, amse
             integer(kind=c_int), value :: L
@@ -314,7 +312,6 @@ module fortsa_model
 
         subroutine ar(inp, N, p, method, phi, var) bind(c, name='ar')
             use, intrinsic :: iso_c_binding, only: c_int, c_double
-            import ar_set
             real(kind=c_double) :: inp, phi, var
             integer(kind=c_int), value :: N, p, method
         end subroutine ar
@@ -332,9 +329,8 @@ module fortsa_model
         end subroutine sarima_setMethod
 
         subroutine auto_arima_setMethod(obj, value) bind(c, name='auto_arima_setMethod')
-            use, intrinsic :: iso_c_binding, only: c_int
-            import auto_arima_set
-            type(auto_arima_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_ptr, c_int
+            type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine auto_arima_setMethod
 
@@ -351,22 +347,20 @@ module fortsa_model
         end subroutine arima_setOptMethod
 
         subroutine sarima_setOptMethod(obj, value) bind(c, name='sarima_setOptMethod')
-            use, intrinsic ::  iso_c_binding, only: c_int, c_ptr
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine sarima_setOptMethod
 
         subroutine auto_arima_setOptMethod(obj, value) bind(c, name='auto_arima_setOptMethod')
-            use, intrinsic :: iso_c_binding, only: c_int
-            import auto_arima_set
-            type(auto_arima_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_ptr, c_int
+            type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine auto_arima_setOptMethod
 
         subroutine arima_vcov(obj, vcov) bind(c, name='arima_vcov')
-            use, intrinsic :: iso_c_binding, only: c_double
-            import arima_set
-            type(arima_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_ptr, c_double
+            type(c_ptr), value :: obj
             real(kind=c_double) :: vcov
         end subroutine arima_vcov
 
@@ -377,9 +371,8 @@ module fortsa_model
         end subroutine sarima_vcov
 
         subroutine sarimax_vcov(obj, vcov) bind(c, name='sarimax_vcov')
-            use, intrinsic :: iso_c_binding, only: c_double
-            import sarimax_set
-            type(sarimax_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_ptr, c_double
+            type(c_ptr), value :: obj
             real(kind=c_double) :: vcov
         end subroutine sarimax_vcov
 
@@ -402,25 +395,22 @@ module fortsa_model
         end subroutine auto_arima_setStationary
 
         subroutine auto_arima_setSeasonal(obj, seasonal) bind(c, name='auto_arima_setSeasonal')
-            use, intrinsic :: iso_c_binding, only: c_int
-            import auto_arima_set
-            type(auto_arima_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_ptr, c_int
+            type(c_ptr), value :: obj
             integer(kind=c_int), value :: seasonal
         end subroutine auto_arima_setSeasonal
 
         subroutine auto_arima_setStationarityParameter(obj, test, alpha, type) bind(c, name='auto_arima_setStationarityParameter')
-            use, intrinsic :: iso_c_binding, only: c_double, c_char
-            import auto_arima_set
-            type(auto_arima_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_ptr, c_double, c_char
+            type(c_ptr), value :: obj
             character(kind=c_char) :: test, type
                 !!\tocheck:
             real(kind=c_double), value :: alpha
         end subroutine auto_arima_setStationarityParameter
 
         subroutine auto_arima_setSeasonalParameter(obj, test, alpha) bind(c, name='auto_arima_setSeasonalParameter')
-            use, intrinsic :: iso_c_binding, only: c_double, c_char
-            import auto_arima_set
-            type(auto_arima_set) :: obj
+            use, intrinsic :: iso_c_binding, only: c_ptr, c_double, c_char
+            type(c_ptr), value :: obj
             character(kind=c_char) :: test
             real(kind=c_double), value :: alpha
         end subroutine auto_arima_setSeasonalParameter

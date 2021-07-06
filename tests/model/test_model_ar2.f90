@@ -1,12 +1,13 @@
 program test_model_ar2
+
     use forlab_io, only: disp, file
     use forlab_stats, only: mean
-    use ctsa_api, only: ar_init, ar_exec, &
+    use fortsa_model, only: ar_init, ar_exec, &
                             ar_summary, ar_predict, &
                             ar_free
-    use ctsa_api, only: yw, burg, hr
+    use fortsa_model, only: yw, burg, hr
     use stdlib_error, only: error_stop
-    use, intrinsic :: iso_c_binding
+    use, intrinsic :: iso_c_binding, only: c_ptr, c_loc, c_double
     implicit none
     integer :: i, d, L
     integer :: p, q
@@ -24,14 +25,14 @@ program test_model_ar2
     L = 5
 
     infile = file('example/data/seriesA.txt', 'r')
-    if(.not.infile%exist()) call error_stop('Error: file not exist, '//infile%filename)
+    if (.not. infile%exist()) call error_stop('Error: file not exist, '//infile%filename)
     call infile%open()
     call infile%countlines()
-    allocate(inp(infile%lines), phi(p))
+    allocate (inp(infile%lines), phi(p))
 
     do i = 1, infile%lines
-        read(infile%unit, *) inp(i)
-    enddo
+        read (infile%unit, *) inp(i)
+    end do
 
     wmean = mean(inp)
         !! forlab mean
@@ -51,14 +52,15 @@ program test_model_ar2
     p = 1
     q = 1
 
-    deallocate(phi)
-    allocate(phi(p), theta(q))
+    deallocate (phi)
+    allocate (phi(p), theta(q))
     call disp('ARMA Coefficients Using Hannan Rissanen Algorithm : ')
     call hr(c_loc(inp), infile%lines, p, q, c_loc(phi(1)), c_loc(theta(1)), c_loc(var))
     call disp(phi, 'PHI : ')
     call disp(theta, 'THETA : ')
     call disp(var, 'VAR : ')
 
-    deallocate(inp, phi, theta)
+    deallocate (inp, phi, theta)
     call infile%close()
+
 end program test_model_ar2

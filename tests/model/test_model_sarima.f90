@@ -1,10 +1,11 @@
 program test_model_sarima
+
     use stdlib_error, only: error_stop
     use forlab_io, only: file, disp
     use fortsa_model, only: sarima_init, sarima_setMethod, sarima_predict, &
-        sarima_exec, sarima_summary, sarima_free
-    use, intrinsic :: iso_c_binding
-    implicit none 
+                            sarima_exec, sarima_summary, sarima_free
+    use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc
+    implicit none
     integer :: i, N, d, L
     real(8), target, allocatable :: inp(:)
     integer :: p, q
@@ -26,22 +27,22 @@ program test_model_sarima
 
     L = 5
 
-    allocate(phi(p), theta(q), phi_(p_), theta_(q_))
-    allocate(xpred(L), amse(L))
+    allocate (phi(p), theta(q), phi_(p_), theta_(q_))
+    allocate (xpred(L), amse(L))
 
     infile = file('example/data/seriesG.txt', 'r')
-    if(.not.infile%exist()) call error_stop('Error: file not exist, '//infile%filename)
+    if (.not. infile%exist()) call error_stop('Error: file not exist, '//infile%filename)
     call infile%open()
     call infile%countlines()
     N = infile%lines
-    allocate(inp(N))
+    allocate (inp(N))
 
     do i = 1, N
-        read(infile%unit, *) inp(i)
+        read (infile%unit, *) inp(i)
         inp(i) = log(inp(i))
     end do
     call infile%close()
-    
+
     obj = sarima_init(p, d, q, s, p_, d_, q_, N)
     call sarima_setMethod(obj, 0)   !! Method 0 ("MLE") is default so this step is unnecessary. The method also accepts values 1 ("CSS") and 2 ("Box-Jenkins")
         !! sarima_setOptMethod(obj, 7);// Method 7 ("BFGS with More Thuente Line Search") is default so this step is unnecessary. The method also accepts values 0,1,2,3,4,5,6. Check the documentation for details.
@@ -54,6 +55,6 @@ program test_model_sarima
     call disp(sqrt(amse), 'Standard Errors : ')
 
     call sarima_free(obj)
-    deallocate(inp, phi, theta, phi_, theta_, xpred, amse)
+    deallocate (inp, phi, theta, phi_, theta_, xpred, amse)
 
 end program test_model_sarima

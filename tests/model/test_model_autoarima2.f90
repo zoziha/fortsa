@@ -1,8 +1,9 @@
 program test_model_autoarima2
+
     use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc
     use stdlib_error, only: error_stop
     use forlab_io, only: file, disp
-    use ctsa_api, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
+    use fortsa_model, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
                             auto_arima_exec, auto_arima_summary, auto_arima_predict, auto_arima_free
     implicit none
     integer :: i, d, d_, L
@@ -15,7 +16,7 @@ program test_model_autoarima2
 
     type(file) :: infile
     !! Make sure all the parameter values are correct and consistent with other values. eg., if xreg is NULL r should be 0
-    !! or if P = D = Q = 0 then make sure that s is also 0. 
+    !! or if P = D = Q = 0 then make sure that s is also 0.
     !! Recheck the values if the program fails to execute.
     p = 5
     d = 2
@@ -32,14 +33,14 @@ program test_model_autoarima2
     L = 5
 
     infile = file('example/data/seriesG.txt', 'r')
-    if(.not.infile%exist()) call error_stop('Error: file not exist, '//infile%filename)
+    if (.not. infile%exist()) call error_stop('Error: file not exist, '//infile%filename)
     call infile%open()
     call infile%countlines()
 
-    allocate(inp(infile%lines), xpred(L), amse(L))
+    allocate (inp(infile%lines), xpred(L), amse(L))
     do i = 1, infile%lines
-        read(infile%unit, *) inp(i)
-    enddo
+        read (infile%unit, *) inp(i)
+    end do
 
     obj = auto_arima_init(c_loc(order(1)), c_loc(seasonal(1)), s, r, infile%lines)
     call auto_arima_setApproximation(obj, 0)
@@ -56,7 +57,7 @@ program test_model_autoarima2
 
     call auto_arima_free(obj)
 
-    deallocate(inp, xpred, amse)
+    deallocate (inp, xpred, amse)
     call infile%close()
 
 end program test_model_autoarima2

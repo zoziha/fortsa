@@ -1,8 +1,9 @@
 program test_model_autoarima3
+    
     use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc
     use forlab_io, only: file, disp
     use stdlib_error, only: error_stop
-    use ctsa_api, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
+    use fortsa_model, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
                             auto_arima_exec, auto_arima_summary, auto_arima_predict, auto_arima_free
     implicit none
     integer :: i, d, d_, L
@@ -15,9 +16,11 @@ program test_model_autoarima3
 
     type(file) :: infile
     real(8), allocatable :: data(:, :)
+
     !! Make sure all the parameter values are correct and consistent with other values. eg., if xreg is NULL r should be 0
     !! or if P = D = Q = 0 then make sure that s is also 0. 
     !! Recheck the values if the program fails to execute.
+
     p = 5
     d = 2
     q = 5
@@ -70,4 +73,5 @@ program test_model_autoarima3
 
     deallocate(inp, xpred, amse, xreg, newxreg)
     call infile%close()
+
 end program test_model_autoarima3

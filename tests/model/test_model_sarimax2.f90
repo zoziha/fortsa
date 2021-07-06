@@ -1,10 +1,11 @@
 !! SARIMAX example
 program test_model_sarimax2
+
     use, intrinsic :: iso_c_binding, only: c_ptr, c_loc, c_null_ptr
     use forlab_io, only: disp, file
     use stdlib_error, only: error_stop
     use fortsa_model, only: sarimax_init, sarimax_setMethod, sarimax_exec, &
-        sarimax_summary, sarimax_predict, sarimax_free
+                            sarimax_summary, sarimax_predict, sarimax_free
     implicit none
     integer :: i, N, d, d_, l
     real(8), target, allocatable :: inp(:)
@@ -18,7 +19,7 @@ program test_model_sarimax2
     type(file) :: infile
 
     !! Make sure all the parameter values are correct and consistent with other values. eg., if xreg is NULL r should be 0
-    !! or if P = D = Q = 0 then make sure that s is also 0. 
+    !! or if P = D = Q = 0 then make sure that s is also 0.
     !! Recheck the values if the program fails to execute.
 
     p = 2
@@ -32,16 +33,16 @@ program test_model_sarimax2
 
     L = 5
 
-    allocate(phi(p), theta(q), phi_(p_), theta_(q_), xpred(L), amse(L))
+    allocate (phi(p), theta(q), phi_(p_), theta_(q_), xpred(L), amse(L))
     infile = file('example/data/seriesG.txt', 'r')
-    if(.not.infile%exist()) call error_stop('Error: file not exist, '//infile%filename)
+    if (.not. infile%exist()) call error_stop('Error: file not exist, '//infile%filename)
     call infile%open()
     call infile%countlines()
     N = infile%lines
 
-    allocate(inp(N))
+    allocate (inp(N))
     do i = 1, N
-        read(infile%unit, *) inp(i)
+        read (infile%unit, *) inp(i)
         inp(i) = log(inp(i))
     end do
     call infile%close()
@@ -65,11 +66,11 @@ program test_model_sarimax2
     !! xpred - L future values
     !! amse - MSE for L future values
     call sarimax_predict(obj, c_loc(inp(1)), c_null_ptr, L, c_null_ptr, c_loc(xpred(1)), &
-        c_loc(amse(1)))
+                         c_loc(amse(1)))
     call disp(exp(xpred), 'Predicted Values : ')
     call disp(sqrt(amse), 'Standard Errors : ')
-  
+
     call sarimax_free(obj)
-    deallocate(inp, phi, theta, phi_, theta_, xpred, amse)
+    deallocate (inp, phi, theta, phi_, theta_, xpred, amse)
 
 end program test_model_sarimax2

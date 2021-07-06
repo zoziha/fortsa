@@ -4,10 +4,10 @@ module wavelib_api
     private
 
     public :: wave_init, wt_init, &
-                wave_summary, wt_summary, &
-                modwt, imodwt, &
-                wave_free, wt_free, &
-                wt_set
+              wave_summary, wt_summary, &
+              modwt, imodwt, &
+              wave_free, wt_free, &
+              wt_set
 
     type, bind(c) :: wt_set
         type(c_ptr) :: wave
@@ -29,7 +29,7 @@ module wavelib_api
         integer(kind=c_int) :: length(102)
         type(c_ptr) :: output
         real(kind=c_double), dimension(0) :: params
-    endtype
+    end type
 
     interface
         function wave_init(wname) bind(c)
@@ -41,12 +41,11 @@ module wavelib_api
 
         function wt_init(wave, method, siglength, J) bind(c)
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr
-            import
             type(c_ptr), value :: wave
                 !! pointer point to `wave_object`
             type(c_ptr), value, intent(in) :: method
                 !! const char*
-            integer(c_int), value :: siglength, J 
+            integer(c_int), value :: siglength, J
             type(c_ptr) :: wt_init
                 !! wt_object
         end function wt_init
@@ -59,14 +58,12 @@ module wavelib_api
 
         subroutine wt_summary(wt) bind(c)
             use, intrinsic :: iso_c_binding, only: c_ptr
-            import
             type(c_ptr), value :: wt
                 !! wt_object
         end subroutine wt_summary
 
         subroutine modwt(wt, inp) bind(c)
             use, intrinsic :: iso_c_binding, only: c_ptr
-            import
             type(c_ptr), value :: wt
                 !! wt_object
             type(c_ptr), value, intent(in) :: inp
@@ -75,7 +72,6 @@ module wavelib_api
 
         subroutine imodwt(wt, dwtop) bind(c)
             use, intrinsic :: iso_c_binding, only: c_ptr
-            import
             type(c_ptr), value :: wt
                 !! wt_object
             type(c_ptr), value :: dwtop
@@ -90,14 +86,12 @@ module wavelib_api
 
         subroutine wt_free(object) bind(c)
             use, intrinsic :: iso_c_binding, only: c_ptr
-            import
             type(c_ptr), value :: object
                 !! wt_object
         end subroutine wt_free
 
-    endinterface
+    end interface
 
 contains
-    
 
 end module wavelib_api

@@ -1,7 +1,8 @@
 program test_model_arima
+
     use forlab_io, only: disp, file
-    use ctsa_api, only: arima_set, arima_init, &
-                            arima_setMethod,arima_exec, &
+    use fortsa_model, only: arima_set, arima_init, &
+                            arima_setMethod, arima_exec, &
                             arima_summary, arima_predict, &
                             arima_free, arima_setOptMethod
     use stdlib_error, only: error_stop
@@ -11,9 +12,7 @@ program test_model_arima
     real(8), target, allocatable :: xpred(:), amse(:)
     type(c_ptr) :: obj = c_null_ptr
     target obj
-    ! type(arima_set), target :: set
-    ! target set
-    ! type(arima_set) :: obj
+
     type(file) :: infile
     real(8), target, allocatable :: inp(:)
 
@@ -24,14 +23,14 @@ program test_model_arima
     L = 5
 
     infile = file('example/data/seriesA.txt', 'r')
-    if(.not.infile%exist()) call error_stop('Error: File not exist, '//infile%filename)
+    if (.not. infile%exist()) call error_stop('Error: File not exist, '//infile%filename)
     call infile%open()
     call infile%countlines()
-    allocate(inp(infile%lines), xpred(L), amse(L))
+    allocate (inp(infile%lines), xpred(L), amse(L))
 
     do i = 1, infile%lines
-        read(infile%unit, *) inp(i)
-    enddo
+        read (infile%unit, *) inp(i)
+    end do
 
     ! obj = c_loc(set)
     ! call c_f_pointer(obj, set)
@@ -42,14 +41,14 @@ program test_model_arima
     call arima_exec(obj, c_loc(inp(1)))
     call arima_summary(obj)
     call arima_predict(obj, c_loc(inp(1)), L, c_loc(xpred(1)), c_loc(amse(1)))
-    
+
     call disp('Predicted Values : ')
     call disp(xpred)
     call disp('Standard Errors : ')
     call disp(sqrt(amse))
 
     call arima_free(obj)
-    deallocate(inp, xpred, amse)
+    deallocate (inp, xpred, amse)
     call infile%close()
-    
+
 end program test_model_arima

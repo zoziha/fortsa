@@ -43,7 +43,6 @@ main="test_model_autoarima2.f90"
 name="model_autoarima3"
 source-dir="tests/model"
 main="test_model_autoarima3.f90"
-## \TODO:
 [[test]]
 name="model_dwt"
 source-dir="tests/model"
