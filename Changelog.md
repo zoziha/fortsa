@@ -1,7 +1,7 @@
 
 2021-07-06  zoziha  zuo.zhihua@qq.com
 
-    Add CTSA Fortran interface.
+    Add `CTSA` Fortran interface.
 
     * src/ctsa/*.c:
     * src/fortsa_model.f90:

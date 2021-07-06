@@ -1,18 +1,17 @@
-# fortsa
-This package is still **under development**, please **do not use** this package as a production tool.
+# ForTSA
 
 ## A Univariate Time Series Analysis and ARIMA Modeling Package in Fortran
 
-fortsa is a Fortran software package for univariate time series analysis, which is base on [rafat/CTSA](https://github.com/rafat/ctsa).  
-CTSA is a C software package for univariate time series analysis. 
-| | |  
+`ForTSA` is a Fortran software package for univariate time series analysis, which is base on [rafat/CTSA](https://github.com/rafat/ctsa).  
+`CTSA` is a C software package for univariate time series analysis. 
+| Item | Info |  
 |:-:|---|
 | **Version:** | 0.0.1 |
-| **Author:** | fortsa Contributors |
+| **Author:** | `ForTSA` Contributors |
 | **Web site:** | https://github.com/zoziha/fortsa |
 | **API-Doc Web site:** | \todo: |
-| **Copyright:** | _This document_ has been placed in the public domain. |
-| **License:** | _fortsa_ is released under BSD-3. |
+| **Copyright:** | _This document_ is placed in the public domain. |
+| **License:** | _`ForTSA`_ is released under BSD-3. |
 
 ## Getting Started
 ```bash
@@ -24,7 +23,7 @@ cd fortsa
 Git and [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
 
 ### Supported Compilers
-The following combinations are tested on the default branch of `forlab`:  
+The following combinations are tested on the default branch of `ForTSA`:  
 |Name|Vesrion|Platform|Architecture|  
 |---|---|---|---|  
 |GCC Fortran(MSYS2)|10|Windows 10|x86_64|
@@ -35,10 +34,10 @@ You can build using provided `fpm.toml`:
 fpm build
 fpm test
 ```
-To use `fortsa` within your fpm project, add the following to `fpm.toml` file:
+To use `ForTSA` within your fpm project, add the following to `fpm.toml` file:
 ```toml
 [dependencies]
-forlab = { git = "https://github.com/zoziha/fortsa.git" }
+fortsa = { git = "https://github.com/zoziha/fortsa.git" }
 ```
 ## Fortran Docs
 
@@ -57,7 +56,8 @@ https://github.com/rafat/ctsa/wiki
 
 License : BSD 3- Clause Check LICENSE file
 
-Contact rafat.hsn@gmail.com
+For `C` routines, contact rafat.hsn@gmail.com.  
+For `Fortran` routines, contact zuozhihua@hrbeu.edu.cn.
 
 ## Links
 1. [rafat/ctsa](https://github.com/rafat/ctsa)
