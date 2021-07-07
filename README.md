@@ -32,7 +32,7 @@ The following combinations are tested on the default branch of `ForTSA`:
 You can build using provided `fpm.toml`:
 ```bash
 fpm build
-fpm test
+fpm test <test_name (see `fpm.toml`)>
 ```
 To use `ForTSA` within your fpm project, add the following to `fpm.toml` file:
 ```toml

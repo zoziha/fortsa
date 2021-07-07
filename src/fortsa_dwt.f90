@@ -1,4 +1,4 @@
-module wavelib_api
+module fortsa_dwt
     use, intrinsic :: iso_c_binding, only: c_ptr, c_char, c_int, c_double
     implicit none
     private
@@ -94,4 +94,4 @@ module wavelib_api
 
 contains
 
-end module wavelib_api
+end module fortsa_dwt

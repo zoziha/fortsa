@@ -5,8 +5,6 @@ module fortsa_model
     implicit none
     private
 
-    public :: acvf, acvf_opt, acvf2acf
-
     public :: arima_set, arima_init, arima_setMethod, arima_setOptMethod, &
               arima_exec, arima_summary, arima_predict, arima_free
     public :: ar_init, ar_exec, &
@@ -244,7 +242,7 @@ module fortsa_model
     end interface
 
     interface
-        !!! exec routines 🔻
+        ! exec routines 🔻
         subroutine sarimax_exec(obj, inp, xreg) bind(c, name='sarimax_exec')
             use, intrinsic :: iso_c_binding, only: c_ptr
             type(c_ptr), value :: obj
@@ -274,7 +272,7 @@ module fortsa_model
             type(c_ptr), value :: obj
             type(c_ptr), value :: inp
         end subroutine ar_exec
-        !!! predict routines 🔻
+        ! predict routines 🔻
         subroutine arima_predict(obj, inp, L, xpred, amse) bind(c, name='arima_predict')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr, c_double
             type(c_ptr), value :: obj
@@ -315,7 +313,7 @@ module fortsa_model
             real(kind=c_double) :: inp, phi, var
             integer(kind=c_int), value :: N, p, method
         end subroutine ar
-        !!! setMethod routines 🔻
+        ! setMethod routines 🔻
         subroutine arima_setMethod(obj, value) bind(c, name='arima_setMethod')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr
             type(c_ptr), value :: obj
@@ -339,7 +337,7 @@ module fortsa_model
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine sarimax_setMethod
-        !!! setOptMethod routines 🔻
+        ! setOptMethod routines 🔻
         subroutine arima_setOptMethod(obj, value) bind(c, name='arima_setOptMethod')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr
             type(c_ptr), value :: obj
@@ -420,7 +418,7 @@ module fortsa_model
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: verbose
         end subroutine auto_arima_setVerbose
-        !!! summary routines 🔻
+        ! summary routines 🔻
         subroutine arima_summary(obj) bind(c, name='arima_summary')
             use, intrinsic :: iso_c_binding, only: c_ptr
             type(c_ptr), value :: obj
@@ -459,26 +457,7 @@ module fortsa_model
             integer(kind=c_int), value :: N, d, pmax, h
         end subroutine model_estimate
 
-        subroutine acvf(vec, N, par, M) bind(c, name='acvf')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
-            ! real(kind=c_double) :: vec, par
-            type(c_ptr), value :: vec, par
-            integer(kind=c_int), value :: N, M
-        end subroutine acvf
-
-        subroutine acvf_opt(vec, N, method, par, M) bind(c, name='acvf_opt')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
-            type(c_ptr), value :: vec, par
-            integer(kind=c_int), value :: N, method, M
-        end subroutine acvf_opt
-
-        subroutine acvf2acf(acf, M) bind(c, name='acvf2acf')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
-            type(c_ptr), value :: acf
-            integer(kind=c_int), value :: M
-        end subroutine acvf2acf
-
-        !!! free routines 🔻
+        ! free routines 🔻
         subroutine arima_free(object) bind(c, name='arima_free')
             !! free arima struct memory
             use, intrinsic :: iso_c_binding, only: c_ptr
@@ -513,7 +492,8 @@ module fortsa_model
             type(c_ptr), value :: object
                 !! pointer points to `ar_object`
         end subroutine ar_free
-        !!! Yule-Walker, Burg and Hannan Rissanen Algorithms for Initial Parameter Estimation
+
+        ! Yule-Walker, Burg and Hannan Rissanen Algorithms for Initial Parameter Estimation
         subroutine yw(x, N, p, phi, var) bind(c, name='yw')
             !! Yule-Walker Algorithms for Initial Parameter Estimation
             use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr

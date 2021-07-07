@@ -12,12 +12,18 @@ auto-executables = false
 auto-tests = false
 
 [dev-dependencies]
+## `stdlib` inside `forlab` dependencies
 forlab = { git = "https://github.com/zoziha/forlab", branch = "feature/fypp_src" }
 
 [library]
 source-dir="src"
 
 # ============================ tests ===========================================
+## [dwt] tests
+[[test]]
+name="dwt_dwt"
+source-dir="tests/dwt"
+main="test_dwt_dwt.f90"
 ## [model] tests
 [[test]]
 name="model_ar"
@@ -43,10 +49,6 @@ main="test_model_autoarima2.f90"
 name="model_autoarima3"
 source-dir="tests/model"
 main="test_model_autoarima3.f90"
-[[test]]
-name="model_dwt"
-source-dir="tests/model"
-main="test_model_dwt.f90"
 # [[test]]
 # name="model_misc"
 # source-dir="tests/model"
@@ -77,4 +79,3 @@ main="test_stats_acf.f90"
 name="stats_pacf"
 source-dir="tests/stats"
 main="test_stats_pacf.f90"
-

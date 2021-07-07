@@ -1,13 +1,13 @@
-program test_model_dwt
+program test_dwt_dwt
 
     !! <Fortran 2018 with Parallel Programming> Page.432
     use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc, c_char, c_f_pointer, c_null_char
     use forlab_io, only: file, disp
     use stdlib_error, only: error_stop
-    use wavelib_api, only: wave_init, wt_init, &
-                           wave_summary, wt_summary, &
-                           modwt, imodwt, &
-                           wave_free, wt_free, wt_set
+    use fortsa_dwt, only: wave_init, wt_init, &
+                          wave_summary, wt_summary, &
+                          modwt, imodwt, &
+                          wave_free, wt_free, wt_set
     implicit none
     real(8), allocatable, target :: inp(:), out(:), diff(:), data(:)
     integer :: N, i, J
@@ -83,4 +83,4 @@ program test_model_dwt
     call wt_free(wt)
     deallocate (inp, out, diff, data)
 
-end program test_model_dwt
+end program test_dwt_dwt
