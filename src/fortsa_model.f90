@@ -247,6 +247,7 @@ module fortsa_model
             type(c_ptr), value :: obj
             real(kind=c_double) :: inp(*)
             real(kind=c_double), optional :: xreg(*)
+                !!\Note: `xreg(*)` is `optional` now @2021-07-08
         end subroutine sarimax_exec
 
         subroutine arima_exec(obj, x) bind(c, name='arima_exec')
@@ -298,8 +299,7 @@ module fortsa_model
         subroutine auto_arima_predict(obj, inp, xreg, L, newxreg, xpred, amse) bind(c, name='auto_arima_predict')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr, c_double
             type(c_ptr), value :: obj
-            real(kind=c_double) :: inp(*), xpred(*), amse(*)
-            real(kind=c_double), optional :: xreg(*), newxreg(*)
+            real(kind=c_double) :: inp(*), xreg(*), newxreg(*), xpred(*), amse(*)
             integer(kind=c_int), value :: L
         end subroutine auto_arima_predict
 

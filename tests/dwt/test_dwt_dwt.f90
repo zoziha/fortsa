@@ -61,7 +61,7 @@ program test_dwt_dwt
         diff(i) = out(i) - inp(i)
     end do
     call disp(maxval(abs(diff)), 'MAX : ')   !! If Reconstruction succeeded then the output should be a small value.
-    !!\TODO: detto
+        !!\TODO: detto
 
     call wt_summary(wt)
 

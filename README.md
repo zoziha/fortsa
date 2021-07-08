@@ -1,15 +1,16 @@
-# ForTSA
+# ForTSA: A CTSA/Fortran binding
 
 ## A Univariate Time Series Analysis and ARIMA Modeling Package in Fortran
 
 `ForTSA` is a Fortran software package for univariate time series analysis, which is base on [rafat/CTSA](https://github.com/rafat/ctsa).  
 `CTSA` is a C software package for univariate time series analysis. 
+
 | Item | Info |  
 |:-:|---|
-| **Version:** | 0.0.1 |
+| **Version:** | 0.0.2 |
 | **Author:** | `ForTSA` Contributors |
 | **Web site:** | https://github.com/zoziha/fortsa |
-| **API-Doc Web site:** | \todo: |
+| **API-Doc Web site:** | https://zoziha.github.io/fortsa-API-doc/ |
 | **Copyright:** | _This document_ is placed in the public domain. |
 | **License:** | _`ForTSA`_ is released under BSD-3. |
 
@@ -24,11 +25,13 @@ Git and [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
 
 ### Supported Compilers
 The following combinations are tested on the default branch of `ForTSA`:  
+
 |Name|Vesrion|Platform|Architecture|  
 |---|---|---|---|  
 |GCC Fortran(MSYS2)|10|Windows 10|x86_64|
 
 ### Build with [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
+Fortran Package Manager (fpm) is a great package manager and build system for Fortran.  
 You can build using provided `fpm.toml`:
 ```bash
 fpm build
@@ -39,7 +42,7 @@ To use `ForTSA` within your fpm project, add the following to `fpm.toml` file:
 [dependencies]
 fortsa = { git = "https://github.com/zoziha/fortsa.git" }
 ```
-## Fortran Docs
+## `CTSA` Docs
 
 |**[Auto ARIMA](https://github.com/rafat/ctsa/wiki/AUTO-ARIMA)**| Auto ARIMA Class + Examples        |
 |:-----------------------------------------------------|:----------------------------------|
@@ -52,12 +55,12 @@ fortsa = { git = "https://github.com/zoziha/fortsa.git" }
 
 Wiki is available at 
 
-https://github.com/rafat/ctsa/wiki
+[ctsa/wiki](https://github.com/rafat/ctsa/wiki)
 
 License : BSD 3- Clause Check LICENSE file
 
 For `C` routines, contact rafat.hsn@gmail.com.  
-For `Fortran` routines, contact zuozhihua@hrbeu.edu.cn.
+For `Fortran` routines, contact zuo.zhihua@qq.com.
 
 ## Links
 1. [rafat/ctsa](https://github.com/rafat/ctsa)

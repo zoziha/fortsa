@@ -33,9 +33,6 @@ program test_model_arima
         read (infile%unit, *) inp(i)
     end do
 
-    ! obj = c_loc(set)
-    ! call c_f_pointer(obj, set)
-
     obj = arima_init(p, d, q, infile%lines)
     call arima_setMethod(obj, 0)
     call arima_setOptMethod(obj, 5)
