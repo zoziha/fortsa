@@ -7,14 +7,15 @@ program test_model_arima
                             arima_free, arima_setOptMethod
     use stdlib_error, only: error_stop
     use, intrinsic :: iso_c_binding
+        !!\TODO:
     integer :: i, d, L
     integer :: p, q
-    real(8), target, allocatable :: xpred(:), amse(:)
+    real(8), allocatable :: xpred(:), amse(:)
     type(c_ptr) :: obj = c_null_ptr
     target obj
 
     type(file) :: infile
-    real(8), target, allocatable :: inp(:)
+    real(8), allocatable :: inp(:)
 
     p = 0
     d = 1
@@ -38,9 +39,9 @@ program test_model_arima
     obj = arima_init(p, d, q, infile%lines)
     call arima_setMethod(obj, 0)
     call arima_setOptMethod(obj, 5)
-    call arima_exec(obj, c_loc(inp(1)))
+    call arima_exec(obj, inp)
     call arima_summary(obj)
-    call arima_predict(obj, c_loc(inp(1)), L, c_loc(xpred(1)), c_loc(amse(1)))
+    call arima_predict(obj, inp, L, xpred, amse)
 
     call disp('Predicted Values : ')
     call disp(xpred)

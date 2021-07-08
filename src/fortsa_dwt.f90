@@ -29,21 +29,21 @@ module fortsa_dwt
         integer(kind=c_int) :: length(102)
         type(c_ptr) :: output
         real(kind=c_double), dimension(0) :: params
-    end type
+    end type wt_set
 
     interface
         function wave_init(wname) bind(c)
-            use, intrinsic :: iso_c_binding, only: c_ptr
-            type(c_ptr), value, intent(in) :: wname
+            use, intrinsic :: iso_c_binding, only: c_ptr, c_char
+            character(kind=c_char), intent(in) :: wname(*)
             type(c_ptr) :: wave_init
                 !! pointer point to `wave_object`
         end function wave_init
 
         function wt_init(wave, method, siglength, J) bind(c)
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr, c_char
             type(c_ptr), value :: wave
                 !! pointer point to `wave_object`
-            type(c_ptr), value, intent(in) :: method
+            character(kind=c_char), intent(in) :: method(*)
                 !! const char*
             integer(c_int), value :: siglength, J
             type(c_ptr) :: wt_init
@@ -63,19 +63,18 @@ module fortsa_dwt
         end subroutine wt_summary
 
         subroutine modwt(wt, inp) bind(c)
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            use, intrinsic :: iso_c_binding, only: c_ptr, c_double
             type(c_ptr), value :: wt
                 !! wt_object
-            type(c_ptr), value, intent(in) :: inp
+            real(kind=c_double), intent(in) :: inp(*)
                 !! const double*
         end subroutine modwt
 
         subroutine imodwt(wt, dwtop) bind(c)
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            use, intrinsic :: iso_c_binding, only: c_ptr, c_double
             type(c_ptr), value :: wt
                 !! wt_object
-            type(c_ptr), value :: dwtop
-                !! double*
+            real(kind=c_double) :: dwtop(*)
         end subroutine imodwt
 
         subroutine wave_free(object) bind(c)

@@ -55,7 +55,7 @@ program test_model_sarimax2
 
     !!## sarimax_exec(object, input time series, exogenous time series)
     !! set exogenous to NULL if deadling only with a univariate time series.
-    call sarimax_exec(obj, c_loc(inp(1)), c_null_ptr)
+    call sarimax_exec(obj, inp)
     call sarimax_summary(obj)
 
     !!## sarimax_predict(sarimax_object obj, double *inp, double *xreg, int L,double *newxreg, double *xpred, double *amse)
@@ -65,8 +65,8 @@ program test_model_sarimax2
     !! newxreg - Exogenous Time Series of dimension r * L where r is the number of exogenus time series and L is the length of each
     !! xpred - L future values
     !! amse - MSE for L future values
-    call sarimax_predict(obj, c_loc(inp(1)), c_null_ptr, L, c_null_ptr, c_loc(xpred(1)), &
-                         c_loc(amse(1)))
+    call sarimax_predict(obj, inp, %ref([0.0d0]), L, %ref([0.0d0]), xpred, &
+                         amse)
     call disp(exp(xpred), 'Predicted Values : ')
     call disp(sqrt(amse), 'Standard Errors : ')
 

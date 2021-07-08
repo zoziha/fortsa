@@ -4,15 +4,15 @@ program test_model_sarima
     use forlab_io, only: file, disp
     use fortsa_model, only: sarima_init, sarima_setMethod, sarima_predict, &
                             sarima_exec, sarima_summary, sarima_free
-    use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc
+    use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr
     implicit none
     integer :: i, N, d, L
-    real(8), target, allocatable :: inp(:)
+    real(8), allocatable :: inp(:)
     integer :: p, q
     integer :: s, p_, d_, q_
-    real(8), target, allocatable :: phi(:), theta(:)
-    real(8), target, allocatable :: phi_(:), theta_(:)
-    real(8), target, allocatable :: xpred(:), amse(:)
+    real(8), allocatable :: phi(:), theta(:)
+    real(8), allocatable :: phi_(:), theta_(:)
+    real(8), allocatable :: xpred(:), amse(:)
     type(c_ptr) :: obj = c_null_ptr
     target :: obj
     type(file) :: infile
@@ -46,10 +46,10 @@ program test_model_sarima
     obj = sarima_init(p, d, q, s, p_, d_, q_, N)
     call sarima_setMethod(obj, 0)   !! Method 0 ("MLE") is default so this step is unnecessary. The method also accepts values 1 ("CSS") and 2 ("Box-Jenkins")
         !! sarima_setOptMethod(obj, 7);// Method 7 ("BFGS with More Thuente Line Search") is default so this step is unnecessary. The method also accepts values 0,1,2,3,4,5,6. Check the documentation for details.
-    call sarima_exec(obj, c_loc(inp(1)))
+    call sarima_exec(obj, inp)
     call sarima_summary(obj)
         !! Predict the next 5 values using the obtained ARIMA model
-    call sarima_predict(obj, c_loc(inp(1)), L, c_loc(xpred(1)), c_loc(amse(1)))
+    call sarima_predict(obj, inp, L, xpred, amse)
     call disp(xpred, 'Predicted Values : ')
 
     call disp(sqrt(amse), 'Standard Errors : ')

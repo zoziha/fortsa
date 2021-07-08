@@ -47,14 +47,14 @@ program auto_arima_failure
         read (infile%unit, *) inp(i)
     end do
 
-    obj = auto_arima_init(c_loc(order(1)), c_loc(seasonal(1)), s, r, lines)
+    obj = auto_arima_init(order, seasonal, s, r, lines)
     call auto_arima_setApproximation(obj, 1)
     call auto_arima_setStepwise(obj, 1)
     call auto_arima_setVerbose(obj, 1)
 
-    call auto_arima_exec(obj, c_loc(inp(1)), c_null_ptr)
+    call auto_arima_exec(obj, inp)
     call auto_arima_summary(obj)
-    call auto_arima_predict(obj, c_loc(inp(1)), c_null_ptr, L, c_null_ptr, c_loc(xpred(1)), c_loc(amse(1)))
+    call auto_arima_predict(obj, inp, %ref([0.0d0]), L, %ref([0.0d0]), xpred, amse)
 
     call disp('Forecast : 5 Point Look Ahead')
     call disp(xpred, 'Predicted Values : ')

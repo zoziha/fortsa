@@ -34,13 +34,10 @@ program test_model_ar
         read (infile%unit, *) inp(i)
     end do
 
-    ! obj = c_loc(set)
-    ! call c_f_pointer(obj, set)
-
     obj = ar_init(0, infile%lines)
-    call ar_exec(obj, c_loc(inp(1)))
+    call ar_exec(obj, inp)
     call ar_summary(obj)
-    call ar_predict(obj, c_loc(inp(1)), L, c_loc(xpred(1)), c_loc(amse(1)))
+    call ar_predict(obj, inp, L, xpred, amse)
 
     call disp('Predicted Values : ')
     call disp(xpred)
@@ -48,7 +45,6 @@ program test_model_ar
     call disp(sqrt(amse))
 
     call ar_free(obj)
-        !!\FIXME:
     deallocate (inp, xpred, amse)
     call infile%close()
 

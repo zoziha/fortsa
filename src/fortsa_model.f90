@@ -23,7 +23,6 @@ module fortsa_model
 
     public :: yw, burg, hr
 
-    !* CTSA_H_ *!
     type, bind(c) :: auto_arima_set
         integer(kind=c_int) :: N        !! length of time series
         integer(kind=c_int) :: Nused    !! length of time series after differencing, Nused = N - d
@@ -84,15 +83,15 @@ module fortsa_model
         real(kind=c_double) :: bic
         real(kind=c_double) :: aicc
         real(kind=c_double), dimension(0) :: params
-    end type
+    end type auto_arima_set
 
     interface
         function auto_arima_init(pdqmax, pdqmax_, s, r, N) bind(c, name='auto_arima_init')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr
-            type(c_ptr), value :: pdqmax, pdqmax_
+            integer(kind=c_int) :: pdqmax(*), pdqmax_(*)
             integer(kind=c_int), value :: s, r, N
             type(c_ptr) :: auto_arima_init
-        end function
+        end function auto_arima_init
     end interface
 
     type, bind(c) :: sarimax_set
@@ -244,67 +243,70 @@ module fortsa_model
     interface
         ! exec routines 🔻
         subroutine sarimax_exec(obj, inp, xreg) bind(c, name='sarimax_exec')
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            use, intrinsic :: iso_c_binding, only: c_ptr, c_double
             type(c_ptr), value :: obj
-            type(c_ptr), value :: inp, xreg
+            real(kind=c_double) :: inp(*)
+            real(kind=c_double), optional :: xreg(*)
         end subroutine sarimax_exec
 
         subroutine arima_exec(obj, x) bind(c, name='arima_exec')
             use, intrinsic :: iso_c_binding, only: c_ptr, c_double
             type(c_ptr), value :: obj
-            type(c_ptr), value :: x
+            real(kind=c_double) :: x(*)
         end subroutine arima_exec
 
         subroutine sarima_exec(obj, x) bind(c, name='sarima_exec')
             use, intrinsic :: iso_c_binding, only: c_double, c_ptr
             type(c_ptr), value :: obj
-            type(c_ptr), value :: x
+            real(kind=c_double) :: x(*)
         end subroutine sarima_exec
 
         subroutine auto_arima_exec(obj, inp, xreg) bind(c, name='auto_arima_exec')
             use, intrinsic :: iso_c_binding, only: c_double, c_ptr
             type(c_ptr), value :: obj
-            type(c_ptr), value :: inp, xreg
+            real(kind=c_double) :: inp(*)
+            real(kind=c_double), optional :: xreg(*)
         end subroutine auto_arima_exec
 
         subroutine ar_exec(obj, inp) bind(c, name='ar_exec')
             use, intrinsic :: iso_c_binding, only: c_double, c_ptr
             type(c_ptr), value :: obj
-            type(c_ptr), value :: inp
+            real(kind=c_double) :: inp(*)
         end subroutine ar_exec
         ! predict routines 🔻
         subroutine arima_predict(obj, inp, L, xpred, amse) bind(c, name='arima_predict')
             use, intrinsic :: iso_c_binding, only: c_int, c_ptr, c_double
             type(c_ptr), value :: obj
-            type(c_ptr), value :: inp, xpred, amse
+            real(kind=c_double) :: inp(*), xpred(*), amse(*)
             integer(kind=c_int), value :: L
         end subroutine arima_predict
 
         subroutine sarima_predict(obj, inp, L, xpred, amse) bind(c, name='sarima_predict')
             use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
             type(c_ptr), value :: obj
-            type(c_ptr), value :: inp, xpred, amse
+            real(kind=c_double) :: inp(*), xpred(*), amse(*)
             integer(kind=c_int), value :: L
         end subroutine sarima_predict
 
         subroutine sarimax_predict(obj, inp, xreg, L, newxreg, xpred, amse) bind(c, name='sarimax_predict')
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_int
+            use, intrinsic :: iso_c_binding, only: c_ptr, c_int, c_double
             type(c_ptr), value :: obj
-            type(c_ptr), value :: inp, xreg, newxreg, xpred, amse
+            real(kind=c_double) :: inp(*), xreg(*), newxreg(*), xpred(*), amse(*)
             integer(kind=c_int), value :: L
         end subroutine sarimax_predict
 
         subroutine auto_arima_predict(obj, inp, xreg, L, newxreg, xpred, amse) bind(c, name='auto_arima_predict')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            use, intrinsic :: iso_c_binding, only: c_int, c_ptr, c_double
             type(c_ptr), value :: obj
-            type(c_ptr), value :: inp, xreg, newxreg, xpred, amse
+            real(kind=c_double) :: inp(*), xpred(*), amse(*)
+            real(kind=c_double), optional :: xreg(*), newxreg(*)
             integer(kind=c_int), value :: L
         end subroutine auto_arima_predict
 
         subroutine ar_predict(obj, inp, L, xpred, amse) bind(c, name='ar_predict')
             use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
             type(c_ptr), value :: obj
-            type(c_ptr), value :: inp, xpred, amse
+            real(kind=c_double) :: inp(*), xpred(*), amse(*)
             integer(kind=c_int), value :: L
         end subroutine ar_predict
 
@@ -496,29 +498,28 @@ module fortsa_model
         ! Yule-Walker, Burg and Hannan Rissanen Algorithms for Initial Parameter Estimation
         subroutine yw(x, N, p, phi, var) bind(c, name='yw')
             !! Yule-Walker Algorithms for Initial Parameter Estimation
-            use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
-            type(c_ptr), value :: var
-                !!\FIXME:
-            type(c_ptr), value :: x, phi
+            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            real(kind=c_double) :: var
+            real(kind=c_double) :: x(*), phi(*)
             integer(kind=c_int), value :: N, p
         end subroutine yw
 
         subroutine burg(x, N, p, phi, var) bind(c, name='burg')
             !! Burg Algorithms for Initial Parameter Estimation
-            use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
-            type(c_ptr), value :: var
-            type(c_ptr), value :: x, phi
+            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            real(kind=c_double) :: var
+            real(kind=c_double) :: x(*), phi(*)
             integer(kind=c_int), value :: N, p
         end subroutine burg
 
         subroutine hr(x, N, p, q, phi, theta, var) bind(c, name='hr')
             !! Hannan Rissanen Algorithms for Initial Parameter Estimation
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
-            type(c_ptr), value :: x, phi, theta, var
+            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            real(kind=c_double) :: x(*), phi(*), theta(*), var
             integer(kind=c_int), value :: N, p, q
         end subroutine hr
     end interface
-    !* CTSA_H_ *!
+
 contains
 
 end module fortsa_model

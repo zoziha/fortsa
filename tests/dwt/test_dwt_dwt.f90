@@ -1,7 +1,7 @@
 program test_dwt_dwt
 
     !! <Fortran 2018 with Parallel Programming> Page.432
-    use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc, c_char, c_f_pointer, c_null_char
+    use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_char, c_f_pointer, c_null_char
     use forlab_io, only: file, disp
     use stdlib_error, only: error_stop
     use fortsa_dwt, only: wave_init, wt_init, &
@@ -19,16 +19,10 @@ program test_dwt_dwt
         !! wt_object
     real(8), allocatable, target :: output_(:)
     real(8), pointer :: fp(:)
-    character(kind=c_char), dimension(4), target :: name
-    character(kind=c_char), dimension(6), target :: tmp
 
     type(file) :: infile
 
-    name(1) = 'd'
-    name(2) = 'b'
-    name(3) = '4'
-    name(4) = c_null_char
-    obj = wave_init(c_loc(name(1)))
+    obj = wave_init('db4'//c_null_char)
     call wave_summary(obj)
 
     infile = file('example/data/signal.txt', 'r')
@@ -48,19 +42,11 @@ program test_dwt_dwt
     inp(:N) = data(:N)
     J = 2
 
-    tmp(1) = 'm'
-    tmp(2) = 'o'
-    tmp(3) = 'd'
-    tmp(4) = 'w'
-    tmp(5) = 't'
-    tmp(6) = c_null_char
-            !! Note: char of c and fortran is different.
-
-    wt = wt_init(obj, c_loc(tmp(1)), N, J)
+    wt = wt_init(obj, 'modwt'//c_null_char, N, J)
             !! Initialize the wavelet transform object
     call c_f_pointer(wt, wt_)
 
-    call modwt(wt, c_loc(inp(1)))
+    call modwt(wt, inp)
         !! MODWT output can be accessed using wt->output vector. Use wt_summary to find out how to extract appx and detail coefficients
 
     allocate (output_(wt_%outlength), fp(wt_%outlength))
@@ -69,7 +55,7 @@ program test_dwt_dwt
     call disp(fp(1:wt_%outlength))
         !!\TODO: c_f_pointer, page427
 
-    call imodwt(wt, c_loc(out(1)))
+    call imodwt(wt, out)
 
     do i = 1, wt_%siglength
         diff(i) = out(i) - inp(i)

@@ -55,15 +55,15 @@ program test_model_autoarima3
     newxreg(:L)   = data(infile%lines-L+1:, 2)
     newxreg(L+1:) = data(infile%lines-L+1:, 3)
 
-    obj = auto_arima_init(c_loc(order(1)), c_loc(seasonal(1)), s, r, infile%lines-L)
+    obj = auto_arima_init(order, seasonal, s, r, infile%lines-L)
     call auto_arima_setApproximation(obj, 1)
     call auto_arima_setStepwise(obj, 1)
     call auto_arima_setVerbose(obj, 1)
 
-    call auto_arima_exec(obj, c_loc(inp(1)), c_loc(xreg(1)))
+    call auto_arima_exec(obj, inp, xreg)
     call auto_arima_summary(obj)
-    call auto_arima_predict(obj, c_loc(inp(1)), c_loc(xreg(1)), L, &
-                            c_loc(newxreg(1)), c_loc(xpred(1)), c_loc(amse(1)))
+    call auto_arima_predict(obj, inp, xreg, L, &
+                            newxreg, xpred, amse)
 
     call disp('Forecast : 5 Point Look Ahead')
     call disp(xpred, 'Predicted Values : ')
