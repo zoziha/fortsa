@@ -242,13 +242,12 @@ module fortsa_model
 
     interface
         ! exec routines 🔻
-        subroutine sarimax_exec(obj, inp, xreg) bind(c, name='sarimax_exec')
+        subroutine ctsa_sarimax_exec(obj, inp, xreg) bind(c, name='sarimax_exec')
             use, intrinsic :: iso_c_binding, only: c_ptr, c_double
             type(c_ptr), value :: obj
             real(kind=c_double) :: inp(*)
-            real(kind=c_double), optional :: xreg(*)
-                !!\Note: `xreg(*)` is `optional` now @2021-07-08
-        end subroutine sarimax_exec
+            type(c_ptr), value :: xreg
+        end subroutine ctsa_sarimax_exec
 
         subroutine arima_exec(obj, x) bind(c, name='arima_exec')
             use, intrinsic :: iso_c_binding, only: c_ptr, c_double
@@ -262,12 +261,12 @@ module fortsa_model
             real(kind=c_double) :: x(*)
         end subroutine sarima_exec
 
-        subroutine auto_arima_exec(obj, inp, xreg) bind(c, name='auto_arima_exec')
+        subroutine ctsa_auto_arima_exec(obj, inp, xreg) bind(c, name='auto_arima_exec')
             use, intrinsic :: iso_c_binding, only: c_double, c_ptr
             type(c_ptr), value :: obj
             real(kind=c_double) :: inp(*)
-            real(kind=c_double), optional :: xreg(*)
-        end subroutine auto_arima_exec
+            type(c_ptr), value :: xreg
+        end subroutine ctsa_auto_arima_exec
 
         subroutine ar_exec(obj, inp) bind(c, name='ar_exec')
             use, intrinsic :: iso_c_binding, only: c_double, c_ptr
@@ -521,5 +520,29 @@ module fortsa_model
     end interface
 
 contains
+
+    subroutine sarimax_exec(obj, inp, xreg)
+        use, intrinsic :: iso_c_binding, only: c_loc, c_ptr, c_null_ptr
+        type(c_ptr), intent(in) :: obj
+        real(kind=c_double), intent(in) :: inp(*)
+        real(kind=c_double), intent(out), optional, target :: xreg(*)
+        if (present(xreg)) then
+            call ctsa_sarimax_exec(obj, inp, c_loc(xreg))
+        else
+            call ctsa_sarimax_exec(obj, inp, c_null_ptr)
+        end if
+    end subroutine sarimax_exec
+
+    subroutine auto_arima_exec(obj, inp, xreg)
+        use, intrinsic :: iso_c_binding, only: c_loc, c_ptr, c_null_ptr
+        type(c_ptr), intent(in) :: obj
+        real(kind=c_double), intent(in) :: inp(*)
+        real(kind=c_double), intent(out), optional, target :: xreg(*)
+        if (present(xreg)) then
+            call ctsa_auto_arima_exec(obj, inp, c_loc(xreg))
+        else
+            call ctsa_auto_arima_exec(obj, inp, c_null_ptr)
+        end if
+    end subroutine auto_arima_exec
 
 end module fortsa_model

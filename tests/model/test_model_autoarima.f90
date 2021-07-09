@@ -46,7 +46,7 @@ program test_model_autoarima
     call auto_arima_setStepwise(obj, 0)
     ! call auto_arima_setVerbose(obj, 1)
 
-    call auto_arima_exec(obj, inp, %ref([0.0d0]))
+    call auto_arima_exec(obj, inp)
         !!\TOCHECK: optional
     call auto_arima_summary(obj)
     call auto_arima_predict(obj, inp, %ref([0.0d0]), L, %ref([0.0d0]), xpred, amse)
