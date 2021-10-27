@@ -13,7 +13,7 @@ auto-tests = false
 
 [dev-dependencies]
 ## `stdlib` inside `forlab` dependencies
-forlab = { git = "https://github.com/zoziha/forlab", branch = "feature/fypp_src" }
+forlab = { git = "https://github.com/fortran-fans/forlab", branch = "forlab-fpm" }
 
 [library]
 source-dir="src"
