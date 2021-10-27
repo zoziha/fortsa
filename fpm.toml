@@ -14,6 +14,7 @@ auto-tests = false
 [dev-dependencies]
 ## `stdlib` inside `forlab` dependencies
 forlab = { git = "https://github.com/fortran-fans/forlab", branch = "forlab-fpm" }
+test-drive = { git="https://github.com/fortran-lang/test-drive" }
 
 [library]
 source-dir="src"

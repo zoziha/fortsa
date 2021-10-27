@@ -1,7 +1,8 @@
 !! `Fortran-TSA-api.f90` will be the `C-Fortran` interface to [rafat/CTSA](https://github.com/rafat/ctsa)
 
 module fortsa_model
-    use, intrinsic :: iso_c_binding, only: c_int, c_double, c_char, c_ptr
+
+    use, intrinsic :: iso_c_binding, only: c_int, c_double, c_char, c_ptr, c_null_ptr, c_loc
     implicit none
     private
 
@@ -87,7 +88,7 @@ module fortsa_model
 
     interface
         function auto_arima_init(pdqmax, pdqmax_, s, r, N) bind(c, name='auto_arima_init')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             integer(kind=c_int) :: pdqmax(*), pdqmax_(*)
             integer(kind=c_int), value :: s, r, N
             type(c_ptr) :: auto_arima_init
@@ -129,7 +130,7 @@ module fortsa_model
 
     interface
         function sarimax_init(p, d, q, p_, d_, q_, s, r, imean, N) bind(c, name='sarimax_init')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             integer(kind=c_int), value :: p, d, q, p_, d_, q_, s, r, imean, N
             type(c_ptr) :: sarimax_init
                 !! `sarimax_set` struct
@@ -173,7 +174,7 @@ module fortsa_model
 
     interface
         function arima_init(p, d, q, N) bind(c, name='arima_init')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             integer(kind=c_int), value :: p, d, q, N
             type(c_ptr) :: arima_init
         end function
@@ -210,7 +211,7 @@ module fortsa_model
 
     interface
         function sarima_init(p, d, q, s, p_, d_, q_, N) bind(c, name='sarima_init')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             integer(kind=c_int), value :: p, d, q, s, p_, d_, q_, N
             type(c_ptr) :: sarima_init
         end function
@@ -234,7 +235,7 @@ module fortsa_model
 
     interface
         function ar_init(method, N) bind(c, name='ar_init')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             integer(kind=c_int), value :: method, N
             type(c_ptr) :: ar_init
         end function
@@ -243,164 +244,164 @@ module fortsa_model
     interface
         ! exec routines 🔻
         subroutine ctsa_sarimax_exec(obj, inp, xreg) bind(c, name='sarimax_exec')
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_double
+            import c_ptr, c_double
             type(c_ptr), value :: obj
             real(kind=c_double) :: inp(*)
             type(c_ptr), value :: xreg
         end subroutine ctsa_sarimax_exec
 
         subroutine arima_exec(obj, x) bind(c, name='arima_exec')
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_double
+            import c_ptr, c_double
             type(c_ptr), value :: obj
             real(kind=c_double) :: x(*)
         end subroutine arima_exec
 
         subroutine sarima_exec(obj, x) bind(c, name='sarima_exec')
-            use, intrinsic :: iso_c_binding, only: c_double, c_ptr
+            import c_double, c_ptr
             type(c_ptr), value :: obj
             real(kind=c_double) :: x(*)
         end subroutine sarima_exec
 
         subroutine ctsa_auto_arima_exec(obj, inp, xreg) bind(c, name='auto_arima_exec')
-            use, intrinsic :: iso_c_binding, only: c_double, c_ptr
+            import c_double, c_ptr
             type(c_ptr), value :: obj
             real(kind=c_double) :: inp(*)
             type(c_ptr), value :: xreg
         end subroutine ctsa_auto_arima_exec
 
         subroutine ar_exec(obj, inp) bind(c, name='ar_exec')
-            use, intrinsic :: iso_c_binding, only: c_double, c_ptr
+            import c_double, c_ptr
             type(c_ptr), value :: obj
             real(kind=c_double) :: inp(*)
         end subroutine ar_exec
         ! predict routines 🔻
         subroutine arima_predict(obj, inp, L, xpred, amse) bind(c, name='arima_predict')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr, c_double
+            import c_int, c_ptr, c_double
             type(c_ptr), value :: obj
             real(kind=c_double) :: inp(*), xpred(*), amse(*)
             integer(kind=c_int), value :: L
         end subroutine arima_predict
 
         subroutine sarima_predict(obj, inp, L, xpred, amse) bind(c, name='sarima_predict')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
+            import c_int, c_double, c_ptr
             type(c_ptr), value :: obj
             real(kind=c_double) :: inp(*), xpred(*), amse(*)
             integer(kind=c_int), value :: L
         end subroutine sarima_predict
 
         subroutine sarimax_predict(obj, inp, xreg, L, newxreg, xpred, amse) bind(c, name='sarimax_predict')
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_int, c_double
+            import c_ptr, c_int, c_double
             type(c_ptr), value :: obj
             real(kind=c_double) :: inp(*), xreg(*), newxreg(*), xpred(*), amse(*)
             integer(kind=c_int), value :: L
         end subroutine sarimax_predict
 
         subroutine auto_arima_predict(obj, inp, xreg, L, newxreg, xpred, amse) bind(c, name='auto_arima_predict')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr, c_double
+            import c_int, c_ptr, c_double
             type(c_ptr), value :: obj
             real(kind=c_double) :: inp(*), xreg(*), newxreg(*), xpred(*), amse(*)
             integer(kind=c_int), value :: L
         end subroutine auto_arima_predict
 
         subroutine ar_predict(obj, inp, L, xpred, amse) bind(c, name='ar_predict')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double, c_ptr
+            import c_int, c_double, c_ptr
             type(c_ptr), value :: obj
             real(kind=c_double) :: inp(*), xpred(*), amse(*)
             integer(kind=c_int), value :: L
         end subroutine ar_predict
 
         subroutine ar(inp, N, p, method, phi, var) bind(c, name='ar')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            import c_int, c_double
             real(kind=c_double) :: inp, phi, var
             integer(kind=c_int), value :: N, p, method
         end subroutine ar
         ! setMethod routines 🔻
         subroutine arima_setMethod(obj, value) bind(c, name='arima_setMethod')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine arima_setMethod
 
         subroutine sarima_setMethod(obj, value) bind(c, name='sarima_setMethod')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine sarima_setMethod
 
         subroutine auto_arima_setMethod(obj, value) bind(c, name='auto_arima_setMethod')
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_int
+            import c_ptr, c_int
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine auto_arima_setMethod
 
         subroutine sarimax_setMethod(obj, value) bind(c, name='sarimax_setMethod')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine sarimax_setMethod
         ! setOptMethod routines 🔻
         subroutine arima_setOptMethod(obj, value) bind(c, name='arima_setOptMethod')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine arima_setOptMethod
 
         subroutine sarima_setOptMethod(obj, value) bind(c, name='sarima_setOptMethod')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine sarima_setOptMethod
 
         subroutine auto_arima_setOptMethod(obj, value) bind(c, name='auto_arima_setOptMethod')
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_int
+            import c_ptr, c_int
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: value
         end subroutine auto_arima_setOptMethod
 
         subroutine arima_vcov(obj, vcov) bind(c, name='arima_vcov')
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_double
+            import c_ptr, c_double
             type(c_ptr), value :: obj
             real(kind=c_double) :: vcov
         end subroutine arima_vcov
 
         subroutine sarima_vcov(obj, vcov) bind(c, name='sarima_vcov')
-            use, intrinsic :: iso_c_binding, only: c_double, c_ptr
+            import c_double, c_ptr
             type(c_ptr) :: obj
             real(kind=c_double) :: vcov
         end subroutine sarima_vcov
 
         subroutine sarimax_vcov(obj, vcov) bind(c, name='sarimax_vcov')
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_double
+            import c_ptr, c_double
             type(c_ptr), value :: obj
             real(kind=c_double) :: vcov
         end subroutine sarimax_vcov
 
         subroutine auto_arima_setApproximation(obj, approximation) bind(c, name='auto_arima_setApproximation')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: approximation
         end subroutine auto_arima_setApproximation
 
         subroutine auto_arima_setStepwise(obj, stepwise) bind(c, name='auto_arima_setStepwise')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: stepwise
         end subroutine auto_arima_setStepwise
 
         subroutine auto_arima_setStationary(obj, stationary) bind(c, name='auto_arima_setStationary')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             type(c_ptr) :: obj
             integer(kind=c_int), value :: stationary
         end subroutine auto_arima_setStationary
 
         subroutine auto_arima_setSeasonal(obj, seasonal) bind(c, name='auto_arima_setSeasonal')
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_int
+            import c_ptr, c_int
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: seasonal
         end subroutine auto_arima_setSeasonal
 
         subroutine auto_arima_setStationarityParameter(obj, test, alpha, type) bind(c, name='auto_arima_setStationarityParameter')
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_double, c_char
+            import c_ptr, c_double, c_char
             type(c_ptr), value :: obj
             character(kind=c_char) :: test, type
                 !!\tocheck:
@@ -408,52 +409,52 @@ module fortsa_model
         end subroutine auto_arima_setStationarityParameter
 
         subroutine auto_arima_setSeasonalParameter(obj, test, alpha) bind(c, name='auto_arima_setSeasonalParameter')
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_double, c_char
+            import c_ptr, c_double, c_char
             type(c_ptr), value :: obj
             character(kind=c_char) :: test
             real(kind=c_double), value :: alpha
         end subroutine auto_arima_setSeasonalParameter
 
         subroutine auto_arima_setVerbose(obj, verbose) bind(c, name='auto_arima_setVerbose')
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr
+            import c_int, c_ptr
             type(c_ptr), value :: obj
             integer(kind=c_int), value :: verbose
         end subroutine auto_arima_setVerbose
         ! summary routines 🔻
         subroutine arima_summary(obj) bind(c, name='arima_summary')
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: obj
         end subroutine arima_summary
 
         subroutine sarima_summary(obj) bind(c, name='sarima_summary')
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: obj
         end subroutine sarima_summary
 
         subroutine sarimax_summary(obj) bind(c, name='sarimax_summary')
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: obj
                 !! `sarimax_set` struct
         end subroutine sarimax_summary
 
         subroutine auto_arima_summary(obj) bind(c, name='auto_arima_summary')
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: obj
         end subroutine auto_arima_summary
 
         subroutine ar_estimate(x, N, method) bind(c, name='ar_estimate')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            import c_int, c_double
             real(kind=c_double) :: x
             integer(kind=c_int), value :: N, method
         end subroutine ar_estimate
 
         subroutine ar_summary(obj) bind(c, name='ar_summary')
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: obj
         end subroutine ar_summary
 
         subroutine model_estimate(x, N, d, pmax, h) bind(c, name='model_estimate')
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            import c_int, c_double
             real(kind=c_double) :: x
             integer(kind=c_int), value :: N, d, pmax, h
         end subroutine model_estimate
@@ -461,35 +462,35 @@ module fortsa_model
         ! free routines 🔻
         subroutine arima_free(object) bind(c, name='arima_free')
             !! free arima struct memory
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: object
                 !! pointer points to `arima_objectect`
         end subroutine arima_free
 
         subroutine sarima_free(object) bind(c, name='sarima_free')
             !! free sarima struct memory
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: object
                 !! pointer points to `sarima_object`
         end subroutine sarima_free
 
         subroutine sarimax_free(object) bind(c, name='sarimax_free')
             !! free sarimax struct memory
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: object
                 !! pointer points to `sarimax_object`
         end subroutine sarimax_free
 
         subroutine auto_arima_free(object) bind(c, name='auto_arima_free')
             !! free auto_arima struct memory
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: object
                 !! pointer points to `auto_arima_object`
         end subroutine auto_arima_free
 
         subroutine ar_free(object) bind(c, name='ar_free')
             !! free ar struct memory
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: object
                 !! pointer points to `ar_object`
         end subroutine ar_free
@@ -497,7 +498,7 @@ module fortsa_model
         ! Yule-Walker, Burg and Hannan Rissanen Algorithms for Initial Parameter Estimation
         subroutine yw(x, N, p, phi, var) bind(c, name='yw')
             !! Yule-Walker Algorithms for Initial Parameter Estimation
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            import c_int, c_double
             real(kind=c_double) :: var
             real(kind=c_double) :: x(*), phi(*)
             integer(kind=c_int), value :: N, p
@@ -505,7 +506,7 @@ module fortsa_model
 
         subroutine burg(x, N, p, phi, var) bind(c, name='burg')
             !! Burg Algorithms for Initial Parameter Estimation
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            import c_int, c_double
             real(kind=c_double) :: var
             real(kind=c_double) :: x(*), phi(*)
             integer(kind=c_int), value :: N, p
@@ -513,7 +514,7 @@ module fortsa_model
 
         subroutine hr(x, N, p, q, phi, theta, var) bind(c, name='hr')
             !! Hannan Rissanen Algorithms for Initial Parameter Estimation
-            use, intrinsic :: iso_c_binding, only: c_int, c_double
+            import c_int, c_double
             real(kind=c_double) :: x(*), phi(*), theta(*), var
             integer(kind=c_int), value :: N, p, q
         end subroutine hr
@@ -522,7 +523,6 @@ module fortsa_model
 contains
 
     subroutine sarimax_exec(obj, inp, xreg)
-        use, intrinsic :: iso_c_binding, only: c_loc, c_ptr, c_null_ptr
         type(c_ptr), intent(in) :: obj
         real(kind=c_double), intent(in) :: inp(*)
         real(kind=c_double), intent(out), optional, target :: xreg(*)
@@ -534,7 +534,6 @@ contains
     end subroutine sarimax_exec
 
     subroutine auto_arima_exec(obj, inp, xreg)
-        use, intrinsic :: iso_c_binding, only: c_loc, c_ptr, c_null_ptr
         type(c_ptr), intent(in) :: obj
         real(kind=c_double), intent(in) :: inp(*)
         real(kind=c_double), intent(out), optional, target :: xreg(*)

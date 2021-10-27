@@ -36,14 +36,14 @@ module fortsa_dwt
 
     interface
         function wave_init(wname) bind(c)
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_char
+            import c_ptr, c_char
             character(kind=c_char), intent(in) :: wname(*)
             type(c_ptr) :: wave_init
                 !! pointer point to `wave_object`
         end function wave_init
 
         function wt_init(wave, method, siglength, J) bind(c)
-            use, intrinsic :: iso_c_binding, only: c_int, c_ptr, c_char
+            import c_int, c_ptr, c_char
             type(c_ptr), value :: wave
                 !! pointer point to `wave_object`
             character(kind=c_char), intent(in) :: method(*)
@@ -54,19 +54,19 @@ module fortsa_dwt
         end function wt_init
 
         subroutine wave_summary(obj) bind(c)
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: obj
                 !! `wave_object`
         end subroutine wave_summary
 
         subroutine wt_summary(wt) bind(c)
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: wt
                 !! wt_object
         end subroutine wt_summary
 
         subroutine modwt(wt, inp) bind(c)
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_double
+            import c_ptr, c_double
             type(c_ptr), value :: wt
                 !! wt_object
             real(kind=c_double), intent(in) :: inp(*)
@@ -74,20 +74,20 @@ module fortsa_dwt
         end subroutine modwt
 
         subroutine imodwt(wt, dwtop) bind(c)
-            use, intrinsic :: iso_c_binding, only: c_ptr, c_double
+            import c_ptr, c_double
             type(c_ptr), value :: wt
                 !! wt_object
             real(kind=c_double) :: dwtop(*)
         end subroutine imodwt
 
         subroutine wave_free(object) bind(c)
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: object
                 !! wave_object
         end subroutine wave_free
 
         subroutine wt_free(object) bind(c)
-            use, intrinsic :: iso_c_binding, only: c_ptr
+            import c_ptr
             type(c_ptr), value :: object
                 !! wt_object
         end subroutine wt_free
