@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - "src/**.f90"
+    - "tests/**.f90"
     - "fpm.toml"
     
   pull_request:
@@ -11,6 +12,7 @@ on:
     - main
     paths:
     - "src/**.f90"
+    - "tests/**.f90"
     - "fpm.toml"
 
 jobs:

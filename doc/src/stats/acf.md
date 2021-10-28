@@ -22,7 +22,7 @@ This argument is `intent(in)`.
 `par`: Shall be a `real(c_double)` and `rank-1` array.
 This argument is `intent(out)`.
 
-`n`, `m`: Shall be a `integer(c_int)` argument.
+`n`, `m`: Shall be a `integer(c_int)` scalar.
 This argument is `value` and `intent(in)`.
 `n = size(vec)`, `m = size(par)`.
 
@@ -51,10 +51,10 @@ This argument is `intent(in)`.
 `par`: Shall be a `real(c_double)` and `rank-1` array.
 This argument is `intent(out)`.
 
-`method`: Shall be a `integer(c_int)` argument.
+`method`: Shall be a `integer(c_int)` scalar.
 This argument is `value` and `intent(in)`.
 
-`n`, `m`: Shall be a `integer(c_int)` argument.
+`n`, `m`: Shall be a `integer(c_int)` scalar.
 This argument is `value` and `intent(in)`.
 `n = size(vec)`, `m = size(par)`.
 
@@ -76,8 +76,8 @@ call fortsa_stats:acvf2acf(acf, m)
 
 ## Arguments
 
-`acf`: Shall be a `real(c_double)` and `rank-1` argument.
+`acf`: Shall be a `real(c_double)` and `rank-1` array.
 This argument is `intent(inout)`.
 
-`m`: Shall be a `integer(c_int)` argument.
+`m`: Shall be a `integer(c_int)` scalar.
 This argument is `value` and `intent(in)`.
