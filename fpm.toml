@@ -73,9 +73,9 @@ main="test_model_sarimax3.f90"
 
 ## [stats] tests
 [[test]]
-name="stats_acf"
+name="stats"
 source-dir="tests/stats"
-main="test_stats_acf.f90"
+main="stats_test.f90"
 [[test]]
 name="stats_pacf"
 source-dir="tests/stats"

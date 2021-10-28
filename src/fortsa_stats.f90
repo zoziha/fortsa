@@ -8,22 +8,28 @@ module fortsa_stats
     public :: pacf, pacf_opt
 
     interface
+        !> Auto Covariance Function
         subroutine acvf(vec, N, par, M) bind(c, name='acvf')
             import c_int, c_double
-            real(kind=c_double) :: vec(*), par(*)
-            integer(kind=c_int), value :: N, M
+            real(kind=c_double), intent(in) :: vec(*)
+            real(kind=c_double), intent(out) :: par(*)
+            integer(kind=c_int), value, intent(in) :: N, M
         end subroutine acvf
 
+        !> Method 0 : Regular Method. Slow for large input length.
+	    !> Method 1 : FFT based Method. Use it if data length is large
         subroutine acvf_opt(vec, N, method, par, M) bind(c, name='acvf_opt')
             import c_int, c_double
-            real(kind=c_double) :: vec(*), par(*)
-            integer(kind=c_int), value :: N, method, M
+            real(kind=c_double), intent(in) :: vec(*)
+            real(kind=c_double), intent(out) :: par(*)
+            integer(kind=c_int), value, intent(in) :: N, method, M
         end subroutine acvf_opt
 
-        subroutine acvf2acf(acf, M) bind(c, name='acvf2acf')
+        !> Converts Autocovariance to autocorrelation function
+        pure subroutine acvf2acf(acf, M) bind(c, name='acvf2acf')
             import c_int, c_double
-            real(kind=c_double) :: acf(*)
-            integer(kind=c_int), value :: M
+            real(kind=c_double), intent(inout) :: acf(*)
+            integer(kind=c_int), value, intent(in) :: M
         end subroutine acvf2acf
 
         subroutine pacf(vec, N, par, M) bind(c, name='pacf')
