@@ -1,5 +1,5 @@
 name = 'fortsa'
-version = '0.0.1'
+version = '0.0.2'
 maintainer = 'fortsa contributors'
 license = 'BSD 3- Clause Check LINCENSE file'
 author = 'fortsa contributors'
@@ -75,8 +75,4 @@ main="test_model_sarimax3.f90"
 [[test]]
 name="stats"
 source-dir="tests/stats"
-main="stats_test.f90"
-[[test]]
-name="stats_pacf"
-source-dir="tests/stats"
-main="test_stats_pacf.f90"
+main="checker.f90"

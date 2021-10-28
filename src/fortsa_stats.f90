@@ -17,7 +17,7 @@ module fortsa_stats
         end subroutine acvf
 
         !> Method 0 : Regular Method. Slow for large input length.
-	    !> Method 1 : FFT based Method. Use it if data length is large
+        !> Method 1 : FFT based Method. Use it if data length is large
         subroutine acvf_opt(vec, N, method, par, M) bind(c, name='acvf_opt')
             import c_int, c_double
             real(kind=c_double), intent(in) :: vec(*)
@@ -32,16 +32,22 @@ module fortsa_stats
             integer(kind=c_int), value, intent(in) :: M
         end subroutine acvf2acf
 
-        subroutine pacf(vec, N, par, M) bind(c, name='pacf')
+        !> Partial Auto Covariance Function
+        pure subroutine pacf(vec, N, par, M) bind(c, name='pacf')
             import c_int, c_double
-            real(kind=c_double) :: vec(*), par(*)
-            integer(kind=c_int), value :: N, M
+            real(kind=c_double), intent(in) :: vec(*)
+            real(kind=c_double), intent(out) :: par(*)
+            integer(kind=c_int), value, intent(in) :: N, M
         end subroutine pacf
 
+        !> Method 0 : Yule-Walker
+        !> Method 1 : Burg
+        !> Method 2 : Box-Jenkins Conditional MLE
         subroutine pacf_opt(vec, N, method, par, M) bind(c, name='pacf_opt')
             import c_int, c_double
-            real(kind=c_double) :: vec(*), par(*)
-            integer(kind=c_int), value :: N, method, M
+            real(kind=c_double), intent(in) :: vec(*)
+            real(kind=c_double), intent(out) :: par(*)
+            integer(kind=c_int), value, intent(in) :: N, method, M
         end subroutine pacf_opt
     end interface
 
