@@ -208,7 +208,7 @@ end module fortsa_stats
 This argument is <code>intent(in)</code>.</p>
 <p><code>par</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
 This argument is <code>intent(out)</code>.</p>
-<p><code>n</code>, <code>m</code>: Shall be a <code>integer(c_int)</code> argument.
+<p><code>n</code>, <code>m</code>: Shall be a <code>integer(c_int)</code> scalar.
 This argument is <code>value</code> and <code>intent(in)</code>.
 <code>n = size(vec)</code>, <code>m = size(par)</code>.</p>
 <h1 id="acvf_opt"><a class="header" href="#acvf_opt"><code>acvf_opt</code></a></h1>
@@ -225,9 +225,9 @@ Method 1 : FFT based Method. Use it if data length is large.</p>
 This argument is <code>intent(in)</code>.</p>
 <p><code>par</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
 This argument is <code>intent(out)</code>.</p>
-<p><code>method</code>: Shall be a <code>integer(c_int)</code> argument.
+<p><code>method</code>: Shall be a <code>integer(c_int)</code> scalar.
 This argument is <code>value</code> and <code>intent(in)</code>.</p>
-<p><code>n</code>, <code>m</code>: Shall be a <code>integer(c_int)</code> argument.
+<p><code>n</code>, <code>m</code>: Shall be a <code>integer(c_int)</code> scalar.
 This argument is <code>value</code> and <code>intent(in)</code>.
 <code>n = size(vec)</code>, <code>m = size(par)</code>.</p>
 <h1 id="acvf2acf"><a class="header" href="#acvf2acf"><code>acvf2acf</code></a></h1>
@@ -239,9 +239,9 @@ This argument is <code>value</code> and <code>intent(in)</code>.
 <pre><code class="language-fortran">call fortsa_stats:acvf2acf(acf, m)
 </code></pre>
 <h2 id="arguments-2"><a class="header" href="#arguments-2">Arguments</a></h2>
-<p><code>acf</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> argument.
+<p><code>acf</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
 This argument is <code>intent(inout)</code>.</p>
-<p><code>m</code>: Shall be a <code>integer(c_int)</code> argument.
+<p><code>m</code>: Shall be a <code>integer(c_int)</code> scalar.
 This argument is <code>value</code> and <code>intent(in)</code>.</p>
 
                     </main>
