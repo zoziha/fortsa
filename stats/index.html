@@ -170,7 +170,7 @@
         end subroutine acvf
 
         !&gt; Method 0 : Regular Method. Slow for large input length.
-	    !&gt; Method 1 : FFT based Method. Use it if data length is large
+        !&gt; Method 1 : FFT based Method. Use it if data length is large
         subroutine acvf_opt(vec, N, method, par, M) bind(c, name='acvf_opt')
             import c_int, c_double
             real(kind=c_double), intent(in) :: vec(*)
@@ -194,8 +194,8 @@
         end subroutine pacf
 
         !&gt; Method 0 : Yule-Walker
-	    !&gt; Method 1 : Burg
-	    !&gt; Method 2 : Box-Jenkins Conditional MLE
+        !&gt; Method 1 : Burg
+        !&gt; Method 2 : Box-Jenkins Conditional MLE
         subroutine pacf_opt(vec, N, method, par, M) bind(c, name='pacf_opt')
             import c_int, c_double
             real(kind=c_double), intent(in) :: vec(*)
