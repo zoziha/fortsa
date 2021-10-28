@@ -7,4 +7,4 @@ title = "fortsa api documents"
 
 [output.html]
 git-repository-url = "https://github.com/zoziha/fortsa/tree/main/"
-edit-url-template = "https://github.com/zoziha/fortsa/edit/main/{path}"
+edit-url-template = "https://github.com/zoziha/fortsa/edit/main/doc/{path}"
