@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>fortsa stats - fortsa api documents</title>
+        <title>pacf - fortsa api documents</title>
                 
 
         <!-- Custom HTML head -->
@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> About</a></li><li class="chapter-item expanded "><a href="../stats/index.html" class="active"><strong aria-hidden="true">2.</strong> fortsa stats</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../stats/acf.html"><strong aria-hidden="true">2.1.</strong> acf</a></li><li class="chapter-item expanded "><a href="../stats/pacf.html"><strong aria-hidden="true">2.2.</strong> pacf</a></li></ol></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> About</a></li><li class="chapter-item expanded "><a href="../stats/index.html"><strong aria-hidden="true">2.</strong> fortsa stats</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../stats/acf.html"><strong aria-hidden="true">2.1.</strong> acf</a></li><li class="chapter-item expanded "><a href="../stats/pacf.html" class="active"><strong aria-hidden="true">2.2.</strong> pacf</a></li></ol></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -120,7 +120,7 @@
                                                                         <a href="https://github.com/zoziha/fortsa/tree/main/" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                                                                        <a href="https://github.com/zoziha/fortsa/edit/main/src/stats/README.md" title="Suggest an edit" aria-label="Suggest an edit">
+                                                                        <a href="https://github.com/zoziha/fortsa/edit/main/src/stats/pacf.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
                         
@@ -149,75 +149,51 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="fortsa_stats"><a class="header" href="#fortsa_stats">fortsa_stats</a></h1>
-<p><code>ctsa/fortsa</code> provides us some useful stats functions.</p>
-<pre><code class="language-fortran">module fortsa_stats
-
-    use, intrinsic :: iso_c_binding, only: c_int, c_double
-    implicit none
-    private
-
-    public :: acvf, acvf_opt, acvf2acf
-    public :: pacf, pacf_opt
-
-    interface
-        !&gt; Auto Covariance Function
-        subroutine acvf(vec, N, par, M) bind(c, name='acvf')
-            import c_int, c_double
-            real(kind=c_double), intent(in) :: vec(*)
-            real(kind=c_double), intent(out) :: par(*)
-            integer(kind=c_int), value, intent(in) :: N, M
-        end subroutine acvf
-
-        !&gt; Method 0 : Regular Method. Slow for large input length.
-	    !&gt; Method 1 : FFT based Method. Use it if data length is large
-        subroutine acvf_opt(vec, N, method, par, M) bind(c, name='acvf_opt')
-            import c_int, c_double
-            real(kind=c_double), intent(in) :: vec(*)
-            real(kind=c_double), intent(out) :: par(*)
-            integer(kind=c_int), value, intent(in) :: N, method, M
-        end subroutine acvf_opt
-
-        !&gt; Converts Autocovariance to autocorrelation function
-        pure subroutine acvf2acf(acf, M) bind(c, name='acvf2acf')
-            import c_int, c_double
-            real(kind=c_double), intent(inout) :: acf(*)
-            integer(kind=c_int), value, intent(in) :: M
-        end subroutine acvf2acf
-
-        !&gt; Partial Auto Covariance Function
-        pure subroutine pacf(vec, N, par, M) bind(c, name='pacf')
-            import c_int, c_double
-            real(kind=c_double), intent(in) :: vec(*)
-            real(kind=c_double), intent(out) :: par(*)
-            integer(kind=c_int), value, intent(in) :: N, M
-        end subroutine pacf
-
-        !&gt; Method 0 : Yule-Walker
-	    !&gt; Method 1 : Burg
-	    !&gt; Method 2 : Box-Jenkins Conditional MLE
-        subroutine pacf_opt(vec, N, method, par, M) bind(c, name='pacf_opt')
-            import c_int, c_double
-            real(kind=c_double), intent(in) :: vec(*)
-            real(kind=c_double), intent(out) :: par(*)
-            integer(kind=c_int), value, intent(in) :: N, method, M
-        end subroutine pacf_opt
-    end interface
-
-end module fortsa_stats
+                        <h1 id="pacf"><a class="header" href="#pacf"><code>pacf</code></a></h1>
+<h2 id="description"><a class="header" href="#description">Description</a></h2>
+<p>Partial Auto Covariance Function.</p>
+<h2 id="class"><a class="header" href="#class">Class</a></h2>
+<p>Pure subroutine.</p>
+<h2 id="synatx"><a class="header" href="#synatx">Synatx</a></h2>
+<pre><code class="language-fortran">call fortsa_stats:pacf(vec, n, par, m)
 </code></pre>
+<h2 id="arguments"><a class="header" href="#arguments">Arguments</a></h2>
+<p><code>vec</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
+This argument is <code>intent(in)</code>.</p>
+<p><code>par</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
+This argument is <code>intent(out)</code>.</p>
+<p><code>n</code>, <code>m</code>: Shall be a <code>integer(c_int)</code> scalar.
+This argument is <code>value</code> and <code>intent(in)</code>.
+<code>n = size(vec)</code>, <code>m = size(par)</code>.</p>
+<h1 id="acvf_opt"><a class="header" href="#acvf_opt"><code>acvf_opt</code></a></h1>
+<h2 id="description-1"><a class="header" href="#description-1">Description</a></h2>
+<p>Method 0 : Yule-Walker<br>
+Method 1 : Burg<br>
+Method 2 : Box-Jenkins Conditional MLE</p>
+<h2 id="class-1"><a class="header" href="#class-1">Class</a></h2>
+<p>Impure subroutine.</p>
+<h2 id="synatx-1"><a class="header" href="#synatx-1">Synatx</a></h2>
+<pre><code class="language-fortran">call fortsa_stats:pacf_opt(vec, n, method, par, m)
+</code></pre>
+<h2 id="arguments-1"><a class="header" href="#arguments-1">Arguments</a></h2>
+<p><code>vec</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
+This argument is <code>intent(in)</code>.</p>
+<p><code>par</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
+This argument is <code>intent(out)</code>.</p>
+<p><code>method</code>: Shall be a <code>integer(c_int)</code> scalar.
+This argument is <code>value</code> and <code>intent(in)</code>.</p>
+<p><code>n</code>, <code>m</code>: Shall be a <code>integer(c_int)</code> scalar.
+This argument is <code>value</code> and <code>intent(in)</code>.
+<code>n = size(vec)</code>, <code>m = size(par)</code>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                                                    <a rel="prev" href="../index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                                    <a rel="prev" href="../stats/acf.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
-                                                    <a rel="next" href="../stats/acf.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
                         
                         <div style="clear: both"></div>
                     </nav>
@@ -225,13 +201,10 @@ end module fortsa_stats
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                                    <a rel="prev" href="../index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                    <a rel="prev" href="../stats/acf.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
-                                    <a rel="next" href="../stats/acf.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
                             </nav>
 
         </div>

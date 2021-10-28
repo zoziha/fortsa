@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> About</a></li><li class="chapter-item expanded "><a href="stats/index.html"><strong aria-hidden="true">2.</strong> fortsa stats</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="stats/acf.html"><strong aria-hidden="true">2.1.</strong> acf</a></li></ol></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> About</a></li><li class="chapter-item expanded "><a href="stats/index.html"><strong aria-hidden="true">2.</strong> fortsa stats</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="stats/acf.html"><strong aria-hidden="true">2.1.</strong> acf</a></li><li class="chapter-item expanded "><a href="stats/pacf.html"><strong aria-hidden="true">2.2.</strong> pacf</a></li></ol></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -579,16 +579,22 @@ void hr(double *x, int N, int p, int q, double *phi, double *theta, double *var)
             integer(kind=c_int), value, intent(in) :: M
         end subroutine acvf2acf
 
-        subroutine pacf(vec, N, par, M) bind(c, name='pacf')
+        !&gt; Partial Auto Covariance Function
+        pure subroutine pacf(vec, N, par, M) bind(c, name='pacf')
             import c_int, c_double
-            real(kind=c_double) :: vec(*), par(*)
-            integer(kind=c_int), value :: N, M
+            real(kind=c_double), intent(in) :: vec(*)
+            real(kind=c_double), intent(out) :: par(*)
+            integer(kind=c_int), value, intent(in) :: N, M
         end subroutine pacf
 
+        !&gt; Method 0 : Yule-Walker
+	    !&gt; Method 1 : Burg
+	    !&gt; Method 2 : Box-Jenkins Conditional MLE
         subroutine pacf_opt(vec, N, method, par, M) bind(c, name='pacf_opt')
             import c_int, c_double
-            real(kind=c_double) :: vec(*), par(*)
-            integer(kind=c_int), value :: N, method, M
+            real(kind=c_double), intent(in) :: vec(*)
+            real(kind=c_double), intent(out) :: par(*)
+            integer(kind=c_int), value, intent(in) :: N, method, M
         end subroutine pacf_opt
     end interface
 
@@ -642,6 +648,42 @@ This argument is <code>value</code> and <code>intent(in)</code>.
 This argument is <code>intent(inout)</code>.</p>
 <p><code>m</code>: Shall be a <code>integer(c_int)</code> scalar.
 This argument is <code>value</code> and <code>intent(in)</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="pacf"><a class="header" href="#pacf"><code>pacf</code></a></h1>
+<h2 id="description-3"><a class="header" href="#description-3">Description</a></h2>
+<p>Partial Auto Covariance Function.</p>
+<h2 id="class-3"><a class="header" href="#class-3">Class</a></h2>
+<p>Pure subroutine.</p>
+<h2 id="synatx-3"><a class="header" href="#synatx-3">Synatx</a></h2>
+<pre><code class="language-fortran">call fortsa_stats:pacf(vec, n, par, m)
+</code></pre>
+<h2 id="arguments-3"><a class="header" href="#arguments-3">Arguments</a></h2>
+<p><code>vec</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
+This argument is <code>intent(in)</code>.</p>
+<p><code>par</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
+This argument is <code>intent(out)</code>.</p>
+<p><code>n</code>, <code>m</code>: Shall be a <code>integer(c_int)</code> scalar.
+This argument is <code>value</code> and <code>intent(in)</code>.
+<code>n = size(vec)</code>, <code>m = size(par)</code>.</p>
+<h1 id="acvf_opt-1"><a class="header" href="#acvf_opt-1"><code>acvf_opt</code></a></h1>
+<h2 id="description-4"><a class="header" href="#description-4">Description</a></h2>
+<p>Method 0 : Yule-Walker<br>
+Method 1 : Burg<br>
+Method 2 : Box-Jenkins Conditional MLE</p>
+<h2 id="class-4"><a class="header" href="#class-4">Class</a></h2>
+<p>Impure subroutine.</p>
+<h2 id="synatx-4"><a class="header" href="#synatx-4">Synatx</a></h2>
+<pre><code class="language-fortran">call fortsa_stats:pacf_opt(vec, n, method, par, m)
+</code></pre>
+<h2 id="arguments-4"><a class="header" href="#arguments-4">Arguments</a></h2>
+<p><code>vec</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
+This argument is <code>intent(in)</code>.</p>
+<p><code>par</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
+This argument is <code>intent(out)</code>.</p>
+<p><code>method</code>: Shall be a <code>integer(c_int)</code> scalar.
+This argument is <code>value</code> and <code>intent(in)</code>.</p>
+<p><code>n</code>, <code>m</code>: Shall be a <code>integer(c_int)</code> scalar.
+This argument is <code>value</code> and <code>intent(in)</code>.
+<code>n = size(vec)</code>, <code>m = size(par)</code>.</p>
 
                     </main>
 
