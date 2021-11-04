@@ -6,11 +6,11 @@
 `CTSA` is a C software package for univariate time series analysis. 
 
 | Item | Info |  
-|:-:|---|
+|:-:|:-:|
 | **Version:** | 0.0.3 |
 | **Author:** | `ForTSA` Contributors |
 | **Web site:** | https://github.com/zoziha/fortsa |
-| **API-Doc Web site:** | https://zoziha.github.io/fortsa-API-doc/ |
+| **API-Doc Web site:** | https://zoziha.github.io/fortsa/ |
 | **License:** | _`ForTSA`_ is released under BSD-3. |
 
 ## Getting Started
@@ -28,8 +28,9 @@ cd fortsa
 The following combinations are tested on the default branch of `ForTSA`:  
 
 |Name|Vesrion|Platform|Architecture|  
-|---|---|---|---|  
+|:-:|:-:|:-:|:-:|  
 |GCC Fortran(MSYS2)|10|Windows 10|x86_64|
+|GCC Fortran|10|Ubuntu|x86_64|
 
 ### Build with [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
 Fortran Package Manager (fpm) is a package manager and build system for Fortran.<br>
@@ -44,7 +45,7 @@ To use `ForTSA` within your fpm project, add the following to `fpm.toml` file:
 
 ```toml
 [dependencies]
-fortsa = { git = "https://github.com/zoziha/fortsa.git" }
+fortsa = { git="https://github.com/zoziha/fortsa.git" }
 ```
 ## `CTSA` Docs
 

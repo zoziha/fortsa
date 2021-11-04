@@ -78,8 +78,4 @@ main="test_model_sarimax3.f90"
 [[test]]
 name="stats"
 source-dir="tests/stats"
-main="stats_test.f90"
-[[test]]
-name="stats_pacf"
-source-dir="tests/stats"
-main="test_stats_pacf.f90"
+main="checker.f90"
