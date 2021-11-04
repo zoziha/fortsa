@@ -42,9 +42,9 @@ name="model_arima"
 source-dir="tests/model"
 main="test_model_arima.f90"
 [[test]]
-name="model_autoarima"
+name="model"
 source-dir="tests/model"
-main="test_model_autoarima.f90"
+main="checker.f90"
 [[test]]
 name="model_autoarima2"
 source-dir="tests/model"

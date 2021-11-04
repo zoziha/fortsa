@@ -5,6 +5,10 @@
 `ForTSA` is a Fortran software package for univariate time series analysis, which is base on [rafat/CTSA](https://github.com/rafat/ctsa).  
 `CTSA` is a C software package for univariate time series analysis. 
 
+<div align="center">
+<img src="doc/src/media/logo.png" alt="ForTSA" width="220">
+</div>
+
 | Item | Info |  
 |:-:|:-:|
 | **Version:** | 0.0.3 |
@@ -13,7 +17,7 @@
 | **API-Doc Web site:** | https://zoziha.github.io/fortsa/ |
 | **License:** | _`ForTSA`_ is released under BSD-3. |
 
-## Getting Started
+## Get Started
 
 ```sh
 git clone https://github.com/zoziha/fortsa.git

@@ -1,10 +1,10 @@
-{{#include ../../README.md}}
+{{#include ../../README.md:1:6}}
 
-## CTSA-API
+<div align="center">
+<img src="./media/logo.png" alt="ForTSA" width="220">
+</div>
 
-```c
-{{#include ../header/ctsa.h}}
-```
+{{#include ../../README.md:12::}}
 
 ## Change log
 
