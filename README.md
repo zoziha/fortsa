@@ -7,21 +7,22 @@
 
 | Item | Info |  
 |:-:|---|
-| **Version:** | 0.0.2 |
+| **Version:** | 0.0.3 |
 | **Author:** | `ForTSA` Contributors |
 | **Web site:** | https://github.com/zoziha/fortsa |
 | **API-Doc Web site:** | https://zoziha.github.io/fortsa-API-doc/ |
-| **Copyright:** | _This document_ is placed in the public domain. |
 | **License:** | _`ForTSA`_ is released under BSD-3. |
 
 ## Getting Started
-```bash
+
+```sh
 git clone https://github.com/zoziha/fortsa.git
 cd fortsa
 ```
 ## Dependencies
 
-Git and [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
+- Git
+- [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
 
 ### Supported Compilers
 The following combinations are tested on the default branch of `ForTSA`:  
@@ -31,13 +32,16 @@ The following combinations are tested on the default branch of `ForTSA`:
 |GCC Fortran(MSYS2)|10|Windows 10|x86_64|
 
 ### Build with [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
-Fortran Package Manager (fpm) is a great package manager and build system for Fortran.  
+Fortran Package Manager (fpm) is a package manager and build system for Fortran.<br>
 You can build using provided `fpm.toml`:
-```bash
-fpm build
-fpm test <test_name (see `fpm.toml`)>
+
+```sh
+fpm test --list
+fpm test <test_name, see `fpm.toml` or test list>
 ```
+
 To use `ForTSA` within your fpm project, add the following to `fpm.toml` file:
+
 ```toml
 [dependencies]
 fortsa = { git = "https://github.com/zoziha/fortsa.git" }
@@ -63,6 +67,7 @@ For `C` routines, contact rafat.hsn@gmail.com.
 For `Fortran` routines, contact zuo.zhihua@qq.com.
 
 ## Links
+
 1. [rafat/ctsa](https://github.com/rafat/ctsa)
 2. [vmagnin/gtk-fortran](https://github.com/vmagnin/gtk-fortran)
 3. [fortran-lang](https://fortran-lang.org/learn/)
