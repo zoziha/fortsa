@@ -46,10 +46,6 @@ name="model"
 source-dir="tests/model"
 main="checker.f90"
 [[test]]
-name="model_autoarima2"
-source-dir="tests/model"
-main="test_model_autoarima2.f90"
-[[test]]
 name="model_autoarima3"
 source-dir="tests/model"
 main="test_model_autoarima3.f90"
