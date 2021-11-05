@@ -1,15 +1,18 @@
 name = 'fortsa'
-version = '0.0.2'
+version = '0.0.3'
 maintainer = 'fortsa contributors'
-license = 'BSD 3- Clause Check LINCENSE file'
-author = 'fortsa contributors'
+license = 'BSD 3- Clause'
+author = '左志华'
 categories = 'time series analysis'
-copyright = "2014-2021 fortsa contributors"
+copyright = "2021 fortsa contributors"
 
 [build]
 auto-examples = false
 auto-executables = false
 auto-tests = false
+
+[dependencies]
+ctsa = { git="https://github.com/zoziha/ctsa", branch="ctsa-fpm" }
 
 [dev-dependencies]
 ## `stdlib` inside `forlab` dependencies
@@ -39,9 +42,9 @@ name="model_arima"
 source-dir="tests/model"
 main="test_model_arima.f90"
 [[test]]
-name="model_autoarima"
+name="model"
 source-dir="tests/model"
-main="test_model_autoarima.f90"
+main="checker.f90"
 [[test]]
 name="model_autoarima2"
 source-dir="tests/model"
