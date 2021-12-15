@@ -1,6 +1,6 @@
 program test_model_ar
     
-    use forlab_io, only: disp, file
+    use forlab, only: disp, file
     use fortsa_model, only: ar_init, ar_exec, &
                             ar_summary, ar_predict, &
                             ar_free
@@ -8,7 +8,7 @@ program test_model_ar
     use, intrinsic :: iso_c_binding, only: c_loc, c_null_ptr, c_ptr
     implicit none
     integer :: i, d, L
-    integer :: p, q
+    integer :: p, q, line_num
     real(8), target, allocatable :: xpred(:), amse(:)
     type(c_ptr) :: obj = c_null_ptr
     target obj
@@ -24,25 +24,23 @@ program test_model_ar
 
     L = 5
 
-    infile = file('example/data/seriesA.txt', 'r')
+    infile = file('example/data/seriesA.txt')
     if (.not. infile%exist()) call error_stop('Error: file not exist, '//infile%filename)
     call infile%open()
-    call infile%countlines()
-    allocate (inp(infile%lines), xpred(L), amse(L))
+    line_num = infile%countlines()
+    allocate (inp(line_num), xpred(L), amse(L))
 
-    do i = 1, infile%lines
+    do i = 1, line_num
         read (infile%unit, *) inp(i)
     end do
 
-    obj = ar_init(0, infile%lines)
+    obj = ar_init(0, line_num)
     call ar_exec(obj, inp)
     call ar_summary(obj)
     call ar_predict(obj, inp, L, xpred, amse)
 
-    call disp('Predicted Values : ')
-    call disp(xpred)
-    call disp('Standard Errors : ')
-    call disp(sqrt(amse))
+    call disp(xpred, 'Predicted Values : ')
+    call disp(sqrt(amse), 'Standard Errors : ')
 
     call ar_free(obj)
     deallocate (inp, xpred, amse)

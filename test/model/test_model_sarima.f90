@@ -1,7 +1,7 @@
 program test_model_sarima
 
     use stdlib_error, only: error_stop
-    use forlab_io, only: file, disp
+    use forlab, only: file, disp
     use fortsa_model, only: sarima_init, sarima_setMethod, sarima_predict, &
                             sarima_exec, sarima_summary, sarima_free
     use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr
@@ -30,11 +30,10 @@ program test_model_sarima
     allocate (phi(p), theta(q), phi_(p_), theta_(q_))
     allocate (xpred(L), amse(L))
 
-    infile = file('example/data/seriesG.txt', 'r')
+    infile = file('example/data/seriesG.txt')
     if (.not. infile%exist()) call error_stop('Error: file not exist, '//infile%filename)
     call infile%open()
-    call infile%countlines()
-    N = infile%lines
+    N = infile%countlines()
     allocate (inp(N))
 
     do i = 1, N

@@ -1,7 +1,7 @@
 program auto_arima_failure
     
     use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc
-    use forlab_io, only: file, disp
+    use forlab, only: file, disp
     use stdlib_error, only: error_stop
     use fortsa_model, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
                             auto_arima_exec, auto_arima_summary, auto_arima_predict, auto_arima_free

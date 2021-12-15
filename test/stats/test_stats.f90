@@ -1,6 +1,7 @@
 module test_stats
 
     use testdrive, only: new_unittest, unittest_type, error_type, check
+    use forlab, only: countlines
     implicit none
     private
 
@@ -20,26 +21,22 @@ contains
     end subroutine collect_stats
 
     subroutine test_stats_acf(error)
-
-        use forlab_io, only: file
         use fortsa_stats, only: acvf, acvf_opt, acvf2acf
         type(error_type), allocatable, intent(out) :: error
-        type(file) :: infile
         real(8), allocatable :: inp(:), acf(:)
-        integer :: i
+        integer :: i, line_num, unit
         real(8) :: acf_(10)
 
-        infile = file('example/data/seriesC.txt', 'r')
-        call infile%open()
-        call infile%countlines()
-        call check(error, infile%lines, 226)
+        line_num = countlines('example/data/seriesC.txt')
+        open (newunit=unit, file='example/data/seriesC.txt')
+        call check(error, line_num, 226)
         if (allocated(error)) return
 
-        allocate (inp(infile%lines), acf(10))
-        do i = 1, infile%lines
-            read (infile%unit, *) inp(i)
+        allocate (inp(line_num), acf(10))
+        do i = 1, line_num
+            read (unit, *) inp(i)
         end do
-        call infile%close()
+        close (unit)
 
         acf_ = [4.223, 4.128, 3.987, 3.810, 3.608, 3.388, 3.157, 2.922, 2.683, 2.444]
         call acvf(inp, acf)
@@ -71,25 +68,22 @@ contains
     end subroutine test_stats_acf
 
     subroutine test_stats_pacf(error)
-        use forlab_io, only: file, disp
         use fortsa_stats, only: pacf, pacf_opt
         type(error_type), allocatable, intent(out) :: error
-        integer :: i
+        integer :: i, line_num, unit
         real(8), allocatable :: inp(:), par(:)
-        type(file) :: infile
         real(8) :: pacf_(10)
 
-        infile = file('example/data/seriesC.txt', 'r')
-        call infile%open()
-        call infile%countlines()
-        call check(error, infile%lines, 226)
+        line_num = countlines('example/data/seriesC.txt')
+        open (newunit=unit, file='example/data/seriesC.txt')
+        call check(error, line_num, 226)
         if (allocated(error)) return
 
-        allocate (inp(infile%lines), par(10))
-        do i = 1, infile%lines
-            read (infile%unit, *) inp(i)
+        allocate (inp(line_num), par(10))
+        do i = 1, line_num
+            read (unit, *) inp(i)
         end do
-        call infile%close()
+        close (unit)
 
         pacf_ = [0.9776, -0.2602, -0.1570, -0.9331E-01, -0.5745E-01, &
                  -0.4563E-01, -0.1217E-01, -0.3751E-01, -0.2236E-01, -0.9845E-02]

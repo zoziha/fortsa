@@ -2,8 +2,7 @@ program test_dwt_dwt
 
     !! <Fortran 2018 with Parallel Programming> Page.432
     use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_char, c_f_pointer, c_null_char
-    use forlab_io, only: file, disp
-    use stdlib_error, only: error_stop
+    use forlab, only: countlines, disp
     use fortsa_dwt, only: wave_init, wt_init, &
                           wave_summary, wt_summary, &
                           modwt, imodwt, &
@@ -20,22 +19,20 @@ program test_dwt_dwt
     real(8), allocatable, target :: output_(:)
     real(8), pointer :: fp(:)
 
-    type(file) :: infile
+    integer :: line_num, unit
 
     obj = wave_init('db4'//c_null_char)
     call wave_summary(obj)
 
-    infile = file('example/data/signal.txt', 'r')
-    if (.not. infile%exist()) call error_stop('Error: file not exist : '//infile%filename)
-    call infile%open()
-    call infile%countlines()
-    call disp(infile%lines, 'file number of lines is : ')
-    allocate (data(infile%lines))
+    line_num = countlines('example/data/signal.txt')
+    open(newunit=unit, file='example/data/signal.txt')
+    call disp(line_num, 'file number of lines is : ')
+    allocate (data(line_num))
 
-    do i = 1, infile%lines
-        read (infile%unit, *) data(i)
+    do i = 1, line_num
+        read (unit, *) data(i)
     end do
-    call infile%close()
+    close(unit)
     N = 177
 
     allocate (inp(N), out(N), diff(N))

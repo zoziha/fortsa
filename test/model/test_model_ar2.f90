@@ -1,7 +1,7 @@
 program test_model_ar2
 
-    use forlab_io, only: disp, file
-    use forlab_stats, only: mean
+    use forlab, only: disp, file
+    use forlab, only: mean
     use fortsa_model, only: ar_init, ar_exec, &
                             ar_summary, ar_predict, &
                             ar_free
@@ -9,7 +9,7 @@ program test_model_ar2
     use stdlib_error, only: error_stop
     implicit none
     integer :: i, d, L
-    integer :: p, q
+    integer :: p, q, line_num
     real(8), allocatable :: phi(:), theta(:)
     type(file) :: infile
     real(8), allocatable :: inp(:)
@@ -23,26 +23,26 @@ program test_model_ar2
 
     L = 5
 
-    infile = file('example/data/seriesA.txt', 'r')
+    infile = file('example/data/seriesA.txt')
     if (.not. infile%exist()) call error_stop('Error: file not exist, '//infile%filename)
     call infile%open()
-    call infile%countlines()
-    allocate (inp(infile%lines), phi(p))
+    line_num = infile%countlines()
+    allocate (inp(line_num), phi(p))
 
-    do i = 1, infile%lines
+    do i = 1, line_num
         read (infile%unit, *) inp(i)
     end do
 
     wmean = mean(inp)
         !! forlab mean
 
-    call disp('AR Coefficients Using Yule Walker Algorithm : ')
-    call yw(inp, infile%lines, p, phi, var)
+    print *, 'AR Coefficients Using Yule Walker Algorithm : '
+    call yw(inp, line_num, p, phi, var)
     call disp(phi, 'PHI : ')
     call disp(var, 'VAR : ')
 
-    call disp('AR Coefficients Using Burg Algorithm : ')
-    call burg(inp, infile%lines, p, phi, var)
+    print *, 'AR Coefficients Using Burg Algorithm : '
+    call burg(inp, line_num, p, phi, var)
     call disp(phi, 'PHI : ')
     call disp(var, 'VAR : ')
 
@@ -51,8 +51,8 @@ program test_model_ar2
 
     deallocate (phi)
     allocate (phi(p), theta(q))
-    call disp('ARMA Coefficients Using Hannan Rissanen Algorithm : ')
-    call hr(inp, infile%lines, p, q, phi, theta, var)
+    print *, 'ARMA Coefficients Using Hannan Rissanen Algorithm : '
+    call hr(inp, line_num, p, q, phi, theta, var)
     call disp(phi, 'PHI : ')
     call disp(theta, 'THETA : ')
     call disp(var, 'VAR : ')

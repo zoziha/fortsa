@@ -3,6 +3,7 @@ program checker
     use, intrinsic :: iso_fortran_env, only: error_unit
     use testdrive, only: run_testsuite, new_testsuite, testsuite_type
     use test_model_autoarima, only: collect_model_autoarima
+    use test_model_arima, only: collect_model_arima
     integer :: stat, is
     type(testsuite_type), allocatable :: testsuites(:)
     character(len=*), parameter :: fmt = '("#", *(1x, a))'
@@ -10,7 +11,8 @@ program checker
     stat = 0
 
     testsuites = [ &
-                 new_testsuite("test_model", collect_model_autoarima) &
+                 new_testsuite("test_model_autoarima", collect_model_autoarima) &
+                 , new_testsuite("test_model_arima", collect_model_arima) &
                  ]
 
     do is = 1, size(testsuites)
