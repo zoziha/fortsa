@@ -2,7 +2,6 @@ program test_dwt_dwt
 
     !! <Fortran 2018 with Parallel Programming> Page.432
     use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_char, c_f_pointer, c_null_char
-    use forlab, only: countlines, disp
     use fortsa_dwt, only: wave_init, wt_init, &
                           wave_summary, wt_summary, &
                           modwt, imodwt, &
@@ -26,7 +25,6 @@ program test_dwt_dwt
 
     line_num = countlines('example/data/signal.txt')
     open(newunit=unit, file='example/data/signal.txt')
-    call disp(line_num, 'file number of lines is : ')
     allocate (data(line_num))
 
     do i = 1, line_num
@@ -49,7 +47,6 @@ program test_dwt_dwt
     allocate (output_(wt_%outlength), fp(wt_%outlength))
     call c_f_pointer(wt_%output, fp, reshape([wt_%outlength], shape=[1]))
         !!\FIXME: rm unused variables
-    call disp(fp(1:wt_%outlength))
         !!\TODO: c_f_pointer, page427
 
     call imodwt(wt, out)
@@ -57,7 +54,6 @@ program test_dwt_dwt
     do i = 1, wt_%siglength
         diff(i) = out(i) - inp(i)
     end do
-    call disp(maxval(abs(diff)), 'MAX : ')   !! If Reconstruction succeeded then the output should be a small value.
         !!\TODO: detto
 
     call wt_summary(wt)
@@ -65,5 +61,20 @@ program test_dwt_dwt
     call wave_free(obj)
     call wt_free(wt)
     deallocate (inp, out, diff, data)
+    
+contains
+
+    integer function countlines(filename)
+        character(*), intent(in) :: filename
+        integer :: fid, ierr
+        countlines = 0
+        open (newunit=fid, file=filename)
+        do
+            read (fid, *, iostat=ierr)
+            if (is_iostat_end(ierr)) exit
+            countlines = countlines + 1
+        end do
+        close (fid)
+    end function countlines
 
 end program test_dwt_dwt

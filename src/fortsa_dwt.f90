@@ -1,4 +1,4 @@
-!! fortsa_dwt(module) presents for test.
+!! fortsa_dwt (module) presents for test.
 
 module fortsa_dwt
 
@@ -16,15 +16,15 @@ module fortsa_dwt
         type(c_ptr) :: wave
         type(c_ptr) :: cobj
         character(kind=c_char), dimension(10) :: method
-        integer(kind=c_int) :: siglength                !! Length of the original signal.
-        integer(kind=c_int) :: modwtsiglength           !! Modified signal length for MODWT
-        integer(kind=c_int) :: outlength                !! Length of the output DWT vector
-        integer(kind=c_int) :: lenlength                !! Length of the Output Dimension Vector "length"
-        integer(kind=c_int) :: J                        !! Number of decomposition Levels
-        integer(kind=c_int) :: MaxIter                  !! Maximum Iterations J <= MaxIter
-        integer(kind=c_int) :: even                     !! even = 1 if signal is of even length. even = 0 otherwise
-        character(kind=c_char), dimension(10) :: ext           !! Type of Extension used - "per" or "sym"
-        character(kind=c_char), dimension(10) :: cmethod       !! Convolution Method - "direct" or "FFT"
+        integer(kind=c_int) :: siglength                    !! Length of the original signal.
+        integer(kind=c_int) :: modwtsiglength               !! Modified signal length for MODWT
+        integer(kind=c_int) :: outlength                    !! Length of the output DWT vector
+        integer(kind=c_int) :: lenlength                    !! Length of the Output Dimension Vector "length"
+        integer(kind=c_int) :: J                            !! Number of decomposition Levels
+        integer(kind=c_int) :: MaxIter                      !! Maximum Iterations J <= MaxIter
+        integer(kind=c_int) :: even                         !! even = 1 if signal is of even length. even = 0 otherwise
+        character(kind=c_char), dimension(10) :: ext        !! Type of Extension used - "per" or "sym"
+        character(kind=c_char), dimension(10) :: cmethod    !! Convolution Method - "direct" or "FFT"
 
         integer(kind=c_int) :: N
         integer(kind=c_int) :: cfftset
@@ -93,7 +93,5 @@ module fortsa_dwt
         end subroutine wt_free
 
     end interface
-
-contains
 
 end module fortsa_dwt

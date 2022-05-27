@@ -11,12 +11,10 @@ auto-examples = false
 auto-executables = false
 auto-tests = false
 
-[dependencies]
-ctsa = { git="https://github.com/zoziha/ctsa", branch="ctsa-fpm" }
+# https://github.com/rafat/ctsa
+link = ["ctsalib"]
 
 [dev-dependencies]
-## `stdlib` inside `forlab` dependencies
-forlab = { git = "https://github.com/zoziha/forlab" }
 test-drive = { git="https://github.com/fortran-lang/test-drive" }
 
 [library]
@@ -24,20 +22,20 @@ source-dir="src"
 
 # ============================ tests ===========================================
 ## [dwt] tests
-[[test]]
-name="dwt"
-source-dir="test/dwt"
-main="test_dwt_dwt.f90"
+# [[test]]
+# name="dwt"
+# source-dir="test/dwt"
+# main="test_dwt_dwt.f90"
 
-## [model] tests
-[[test]]
-name="model"
-source-dir="test/model"
-main="checker.f90"
-[[test]]
-name="model_arima"
-source-dir="test/model"
-main="test_model_arima.f90"
+# ## [model] tests
+# [[test]]
+# name="model"
+# source-dir="test/model"
+# main="checker.f90"
+# [[test]]
+# name="model_arima"
+# source-dir="test/model"
+# main="test_model_arima.f90"
 
 ## [stats] tests
 [[test]]

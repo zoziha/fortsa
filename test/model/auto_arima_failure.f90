@@ -1,8 +1,6 @@
 program auto_arima_failure
     
     use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr, c_loc
-    use forlab, only: file, disp
-    use stdlib_error, only: error_stop
     use fortsa_model, only: auto_arima_init, auto_arima_setApproximation, auto_arima_setStepwise, auto_arima_setVerbose, &
                             auto_arima_exec, auto_arima_summary, auto_arima_predict, auto_arima_free
     implicit none
@@ -37,7 +35,6 @@ program auto_arima_failure
 
     infile = file('example/data/seriesG.txt')
     if (.not. infile%exist()) then
-        call error_stop('file not found : '//infile%filename)
     end if
     call infile%open('r')
     lines = infile%countlines()
@@ -56,9 +53,6 @@ program auto_arima_failure
     call auto_arima_summary(obj)
     call auto_arima_predict(obj, inp, %ref([0.0d0]), L, %ref([0.0d0]), xpred, amse)
 
-    call disp('Forecast : 5 Point Look Ahead')
-    call disp(xpred, 'Predicted Values : ')
-    call disp(exp(sqrt(amse)), 'Standard Errors  : ')
 
     call auto_arima_free(obj)
 

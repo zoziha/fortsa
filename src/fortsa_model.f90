@@ -8,7 +8,7 @@ module fortsa_model
 
     public :: arima_set, arima_init, arima_setMethod, arima_setOptMethod, &
               arima_exec, arima_summary, arima_predict, arima_free
-              
+
     public :: ar_init, ar_exec, &
               ar_summary, ar_predict, &
               ar_free
@@ -24,7 +24,7 @@ module fortsa_model
               sarimax_summary, sarimax_predict, sarimax_free
 
     public :: yw, burg, hr
-    
+
     public :: auto_arima_set
 
     type, bind(c) :: auto_arima_set
@@ -141,27 +141,27 @@ module fortsa_model
     end interface
 
     type, bind(c) :: arima_set
-        integer(c_int) :: N        !! length of time series
-        integer(c_int) :: Nused    !! length of time series after differencing, Nused = N - d
+        integer(c_int) :: N         !! length of time series
+        integer(c_int) :: Nused     !! length of time series after differencing, Nused = N - d
         integer(c_int) :: method
         integer(c_int) :: optmethod
-        integer(c_int) :: p        !! size of phi
-        integer(c_int) :: d        !! Number of times the series is to be differenced
-        integer(c_int) :: q        !! size of theta
-        integer(c_int) :: s        !! Seasonality/Period
-        integer(c_int) :: p_       !! Size of seasonal phi
-        integer(c_int) :: d_       !! The number of times the seasonal series is to be differenced
-        integer(c_int) :: q_       !! size of Seasonal Theta
-        integer(c_int) :: r        !! Number of exogenous variables
-        integer(c_int) :: M        !! M = 0 if mean is 0.0 else M = 1
-        integer(c_int) :: ncoeff   !! Total Number of Coefficients to be estimated
+        integer(c_int) :: p         !! size of phi
+        integer(c_int) :: d         !! Number of times the series is to be differenced
+        integer(c_int) :: q         !! size of theta
+        integer(c_int) :: s         !! Seasonality/Period
+        integer(c_int) :: p_        !! Size of seasonal phi
+        integer(c_int) :: d_        !! The number of times the seasonal series is to be differenced
+        integer(c_int) :: q_        !! size of Seasonal Theta
+        integer(c_int) :: r         !! Number of exogenous variables
+        integer(c_int) :: M         !! M = 0 if mean is 0.0 else M = 1
+        integer(c_int) :: ncoeff    !! Total Number of Coefficients to be estimated
         type(c_ptr) :: phi
         type(c_ptr) :: theta
         type(c_ptr) :: phi_
         type(c_ptr) :: theta_
         type(c_ptr) :: exog
-        type(c_ptr) :: vcov     !! Variance-Covariance Matrix Of length lvcov
-        integer(c_int) :: lvcov    !! length of VCOV
+        type(c_ptr) :: vcov         !! Variance-Covariance Matrix Of length lvcov
+        integer(c_int) :: lvcov     !! length of VCOV
         type(c_ptr) :: res
         real(c_double) :: mean
         real(c_double) :: var
@@ -184,25 +184,25 @@ module fortsa_model
     end interface
 
     type, bind(c) :: sarima_set
-        integer(c_int) :: N        !!  length of time series
-        integer(c_int) :: Nused    !! length of time series after differencing, Nused = N - d - s*D
+        integer(c_int) :: N         !!  length of time series
+        integer(c_int) :: Nused     !! length of time series after differencing, Nused = N - d - s*D
         integer(c_int) :: method
         integer(c_int) :: optmethod
-        integer(c_int) :: p        !!  size of phi
-        integer(c_int) :: d        !!  Number of times the series is to be differenced
-        integer(c_int) :: q        !! size of theta
-        integer(c_int) :: s        !!  Seasonality/Period
+        integer(c_int) :: p         !!  size of phi
+        integer(c_int) :: d         !!  Number of times the series is to be differenced
+        integer(c_int) :: q         !! size of theta
+        integer(c_int) :: s         !!  Seasonality/Period
         integer(c_int) :: P_        !! Size of seasonal phi
         integer(c_int) :: D_        !!  The number of times the seasonal series is to be differenced
         integer(c_int) :: Q_        !! size of Seasonal Theta
-        integer(c_int) :: M        !!  M = 0 if mean is 0.0 else M = 1
-        integer(c_int) :: ncoeff   !!  Total Number of Coefficients to be estimated
+        integer(c_int) :: M         !!  M = 0 if mean is 0.0 else M = 1
+        integer(c_int) :: ncoeff    !!  Total Number of Coefficients to be estimated
         real(c_double) :: phi
         real(c_double) :: theta
         real(c_double) :: PHI_
         real(c_double) :: THETA_
-        real(c_double) :: vcov    !!  Variance-Covariance Matrix Of length lvcov
-        integer(c_int) :: lvcov    !! length of VCOV
+        real(c_double) :: vcov      !!  Variance-Covariance Matrix Of length lvcov
+        integer(c_int) :: lvcov     !! length of VCOV
         real(c_double) :: res
         real(c_double) :: mean
         real(c_double) :: var
@@ -302,25 +302,25 @@ module fortsa_model
         !> Predictes the next L values of the time series
         subroutine auto_arima_predict(obj, inp, xreg, L, newxreg, xpred, amse) bind(c)
             import c_int, c_ptr, c_double
-            
+
             !> Pointer points to `auto_arima_object`
             type(c_ptr), value :: obj
-            
+
             !> Input array
             real(c_double) :: inp(*)
-            
+
             !> TODO:
             real(c_double) :: xreg(*), newxreg(*)
-            
+
             !> Prediction array
             real(c_double) :: xpred(*)
-            
+
             !> Standard errors array
             real(c_double) :: amse(*)
-            
+
             !> Length of prediction
             integer(c_int), value :: L
-            
+
         end subroutine auto_arima_predict
 
         subroutine ar_predict(obj, inp, L, xpred, amse) bind(c, name='ar_predict')
@@ -335,7 +335,7 @@ module fortsa_model
             real(c_double) :: inp, phi, var
             integer(c_int), value :: N, p, method
         end subroutine ar
-        
+
         ! setMethod routines 🔻
         subroutine arima_setMethod(obj, value) bind(c, name='arima_setMethod')
             import c_int, c_ptr
@@ -504,10 +504,10 @@ module fortsa_model
         !> Free auto_arima struct memory
         subroutine auto_arima_free(object) bind(c, name='auto_arima_free')
             import c_ptr
-            
+
             !> Pointer points to `auto_arima_object`
             type(c_ptr), value :: object
-            
+
         end subroutine auto_arima_free
 
         subroutine ar_free(object) bind(c, name='ar_free')
