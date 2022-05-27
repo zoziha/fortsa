@@ -157,7 +157,7 @@
 <img src="./media/logo.png" alt="ForTSA" width="220">
 </div>
 <table><thead><tr><th align="center">Item</th><th align="center">Info</th></tr></thead><tbody>
-<tr><td align="center"><strong>Version:</strong></td><td align="center">0.0.3</td></tr>
+<tr><td align="center"><strong>Version:</strong></td><td align="center">0.1.0</td></tr>
 <tr><td align="center"><strong>Author:</strong></td><td align="center"><code>ForTSA</code> Contributors</td></tr>
 <tr><td align="center"><strong>Web site:</strong></td><td align="center">https://github.com/zoziha/fortsa</td></tr>
 <tr><td align="center"><strong>API-Doc Web site:</strong></td><td align="center">https://zoziha.github.io/fortsa/</td></tr>
@@ -171,6 +171,7 @@ cd fortsa
 <ul>
 <li>Git</li>
 <li><a href="https://github.com/fortran-lang/fpm">fortran-lang/fpm</a></li>
+<li><a href="https://github.com/rafat/ctsa">rafat/ctsa</a></li>
 </ul>
 <h3 id="supported-compilers"><a class="header" href="#supported-compilers">Supported Compilers</a></h3>
 <p>The following combinations are tested on the default branch of <code>ForTSA</code>:</p>
@@ -181,8 +182,7 @@ cd fortsa
 <h3 id="build-with-a-hrefhttpsgithubcomfortran-langfpmfortran-langfpma"><a class="header" href="#build-with-a-hrefhttpsgithubcomfortran-langfpmfortran-langfpma">Build with <a href="https://github.com/fortran-lang/fpm">fortran-lang/fpm</a></a></h3>
 <p>Fortran Package Manager (fpm) is a package manager and build system for Fortran.<br>
 You can build using provided <code>fpm.toml</code>:</p>
-<pre><code class="language-sh">fpm test --list
-fpm test &lt;test_name, see `fpm.toml` or test list&gt;
+<pre><code class="language-sh">fpm test
 </code></pre>
 <p>To use <code>ForTSA</code> within your fpm project, add the following to <code>fpm.toml</code> file:</p>
 <pre><code class="language-toml">[dependencies]

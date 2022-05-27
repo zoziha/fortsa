@@ -155,7 +155,7 @@
 <h2 id="class"><a class="header" href="#class">Class</a></h2>
 <p>Pure subroutine.</p>
 <h2 id="synatx"><a class="header" href="#synatx">Synatx</a></h2>
-<pre><code class="language-fortran">call fortsa_stats:pacf(vec, n, par, m)
+<pre><code class="language-fortran">call fortsa_stats_m:pacf(vec, n, par, m)
 </code></pre>
 <h2 id="arguments"><a class="header" href="#arguments">Arguments</a></h2>
 <p><code>vec</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
@@ -173,7 +173,7 @@ Method 2 : Box-Jenkins Conditional MLE</p>
 <h2 id="class-1"><a class="header" href="#class-1">Class</a></h2>
 <p>Impure subroutine.</p>
 <h2 id="synatx-1"><a class="header" href="#synatx-1">Synatx</a></h2>
-<pre><code class="language-fortran">call fortsa_stats:pacf_opt(vec, n, method, par, m)
+<pre><code class="language-fortran">call fortsa_stats_m:pacf_opt(vec, n, method, par, m)
 </code></pre>
 <h2 id="arguments-1"><a class="header" href="#arguments-1">Arguments</a></h2>
 <p><code>vec</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.

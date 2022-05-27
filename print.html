@@ -155,7 +155,7 @@
 <img src="./media/logo.png" alt="ForTSA" width="220">
 </div>
 <table><thead><tr><th align="center">Item</th><th align="center">Info</th></tr></thead><tbody>
-<tr><td align="center"><strong>Version:</strong></td><td align="center">0.0.3</td></tr>
+<tr><td align="center"><strong>Version:</strong></td><td align="center">0.1.0</td></tr>
 <tr><td align="center"><strong>Author:</strong></td><td align="center"><code>ForTSA</code> Contributors</td></tr>
 <tr><td align="center"><strong>Web site:</strong></td><td align="center">https://github.com/zoziha/fortsa</td></tr>
 <tr><td align="center"><strong>API-Doc Web site:</strong></td><td align="center">https://zoziha.github.io/fortsa/</td></tr>
@@ -169,6 +169,7 @@ cd fortsa
 <ul>
 <li>Git</li>
 <li><a href="https://github.com/fortran-lang/fpm">fortran-lang/fpm</a></li>
+<li><a href="https://github.com/rafat/ctsa">rafat/ctsa</a></li>
 </ul>
 <h3 id="supported-compilers"><a class="header" href="#supported-compilers">Supported Compilers</a></h3>
 <p>The following combinations are tested on the default branch of <code>ForTSA</code>:</p>
@@ -179,8 +180,7 @@ cd fortsa
 <h3 id="build-with-a-hrefhttpsgithubcomfortran-langfpmfortran-langfpma"><a class="header" href="#build-with-a-hrefhttpsgithubcomfortran-langfpmfortran-langfpma">Build with <a href="https://github.com/fortran-lang/fpm">fortran-lang/fpm</a></a></h3>
 <p>Fortran Package Manager (fpm) is a package manager and build system for Fortran.<br>
 You can build using provided <code>fpm.toml</code>:</p>
-<pre><code class="language-sh">fpm test --list
-fpm test &lt;test_name, see `fpm.toml` or test list&gt;
+<pre><code class="language-sh">fpm test
 </code></pre>
 <p>To use <code>ForTSA</code> within your fpm project, add the following to <code>fpm.toml</code> file:</p>
 <pre><code class="language-toml">[dependencies]
@@ -241,10 +241,9 @@ For <code>Fortran</code> routines, contact zuo.zhihua@qq.com.</p>
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="fortsa_stats"><a class="header" href="#fortsa_stats">fortsa_stats</a></h1>
 <p><code>ctsa/fortsa</code> provides us some useful stats functions.</p>
-<pre><code class="language-fortran">module fortsa_stats
+<pre><code class="language-fortran">module fortsa_stats_m
 
     use, intrinsic :: iso_c_binding, only: c_int, c_double
-    use, intrinsic :: iso_fortran_env, only: dp =&gt; real64, int32
     implicit none
     private
 
@@ -252,94 +251,46 @@ For <code>Fortran</code> routines, contact zuo.zhihua@qq.com.</p>
     public :: pacf, pacf_opt
 
     interface
-        subroutine ctsa_acvf(vec, N, par, M) bind(c, name='acvf')
+        !&gt; Auto Covariance Function
+        subroutine acvf(vec, N, par, M) bind(c, name='acvf')
             import c_int, c_double
             real(kind=c_double), intent(in) :: vec(*)
             real(kind=c_double), intent(out) :: par(*)
             integer(kind=c_int), value, intent(in) :: N, M
-        end subroutine ctsa_acvf
-
-        subroutine ctsa_acvf_opt(vec, N, method, par, M) bind(c, name='acvf_opt')
+        end subroutine acvf
+        !&gt; Method 0 : Regular Method. Slow for large input length.
+        !&gt; Method 1 : FFT based Method. Use it if data length is large
+        subroutine acvf_opt(vec, N, method, par, M) bind(c, name='acvf_opt')
             import c_int, c_double
             real(kind=c_double), intent(in) :: vec(*)
             real(kind=c_double), intent(out) :: par(*)
             integer(kind=c_int), value, intent(in) :: N, method, M
-        end subroutine ctsa_acvf_opt
-
-        pure subroutine ctsa_acvf2acf(acf, M) bind(c, name='acvf2acf')
+        end subroutine acvf_opt
+        !&gt; Converts Autocovariance to autocorrelation function
+        pure subroutine acvf2acf(acf, M) bind(c, name='acvf2acf')
             import c_int, c_double
             real(kind=c_double), intent(inout) :: acf(*)
             integer(kind=c_int), value, intent(in) :: M
-        end subroutine ctsa_acvf2acf
-
-        pure subroutine ctsa_pacf(vec, N, par, M) bind(c, name='pacf')
+        end subroutine acvf2acf
+        !&gt; Partial Auto Covariance Function
+        pure subroutine pacf(vec, N, par, M) bind(c, name='pacf')
             import c_int, c_double
             real(kind=c_double), intent(in) :: vec(*)
             real(kind=c_double), intent(out) :: par(*)
             integer(kind=c_int), value, intent(in) :: N, M
-        end subroutine ctsa_pacf
-        
-        subroutine ctsa_pacf_opt(vec, N, method, par, M) bind(c, name='pacf_opt')
+        end subroutine pacf
+        !&gt; Method 0 : Yule-Walker
+        !&gt; Method 1 : Burg
+        !&gt; Method 2 : Box-Jenkins Conditional MLE
+        subroutine pacf_opt(vec, N, method, par, M) bind(c, name='pacf_opt')
             import c_int, c_double
             real(kind=c_double), intent(in) :: vec(*)
             real(kind=c_double), intent(out) :: par(*)
             integer(kind=c_int), value, intent(in) :: N, method, M
-        end subroutine ctsa_pacf_opt
+        end subroutine pacf_opt
     end interface
-    
-contains
 
-    !&gt; Auto Covariance Function
-    subroutine acvf(vec, par)
-        real(kind=dp), intent(in) :: vec(:)
-        real(kind=dp), intent(out) :: par(:)
-        
-        call ctsa_acvf(vec, size(vec), par, size(par))
-        
-    end subroutine acvf
-    
-    !&gt; Method 0 : Regular Method. Slow for large input length.
-    !&gt; Method 1 : FFT based Method. Use it if data length is large
-    subroutine acvf_opt(vec, method, par)
-        real(kind=dp), intent(in) :: vec(:)
-        integer(int32), intent(in) :: method
-        real(kind=dp), intent(out) :: par(:)
-        
-        call ctsa_acvf_opt(vec, size(vec), method, par, size(par))
-        
-    end subroutine acvf_opt
-    
-    !&gt; Converts Autocovariance to autocorrelation function
-    subroutine acvf2acf(vec)
-        real(kind=dp), intent(inout) :: vec(:)
-        
-        call ctsa_acvf2acf(vec, size(vec))
-        
-    end subroutine acvf2acf
-    
-    !&gt; Partial Auto Covariance Function
-    subroutine pacf(vec, par)
-        real(kind=dp), intent(in) :: vec(:)
-        real(kind=dp), intent(out) :: par(:)
-        
-        call ctsa_pacf(vec, size(vec), par, size(par))
-        
-    end subroutine pacf
-    
-    !&gt; Method 0 : Yule-Walker
-    !&gt; Method 1 : Burg
-    !&gt; Method 2 : Box-Jenkins Conditional MLE
-    subroutine pacf_opt(vec, method, par)
-        real(kind=dp), intent(in) :: vec(:)
-        integer(int32), intent(in) :: method
-        real(kind=dp), intent(out) :: par(:)
-        
-        call ctsa_pacf_opt(vec, size(vec), method, par, size(par))
-        
-    end subroutine pacf_opt
-    
-
-end module fortsa_stats
+end module fortsa_stats_m
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="acvf"><a class="header" href="#acvf"><code>acvf</code></a></h1>
 <h2 id="description"><a class="header" href="#description">Description</a></h2>
@@ -347,7 +298,7 @@ end module fortsa_stats
 <h2 id="class"><a class="header" href="#class">Class</a></h2>
 <p>Impure subroutine.</p>
 <h2 id="synatx"><a class="header" href="#synatx">Synatx</a></h2>
-<pre><code class="language-fortran">call fortsa_stats:acvf(vec, n, par, m)
+<pre><code class="language-fortran">call fortsa_stats_m:acvf(vec, n, par, m)
 </code></pre>
 <h2 id="arguments"><a class="header" href="#arguments">Arguments</a></h2>
 <p><code>vec</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
@@ -364,7 +315,7 @@ Method 1 : FFT based Method. Use it if data length is large.</p>
 <h2 id="class-1"><a class="header" href="#class-1">Class</a></h2>
 <p>Impure subroutine.</p>
 <h2 id="synatx-1"><a class="header" href="#synatx-1">Synatx</a></h2>
-<pre><code class="language-fortran">call fortsa_stats:acvf_opt(vec, n, method, par, m)
+<pre><code class="language-fortran">call fortsa_stats_m:acvf_opt(vec, n, method, par, m)
 </code></pre>
 <h2 id="arguments-1"><a class="header" href="#arguments-1">Arguments</a></h2>
 <p><code>vec</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
@@ -382,7 +333,7 @@ This argument is <code>value</code> and <code>intent(in)</code>.
 <h2 id="class-2"><a class="header" href="#class-2">Class</a></h2>
 <p>Pure subroutine.</p>
 <h2 id="synatx-2"><a class="header" href="#synatx-2">Synatx</a></h2>
-<pre><code class="language-fortran">call fortsa_stats:acvf2acf(acf, m)
+<pre><code class="language-fortran">call fortsa_stats_m:acvf2acf(acf, m)
 </code></pre>
 <h2 id="arguments-2"><a class="header" href="#arguments-2">Arguments</a></h2>
 <p><code>acf</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
@@ -395,7 +346,7 @@ This argument is <code>value</code> and <code>intent(in)</code>.</p>
 <h2 id="class-3"><a class="header" href="#class-3">Class</a></h2>
 <p>Pure subroutine.</p>
 <h2 id="synatx-3"><a class="header" href="#synatx-3">Synatx</a></h2>
-<pre><code class="language-fortran">call fortsa_stats:pacf(vec, n, par, m)
+<pre><code class="language-fortran">call fortsa_stats_m:pacf(vec, n, par, m)
 </code></pre>
 <h2 id="arguments-3"><a class="header" href="#arguments-3">Arguments</a></h2>
 <p><code>vec</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
@@ -413,7 +364,7 @@ Method 2 : Box-Jenkins Conditional MLE</p>
 <h2 id="class-4"><a class="header" href="#class-4">Class</a></h2>
 <p>Impure subroutine.</p>
 <h2 id="synatx-4"><a class="header" href="#synatx-4">Synatx</a></h2>
-<pre><code class="language-fortran">call fortsa_stats:pacf_opt(vec, n, method, par, m)
+<pre><code class="language-fortran">call fortsa_stats_m:pacf_opt(vec, n, method, par, m)
 </code></pre>
 <h2 id="arguments-4"><a class="header" href="#arguments-4">Arguments</a></h2>
 <p><code>vec</code>: Shall be a <code>real(c_double)</code> and <code>rank-1</code> array.
@@ -427,9 +378,8 @@ This argument is <code>value</code> and <code>intent(in)</code>.
 <code>n = size(vec)</code>, <code>m = size(par)</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="fortsa_model"><a class="header" href="#fortsa_model">fortsa_model</a></h1>
 <p><code>fortsa_model</code> contains useful time series models.</p>
-<pre><code class="language-fortran">!! `Fortran-TSA-api.f90` will be the `C-Fortran` interface to [rafat/CTSA](https://github.com/rafat/ctsa)
-
-module fortsa_model
+<pre><code class="language-fortran">!&gt; `Fortran-TSA-api.f90` will be the `C-Fortran` interface to [rafat/CTSA](https://github.com/rafat/ctsa)
+module fortsa_model_m
 
     use, intrinsic :: iso_c_binding, only: c_int, c_double, c_char, c_ptr, c_null_ptr, c_loc
     implicit none
@@ -437,7 +387,7 @@ module fortsa_model
 
     public :: arima_set, arima_init, arima_setMethod, arima_setOptMethod, &amp;
               arima_exec, arima_summary, arima_predict, arima_free
-              
+
     public :: ar_init, ar_exec, &amp;
               ar_summary, ar_predict, &amp;
               ar_free
@@ -453,7 +403,7 @@ module fortsa_model
               sarimax_summary, sarimax_predict, sarimax_free
 
     public :: yw, burg, hr
-    
+
     public :: auto_arima_set
 
     type, bind(c) :: auto_arima_set
@@ -570,27 +520,27 @@ module fortsa_model
     end interface
 
     type, bind(c) :: arima_set
-        integer(c_int) :: N        !! length of time series
-        integer(c_int) :: Nused    !! length of time series after differencing, Nused = N - d
+        integer(c_int) :: N         !! length of time series
+        integer(c_int) :: Nused     !! length of time series after differencing, Nused = N - d
         integer(c_int) :: method
         integer(c_int) :: optmethod
-        integer(c_int) :: p        !! size of phi
-        integer(c_int) :: d        !! Number of times the series is to be differenced
-        integer(c_int) :: q        !! size of theta
-        integer(c_int) :: s        !! Seasonality/Period
-        integer(c_int) :: p_       !! Size of seasonal phi
-        integer(c_int) :: d_       !! The number of times the seasonal series is to be differenced
-        integer(c_int) :: q_       !! size of Seasonal Theta
-        integer(c_int) :: r        !! Number of exogenous variables
-        integer(c_int) :: M        !! M = 0 if mean is 0.0 else M = 1
-        integer(c_int) :: ncoeff   !! Total Number of Coefficients to be estimated
+        integer(c_int) :: p         !! size of phi
+        integer(c_int) :: d         !! Number of times the series is to be differenced
+        integer(c_int) :: q         !! size of theta
+        integer(c_int) :: s         !! Seasonality/Period
+        integer(c_int) :: p_        !! Size of seasonal phi
+        integer(c_int) :: d_        !! The number of times the seasonal series is to be differenced
+        integer(c_int) :: q_        !! size of Seasonal Theta
+        integer(c_int) :: r         !! Number of exogenous variables
+        integer(c_int) :: M         !! M = 0 if mean is 0.0 else M = 1
+        integer(c_int) :: ncoeff    !! Total Number of Coefficients to be estimated
         type(c_ptr) :: phi
         type(c_ptr) :: theta
         type(c_ptr) :: phi_
         type(c_ptr) :: theta_
         type(c_ptr) :: exog
-        type(c_ptr) :: vcov     !! Variance-Covariance Matrix Of length lvcov
-        integer(c_int) :: lvcov    !! length of VCOV
+        type(c_ptr) :: vcov         !! Variance-Covariance Matrix Of length lvcov
+        integer(c_int) :: lvcov     !! length of VCOV
         type(c_ptr) :: res
         real(c_double) :: mean
         real(c_double) :: var
@@ -613,25 +563,25 @@ module fortsa_model
     end interface
 
     type, bind(c) :: sarima_set
-        integer(c_int) :: N        !!  length of time series
-        integer(c_int) :: Nused    !! length of time series after differencing, Nused = N - d - s*D
+        integer(c_int) :: N         !!  length of time series
+        integer(c_int) :: Nused     !! length of time series after differencing, Nused = N - d - s*D
         integer(c_int) :: method
         integer(c_int) :: optmethod
-        integer(c_int) :: p        !!  size of phi
-        integer(c_int) :: d        !!  Number of times the series is to be differenced
-        integer(c_int) :: q        !! size of theta
-        integer(c_int) :: s        !!  Seasonality/Period
+        integer(c_int) :: p         !!  size of phi
+        integer(c_int) :: d         !!  Number of times the series is to be differenced
+        integer(c_int) :: q         !! size of theta
+        integer(c_int) :: s         !!  Seasonality/Period
         integer(c_int) :: P_        !! Size of seasonal phi
         integer(c_int) :: D_        !!  The number of times the seasonal series is to be differenced
         integer(c_int) :: Q_        !! size of Seasonal Theta
-        integer(c_int) :: M        !!  M = 0 if mean is 0.0 else M = 1
-        integer(c_int) :: ncoeff   !!  Total Number of Coefficients to be estimated
+        integer(c_int) :: M         !!  M = 0 if mean is 0.0 else M = 1
+        integer(c_int) :: ncoeff    !!  Total Number of Coefficients to be estimated
         real(c_double) :: phi
         real(c_double) :: theta
         real(c_double) :: PHI_
         real(c_double) :: THETA_
-        real(c_double) :: vcov    !!  Variance-Covariance Matrix Of length lvcov
-        integer(c_int) :: lvcov    !! length of VCOV
+        real(c_double) :: vcov      !!  Variance-Covariance Matrix Of length lvcov
+        integer(c_int) :: lvcov     !! length of VCOV
         real(c_double) :: res
         real(c_double) :: mean
         real(c_double) :: var
@@ -731,25 +681,25 @@ module fortsa_model
         !&gt; Predictes the next L values of the time series
         subroutine auto_arima_predict(obj, inp, xreg, L, newxreg, xpred, amse) bind(c)
             import c_int, c_ptr, c_double
-            
+
             !&gt; Pointer points to `auto_arima_object`
             type(c_ptr), value :: obj
-            
+
             !&gt; Input array
             real(c_double) :: inp(*)
-            
+
             !&gt; TODO:
             real(c_double) :: xreg(*), newxreg(*)
-            
+
             !&gt; Prediction array
             real(c_double) :: xpred(*)
-            
+
             !&gt; Standard errors array
             real(c_double) :: amse(*)
-            
+
             !&gt; Length of prediction
             integer(c_int), value :: L
-            
+
         end subroutine auto_arima_predict
 
         subroutine ar_predict(obj, inp, L, xpred, amse) bind(c, name='ar_predict')
@@ -764,7 +714,7 @@ module fortsa_model
             real(c_double) :: inp, phi, var
             integer(c_int), value :: N, p, method
         end subroutine ar
-        
+
         ! setMethod routines 🔻
         subroutine arima_setMethod(obj, value) bind(c, name='arima_setMethod')
             import c_int, c_ptr
@@ -933,10 +883,10 @@ module fortsa_model
         !&gt; Free auto_arima struct memory
         subroutine auto_arima_free(object) bind(c, name='auto_arima_free')
             import c_ptr
-            
+
             !&gt; Pointer points to `auto_arima_object`
             type(c_ptr), value :: object
-            
+
         end subroutine auto_arima_free
 
         subroutine ar_free(object) bind(c, name='ar_free')
@@ -995,7 +945,7 @@ contains
         end if
     end subroutine auto_arima_exec
 
-end module fortsa_model
+end module fortsa_model_m
 </code></pre>
 
                     </main>
