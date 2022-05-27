@@ -1,4 +1,4 @@
-module fortsa_stats
+module fortsa_stats_m
 
     use, intrinsic :: iso_c_binding, only: c_int, c_double
     implicit none
@@ -47,4 +47,4 @@ module fortsa_stats
         end subroutine pacf_opt
     end interface
 
-end module fortsa_stats
+end module fortsa_stats_m

@@ -11,7 +11,7 @@ Pure subroutine.
 ## Synatx
 
 ```fortran
-call fortsa_stats:pacf(vec, n, par, m)
+call fortsa_stats_m:pacf(vec, n, par, m)
 ```
 
 ## Arguments
@@ -41,7 +41,7 @@ Impure subroutine.
 ## Synatx
 
 ```fortran
-call fortsa_stats:pacf_opt(vec, n, method, par, m)
+call fortsa_stats_m:pacf_opt(vec, n, method, par, m)
 ```
 
 ## Arguments

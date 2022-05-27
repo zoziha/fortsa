@@ -4,7 +4,7 @@ program test_model_sarimax3
     use, intrinsic :: iso_c_binding, only: c_ptr, c_loc, c_null_ptr
     use forlab, only: disp, file
     use stdlib_error, only: error_stop
-    use fortsa_model, only: sarimax_init, sarimax_setMethod, sarimax_exec, &
+    use fortsa_model_m, only: sarimax_init, sarimax_setMethod, sarimax_exec, &
                             sarimax_summary, sarimax_predict, sarimax_free
     implicit none
     integer :: i, N, d, d_, L, line_num

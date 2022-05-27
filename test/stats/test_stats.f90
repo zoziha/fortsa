@@ -1,5 +1,7 @@
 module test_stats
 
+    use fortsa_stats_m, only: acvf, acvf_opt, acvf2acf
+    use fortsa_stats_m, only: pacf, pacf_opt
     use testdrive, only: new_unittest, unittest_type, error_type, check
     implicit none
     private
@@ -20,7 +22,6 @@ contains
     end subroutine collect_stats
 
     subroutine test_stats_acf(error)
-        use fortsa_stats, only: acvf, acvf_opt, acvf2acf
         type(error_type), allocatable, intent(out) :: error
         real(8), allocatable :: inp(:), acf(:)
         integer :: i, line_num
@@ -67,7 +68,6 @@ contains
     end subroutine test_stats_acf
 
     subroutine test_stats_pacf(error)
-        use fortsa_stats, only: pacf, pacf_opt
         type(error_type), allocatable, intent(out) :: error
         integer :: i, line_num, unit
         real(8), allocatable :: inp(:), par(:)

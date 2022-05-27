@@ -2,7 +2,7 @@ program test_model_sarima
 
     use stdlib_error, only: error_stop
     use forlab, only: file, disp
-    use fortsa_model, only: sarima_init, sarima_setMethod, sarima_predict, &
+    use fortsa_model_m, only: sarima_init, sarima_setMethod, sarima_predict, &
                             sarima_exec, sarima_summary, sarima_free
     use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr
     implicit none

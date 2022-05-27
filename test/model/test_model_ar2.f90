@@ -2,10 +2,10 @@ program test_model_ar2
 
     use forlab, only: disp, file
     use forlab, only: mean
-    use fortsa_model, only: ar_init, ar_exec, &
+    use fortsa_model_m, only: ar_init, ar_exec, &
                             ar_summary, ar_predict, &
                             ar_free
-    use fortsa_model, only: yw, burg, hr
+    use fortsa_model_m, only: yw, burg, hr
     use stdlib_error, only: error_stop
     implicit none
     integer :: i, d, L

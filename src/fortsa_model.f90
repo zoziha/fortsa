@@ -1,6 +1,5 @@
-!! `Fortran-TSA-api.f90` will be the `C-Fortran` interface to [rafat/CTSA](https://github.com/rafat/ctsa)
-
-module fortsa_model
+!> `Fortran-TSA-api.f90` will be the `C-Fortran` interface to [rafat/CTSA](https://github.com/rafat/ctsa)
+module fortsa_model_m
 
     use, intrinsic :: iso_c_binding, only: c_int, c_double, c_char, c_ptr, c_null_ptr, c_loc
     implicit none
@@ -566,4 +565,4 @@ contains
         end if
     end subroutine auto_arima_exec
 
-end module fortsa_model
+end module fortsa_model_m

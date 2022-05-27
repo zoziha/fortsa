@@ -11,7 +11,7 @@
 
 | Item | Info |  
 |:-:|:-:|
-| **Version:** | 0.0.3 |
+| **Version:** | 0.1.0 |
 | **Author:** | `ForTSA` Contributors |
 | **Web site:** | https://github.com/zoziha/fortsa |
 | **API-Doc Web site:** | https://zoziha.github.io/fortsa/ |
@@ -27,6 +27,7 @@ cd fortsa
 
 - Git
 - [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
+- [rafat/ctsa](https://github.com/rafat/ctsa)
 
 ### Supported Compilers
 The following combinations are tested on the default branch of `ForTSA`:  
@@ -41,8 +42,7 @@ Fortran Package Manager (fpm) is a package manager and build system for Fortran.
 You can build using provided `fpm.toml`:
 
 ```sh
-fpm test --list
-fpm test <test_name, see `fpm.toml` or test list>
+fpm test
 ```
 
 To use `ForTSA` within your fpm project, add the following to `fpm.toml` file:

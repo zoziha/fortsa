@@ -1,7 +1,7 @@
 module test_model_arima
 
     use, intrinsic :: iso_c_binding, only: c_ptr, c_null_ptr
-    use fortsa_model, only: arima_set, arima_init, &
+    use fortsa_model_m, only: arima_set, arima_init, &
                             arima_setMethod, arima_exec, &
                             arima_summary, arima_predict, &
                             arima_free, arima_setOptMethod

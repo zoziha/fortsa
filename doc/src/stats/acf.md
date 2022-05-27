@@ -11,7 +11,7 @@ Impure subroutine.
 ## Synatx
 
 ```fortran
-call fortsa_stats:acvf(vec, n, par, m)
+call fortsa_stats_m:acvf(vec, n, par, m)
 ```
 
 ## Arguments
@@ -40,7 +40,7 @@ Impure subroutine.
 ## Synatx
 
 ```fortran
-call fortsa_stats:acvf_opt(vec, n, method, par, m)
+call fortsa_stats_m:acvf_opt(vec, n, method, par, m)
 ```
 
 ## Arguments
@@ -71,7 +71,7 @@ Pure subroutine.
 ## Synatx
 
 ```fortran
-call fortsa_stats:acvf2acf(acf, m)
+call fortsa_stats_m:acvf2acf(acf, m)
 ```
 
 ## Arguments
