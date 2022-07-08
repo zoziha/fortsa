@@ -1,0 +1,7 @@
+name = "ctsa"
+version = "0.1.1"
+license = "BSD-3"
+description = "univariate time series analysis"
+keywords = ["ARIMA", "Auto-ARIMA", "Time Series", "Time Series Analysis"]
+maintainer = "ctsa contributors"
+categories = "solver"
