@@ -1,10 +1,10 @@
 name = 'fortsa'
-version = '0.1.1'
-maintainer = 'fortsa contributors'
-license = 'BSD 3- Clause'
+version = '0.1.2'
+maintainer = '左志华(zuo.zhihua@qq.com)'
+license = 'BSD-3-Clause'
 author = '左志华'
-categories = ['time series analysis', 'Fortran-bindings']
-copyright = "2021 fortsa contributors"
+categories = ['Time series analysis', 'Fortran-bindings']
+copyright = "2021-2022, 左志华"
 
 [build]
 auto-examples = false
@@ -12,29 +12,21 @@ auto-executables = false
 auto-tests = false
 
 [dependencies]
-ctsa = { path = "./ctsa" }
+ctsa = { path = "ctsa" }
 
 [dev-dependencies]
 test-drive = { git = "https://github.com/fortran-lang/test-drive" }
 
-# ============================ tests ===========================================
-## [dwt] tests
 [[test]]
 name = "dwt"
 source-dir = "test/dwt"
 main = "checker.f90"
 
-# ## [model] tests
 [[test]]
 name = "model"
 source-dir = "test/model"
 main = "checker.f90"
-# [[test]]
-# name="model_arima"
-# source-dir="test/model"
-# main="test_model_arima.f90"
 
-## [stats] tests
 [[test]]
 name = "stats"
 source-dir = "test/stats"

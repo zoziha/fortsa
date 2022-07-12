@@ -4,6 +4,7 @@ title: 日志 2022
 ## 日志
 
 - 提供 ctsa Fortran 接口；
+- 提供中文/ English 文档；
 
 ## 待办
 

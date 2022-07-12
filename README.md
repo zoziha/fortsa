@@ -1,17 +1,12 @@
-# ForTSA: A CTSA/Fortran binding
+# fortsa: A ctsa/Fortran binding
+
+> [中文](./README-CN.md) | English
 
 ## A Univariate Time Series Analysis and ARIMA Modeling Package in Fortran
 
-`ForTSA` is a Fortran software package for univariate time series analysis, which is based on [rafat/CTSA](https://github.com/rafat/ctsa).  
-`CTSA` is a C software package for univariate time series analysis. 
+`fortsa` is a Fortran binding package for univariate time series analysis, which is based on [rafat/ctsa](https://github.com/rafat/ctsa).
 
-| Item | Info |  
-|:-:|:-:|
-| **Version:** | 0.1.1 |
-| **Author:** | `ForTSA` Contributors |
-| **Web site:** | https://github.com/zoziha/fortsa |
-| **API-Doc Web site:** | https://zoziha.github.io/fortsa/ |
-| **License:** | _`ForTSA`_ is released under BSD-3. |
+`ctsa` is a C software package for univariate time series analysis.
 
 ## Get Started
 
@@ -19,35 +14,29 @@
 git clone https://github.com/zoziha/fortsa.git
 cd fortsa
 ```
-## Dependencies
+### Dependencies
 
-- Git
-- [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
-- [rafat/ctsa](https://github.com/rafat/ctsa)
+- [Fortran-lang/fpm][1] >= 0.6.0: for building `fortsa`.
+- [GNU/GCC][2] >= 9.4.0: for compiling `fortsa`.
 
-### Supported Compilers
-The following combinations are tested on the default branch of `ForTSA`:  
+[1]: https://github.com/fortran-lang/fpm
+[2]: https://gcc.gnu.org/
 
-|Name|Vesrion|Platform|Architecture|  
-|:-:|:-:|:-:|:-:|  
-|GCC Fortran(MSYS2)|10|Windows 10|x86_64|
-|GCC Fortran|10|Ubuntu|x86_64|
-
-### Build with [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
+### Build with [Fortran-lang/fpm][1]
 Fortran Package Manager (fpm) is a package manager and build system for Fortran.<br>
 You can build using provided `fpm.toml`:
 
 ```sh
-fpm test
+fpm build --profile release
 ```
 
-To use `ForTSA` within your fpm project, add the following to `fpm.toml` file:
+To use `fortsa` within your fpm project, add the following to `fpm.toml` file:
 
 ```toml
 [dependencies]
-fortsa = { git="https://github.com/zoziha/fortsa.git" }
+fortsa = { git = "https://github.com/zoziha/fortsa" }
 ```
-## `CTSA` Docs
+## `ctsa` Docs
 
 |**[Auto ARIMA](https://github.com/rafat/ctsa/wiki/AUTO-ARIMA)**| Auto ARIMA Class + Examples        |
 |:-----------------------------------------------------|:----------------------------------|
@@ -70,8 +59,5 @@ For `Fortran` routines, contact zuo.zhihua@qq.com.
 ## Links
 
 1. [rafat/ctsa](https://github.com/rafat/ctsa)
-2. [vmagnin/gtk-fortran](https://github.com/vmagnin/gtk-fortran)
-3. [fortran-lang](https://fortran-lang.org/learn/)
-4. [fortran-lang/fpm](https://github.com/fortran-lang/fpm)
-5. [zoziha/forlab](https://github.com/zoziha/forlab)
-6. [toml](https://toml.io/en/)
+2. [fortran-lang](https://fortran-lang.org/learn/)
+3. [fortran-lang/fpm](https://github.com/fortran-lang/fpm)

@@ -1,3 +1,1 @@
-build/
-doc/book/*
-.vscode/launch.json
+.vscode*
